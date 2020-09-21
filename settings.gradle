@@ -1,0 +1,3 @@
+include ':yoonit-camera'
+include ':app'
+rootProject.name = "camerademo"
