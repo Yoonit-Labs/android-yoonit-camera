@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CameraDemo</string>
+    <string name="start_label">START CAPTURE</string>
+    <string name="stop">STOP</string>
+    <string name="barcode">BARCODE</string>
+    <string name="face">FACE</string>
+    <string name="lens">LENS</string>
+</resources>
