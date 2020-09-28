@@ -57,24 +57,28 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set different types os captures (face, barcode).
+     * Set different types os captures (none, face, barcode).
      */
-    fun setCaptureType(captureType: Int) {
-        cameraController.setCaptureType(CaptureType.values()[captureType])
+    fun startCaptureType(captureType: String) {
+        when (captureType) {
+            "none" -> this.cameraController.setCaptureType(CaptureType.NONE)
+            "face" -> this.cameraController.setCaptureType(CaptureType.FACE)
+            "qrcode" -> this.cameraController.setCaptureType(CaptureType.QRCODE)
+        }
     }
 
     /**
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
-        cameraController.toggleCameraLens()
+        this.cameraController.toggleCameraLens()
     }
 
     /**
      * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
      */
     fun getCameraLens(): Int {
-        return cameraController.getCameraLens()
+        return this.cameraController.getCameraLens()
     }
 
     /**

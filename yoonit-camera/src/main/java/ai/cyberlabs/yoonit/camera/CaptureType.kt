@@ -10,6 +10,6 @@
 
 package ai.cyberlabs.yoonit.camera
 
-enum class CaptureType(val type: Int) {
-    INIT(0), FACE(1), BARCODE(2);
+enum class CaptureType(val type: String) {
+    NONE("none"), FACE("face"), QRCODE("qrcode");
 }

@@ -25,14 +25,13 @@ class MainActivity : AppCompatActivity() {
         this.cameraView = camera_view
         this.cameraView.setCameraEventListener(startListener())
 
-        this.stop_analyzer.setOnClickListener {  cameraView.stopCapture() }
-        this.face_analyzer.setOnClickListener { cameraView.setCaptureType(1) }
-        this.barcode_analyzer.setOnClickListener { cameraView.setCaptureType(2) }
-        this.change_lensfacing.setOnClickListener { cameraView.toggleCameraLens() }
+        this.stop_analyzer.setOnClickListener {  this.cameraView.stopCapture() }
+        this.face_analyzer.setOnClickListener { this.cameraView.startCaptureType("face") }
+        this.barcode_analyzer.setOnClickListener { this.cameraView.startCaptureType("qrcode") }
+        this.change_lensfacing.setOnClickListener { this.cameraView.toggleCameraLens() }
 
         if (allPermissionsGranted()) {
             this.cameraView.startPreview()
-            this.cameraView.toggleCameraLens()
         } else {
             ActivityCompat.requestPermissions(
                     this,
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-                baseContext, it
+            this.baseContext, it
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -107,7 +106,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "FaceTrackDemo"
+        private const val TAG = "YoonitCameraDemo"
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }
