@@ -63,7 +63,7 @@ class CameraView @JvmOverloads constructor(
         when (captureType) {
             "none" -> this.cameraController.setCaptureType(CaptureType.NONE)
             "face" -> this.cameraController.setCaptureType(CaptureType.FACE)
-            "qrcode" -> this.cameraController.setCaptureType(CaptureType.QRCODE)
+            "barcode" -> this.cameraController.setCaptureType(CaptureType.QRCODE)
         }
     }
 
