@@ -24,6 +24,28 @@ android {
     }
 }
 
+configurations {
+    ktlint
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/pinterest/ktlint#usage for more
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt"
+}
+
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
@@ -42,6 +64,8 @@ dependencies {
     implementation 'com.google.mlkit:barcode-scanning:16.0.3'
     implementation 'com.google.mlkit:face-detection:16.0.2'
 
+    ktlint "com.pinterest:ktlint:0.39.0"
+
     // Test
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -50,4 +74,5 @@ dependencies {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
