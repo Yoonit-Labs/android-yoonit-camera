@@ -140,17 +140,17 @@ class CameraController(
 
         if (this.cameraProviderProcess != null) {
             val cameraSelector = CameraSelector
-                    .Builder()
-                    .requireLensFacing(this.cameraLensFacing)
-                    .build()
+                .Builder()
+                .requireLensFacing(this.cameraLensFacing)
+                .build()
 
             this.cameraProviderProcess?.unbindAll()
 
             this.cameraProviderProcess?.bindToLifecycle(
-                    this.context as LifecycleOwner,
-                    cameraSelector,
-                    imageAnalysis,
-                    preview
+                this.context as LifecycleOwner,
+                cameraSelector,
+                imageAnalysis,
+                preview
             )
 
             this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
