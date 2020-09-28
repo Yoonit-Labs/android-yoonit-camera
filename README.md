@@ -23,7 +23,7 @@ dependencies {
 
 <br/>
 
-## Functions  
+## Methods  
 
 <br/>
 
