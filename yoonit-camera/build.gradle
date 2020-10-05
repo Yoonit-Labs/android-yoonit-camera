@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.google.mlkit:barcode-scanning:16.0.3'
     implementation 'com.google.mlkit:face-detection:16.0.2'
 
+    // KTLint
     ktlint "com.pinterest:ktlint:0.39.0"
 
     // Test

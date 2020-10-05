@@ -36,6 +36,8 @@ class CameraView @JvmOverloads constructor(
     // Camera controller object.
     private var cameraController: CameraController
 
+    private var captureType: String = "none"
+
     /**
      * Inflate CameraView layout and instantiate [CameraController].
      */
@@ -60,6 +62,7 @@ class CameraView @JvmOverloads constructor(
      * Set different types os captures (none, face, barcode).
      */
     fun startCaptureType(captureType: String) {
+        this.captureType = captureType
         when (captureType) {
             "none" -> this.cameraController.setCaptureType(CaptureType.NONE)
             "face" -> this.cameraController.setCaptureType(CaptureType.FACE)
@@ -107,7 +110,8 @@ class CameraView @JvmOverloads constructor(
      * Set to show face detection box when face detected.
      */
     fun setFaceDetectionBox(faceDetectionBox: Boolean) {
-        this.captureOptions.faceDetectionBox = faceDetectionBox
+        this.cameraController.showDetectionBox = faceDetectionBox
+        this.startCaptureType(this.captureType)
     }
 
     /**

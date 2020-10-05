@@ -34,6 +34,7 @@ class CameraController(
     private val captureOptions: CaptureOptions
 ) : CameraCallback {
     var cameraEventListener: CameraEventListener? = null
+    var showDetectionBox: Boolean = true
 
     private lateinit var imageAnalysis: ImageAnalysis
     private lateinit var preview: Preview
@@ -107,7 +108,10 @@ class CameraController(
      * Stop camera face image analyzer and clear drawing.
      */
     fun stopAnalyzer() {
+        this.captureType = CaptureType.NONE
         this.imageAnalysis.clearAnalyzer()
+        this.graphicView.clear()
+
         this.imageAnalysis.setAnalyzer(
             Executors.newFixedThreadPool(1),
             ImageAnalysis.Analyzer {
@@ -170,7 +174,10 @@ class CameraController(
         when (this.captureType) {
             CaptureType.NONE -> this.imageAnalysis.setAnalyzer(
                 Executors.newFixedThreadPool(1),
-                ImageAnalysis.Analyzer { it.close() }
+                ImageAnalysis.Analyzer {
+                    this.graphicView.clear()
+                    it.close()
+                }
             )
 
             CaptureType.FACE -> this.imageAnalysis.setAnalyzer(
@@ -180,6 +187,7 @@ class CameraController(
                     this.cameraEventListener,
                     this.graphicView,
                     this.captureOptions,
+                    this.showDetectionBox,
                     this as CameraCallback
                 )
             )
