@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">CameraDemo</string>
-    <string name="start_label">START CAPTURE</string>
     <string name="stop">STOP</string>
-    <string name="barcode">BARCODE</string>
-    <string name="face">FACE</string>
-    <string name="lens">LENS</string>
+    <string name="face_box">Face Box</string>
+    <string name="camera_lens">CAMERA LENS:</string>
+    <string name="camera_front">FRONT</string>
+    <string name="camera_back">BACK</string>
+    <string name="capture_types">CAPTURE TYPES:</string>
+    <string name="capture_type_none">NONE</string>
+    <string name="capture_type_face">FACE</string>
+    <string name="capture_type_qrcode">QRCODE</string>
+    <string name="face_number">Number of face to capture:</string>
 </resources>
