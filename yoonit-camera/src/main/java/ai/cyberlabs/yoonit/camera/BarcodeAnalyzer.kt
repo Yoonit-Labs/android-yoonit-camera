@@ -4,7 +4,6 @@
  * CameraCallback
  *
  * Created by Márcio H. Bruffato on 02/09/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 
