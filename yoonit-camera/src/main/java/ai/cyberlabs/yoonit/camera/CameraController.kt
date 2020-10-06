@@ -4,7 +4,6 @@
  * CameraView
  *
  * Created by Haroldo Shigueaki Teruya on 05/08/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 

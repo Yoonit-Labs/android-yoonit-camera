@@ -4,7 +4,6 @@
  * CaptureOptions
  *
  * Created by Victor Goulart on 26/08/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 
