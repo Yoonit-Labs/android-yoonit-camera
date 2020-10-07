@@ -155,7 +155,7 @@ class FaceAnalyzer(
 
         // process face number of images.
         if (this.captureOptions.faceNumberOfImages > 0) {
-            if (this.count <= captureOptions.faceNumberOfImages) {
+            if (this.count < captureOptions.faceNumberOfImages) {
                 this.count++
                 this.cameraEventListener?.onFaceImageCreated(
                     this.count,
