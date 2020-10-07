@@ -46,6 +46,7 @@ And inside your code:
 
 ```kotlin
 var cameraView: CameraView
+this.cameraView = camera_view
 this.cameraView.startPreview()
 ```
 
