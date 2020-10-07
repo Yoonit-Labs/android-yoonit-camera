@@ -1,10 +1,14 @@
 
 # android-yoonit-camera  
-[![Generic badge](https://img.shields.io/badge/version-v1.0.0-<COLOR>.svg)](https://shields.io/)    
+
+![Generic badge](https://img.shields.io/badge/version-v1.0.0-<COLOR>.svg) ![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
+
+Face image capture and QR Code scanning library for android using the [Standart Google ML Kit](https://developers.google.com/ml-kit).
+
+## Install
   
-## Download
-  
-Add the JitPack repository to your root build.gradle at the end of repositories  
+Add the JitPack repository to your root `build.gradle` at the end of repositories  
+
 ```groovy  
 allprojects {
 	repositories {  
@@ -22,14 +26,81 @@ dependencies {
 }
 ```  
 
-<br/>  
+<br/>
+
+## Usage  
+  All the functionalities that the `android-yoonit-camera` provides is accessed through the `CameraView`, that includes the camera preview.  Below we have the basic usage code, for more details, see the [**Methods**](#methods).
+
+### Camera Preview
+
+Do not forget request camera permission. Use like this in the your layout XML:
+
+```kotlin
+<ai.cyberlabs.yoonit.camera.CameraView  
+  android:id="@+id/camera_view"  
+  android:layout_width="match_parent"  
+  android:layout_height="match_parent"/>
+```
+
+And inside your code:
+
+```kotlin
+var cameraView: CameraView
+this.cameraView.startPreview()
+```
+
+### Start capturing face images
+
+With camera preview, we can start capture detected face and generate images:
+
+```kotlin
+this.cameraView.startCaptureType("face")
+```
+
+Set camera event listener to get the result:
+
+```kotlin
+this.cameraView.setCameraEventListener(this.buildCameraEventListener())
+...
+fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
+...
+	override fun onFaceImageCreated(count: Int, total: Int, imagePath: String) {  
+		// YOUR CODE
+	}
+...
+}
+```
+
+### Start scanning QR Codes
+
+With camera preview, we can start scanning QR codes:
+
+```kotlin
+this.cameraView.startCaptureType("qrcode")
+```
+
+Set camera event listener to get the result:
+
+```kotlin
+this.cameraView.setCameraEventListener(this.buildCameraEventListener())
+...
+fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
+...
+	override fun onBarcodeScanned(content: String) {  
+		// YOUR CODE
+	}
+...
+}
+```  
+    
+<br/>
   
 ## Methods   
   
 | Function | Parameters | Return Type | Valid values | Description |
 |-|-|-|-|-|  
 | **`startPreview`** | - | void | - | Start camera preview if has permission.
-| **`startCaptureType`** | `captureType : String` | void | `none` default capture type. `face` for face recognition. `barcode` to read barcode content. | Set capture type none, face or barcode.
+| **`startCaptureType`** | `captureType: String` | void | `none` default capture type. `face` for face recognition. `barcode` to read barcode content. | Set capture type none, face or barcode.
 | **`stopCapture`** | - | void | - | Stop any type of capture.
 | **`toggleCameraLens`** | - | void | - | Set camera lens facing front or back.
 | **`getCameraLens`** | - | Int | - | Return `Int` that represents lens face state: 0 for front 1 for back camera.  
