@@ -178,7 +178,7 @@ class FaceAnalyzer(
         this.count = (this.count + 1) % ANALYZER_LIMIT
         this.cameraEventListener?.onFaceImageCreated(
             this.count,
-            this.count,
+            this.captureOptions.faceNumberOfImages,
             this.saveCroppedImage(
                 mediaBitmap,
                 boundingBox,
