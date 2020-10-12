@@ -4,7 +4,6 @@
  * CameraView
  *
  * Created by Haroldo Shigueaki Teruya on 05/08/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 
@@ -34,13 +33,12 @@ class CameraController(
     private val captureOptions: CaptureOptions
 ) : CameraCallback {
     var cameraEventListener: CameraEventListener? = null
+    var showDetectionBox: Boolean = true
 
     private lateinit var imageAnalysis: ImageAnalysis
     private lateinit var preview: Preview
-
     private var cameraProviderProcess: ProcessCameraProvider? = null
-
-    private var captureType: CaptureType = CaptureType.INIT
+    private var captureType: CaptureType = CaptureType.NONE
     private var cameraLensFacing: Int = CameraSelector.LENS_FACING_FRONT
 
     override fun onStopAnalyzer() {
@@ -85,23 +83,23 @@ class CameraController(
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
 
-                    buildCameraImageAnalyzer()
+                    this.buildCameraImageAnalyzer()
 
                     this.cameraProviderProcess?.bindToLifecycle(
                         this.context as LifecycleOwner,
                         cameraSelector,
-                        imageAnalysis,
-                        preview
+                        this.imageAnalysis,
+                        this.preview
                     )
 
-                    preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
+                    this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
                 } catch (e: Exception) {
                     if (this.cameraEventListener != null) {
                         this.cameraEventListener!!.onError(e.toString())
                     }
                 }
             },
-            ContextCompat.getMainExecutor(context)
+            ContextCompat.getMainExecutor(this.context)
         )
     }
 
@@ -109,7 +107,10 @@ class CameraController(
      * Stop camera face image analyzer and clear drawing.
      */
     fun stopAnalyzer() {
+        this.captureType = CaptureType.NONE
         this.imageAnalysis.clearAnalyzer()
+        this.graphicView.clear()
+
         this.imageAnalysis.setAnalyzer(
             Executors.newFixedThreadPool(1),
             ImageAnalysis.Analyzer {
@@ -132,26 +133,24 @@ class CameraController(
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
-        if (this.cameraLensFacing == CameraSelector.LENS_FACING_FRONT) {
-            this.cameraLensFacing = CameraSelector.LENS_FACING_BACK
-        } else {
-            this.cameraLensFacing = CameraSelector.LENS_FACING_FRONT
-        }
+        this.cameraLensFacing =
+            if (this.cameraLensFacing == CameraSelector.LENS_FACING_FRONT)
+                CameraSelector.LENS_FACING_BACK
+            else CameraSelector.LENS_FACING_FRONT
 
         if (this.cameraProviderProcess != null) {
             val cameraSelector = CameraSelector
-                    .Builder()
-                    .requireLensFacing(this.cameraLensFacing)
-                    .build()
+                .Builder()
+                .requireLensFacing(this.cameraLensFacing)
+                .build()
 
             this.cameraProviderProcess?.unbindAll()
 
             this.cameraProviderProcess?.bindToLifecycle(
-                    this.context as LifecycleOwner,
-                    cameraSelector,
-                    imageAnalysis,
-                    preview
-            )
+                this.context as LifecycleOwner,
+                cameraSelector,
+                this.imageAnalysis,
+                this.preview)
 
             this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
 
@@ -163,7 +162,7 @@ class CameraController(
      * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
      */
     fun getCameraLens(): Int {
-        return cameraLensFacing
+        return this.cameraLensFacing
     }
 
     /**
@@ -172,6 +171,14 @@ class CameraController(
     private fun buildCameraImageAnalyzer() {
 
         when (this.captureType) {
+            CaptureType.NONE -> this.imageAnalysis.setAnalyzer(
+                Executors.newFixedThreadPool(1),
+                ImageAnalysis.Analyzer {
+                    this.graphicView.clear()
+                    it.close()
+                }
+            )
+
             CaptureType.FACE -> this.imageAnalysis.setAnalyzer(
                 Executors.newFixedThreadPool(1),
                 FaceAnalyzer(
@@ -179,18 +186,14 @@ class CameraController(
                     this.cameraEventListener,
                     this.graphicView,
                     this.captureOptions,
+                    this.showDetectionBox,
                     this as CameraCallback
                 )
             )
 
-            CaptureType.BARCODE -> this.imageAnalysis.setAnalyzer(
+            CaptureType.QRCODE -> this.imageAnalysis.setAnalyzer(
                 Executors.newFixedThreadPool(1),
                 BarcodeAnalyzer(this.cameraEventListener, this.graphicView)
-            )
-
-            CaptureType.INIT -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
-                ImageAnalysis.Analyzer { it.close() }
             )
         }
     }

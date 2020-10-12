@@ -4,7 +4,6 @@
  * CameraView
  *
  * Created by Haroldo Shigueaki Teruya on 03/08/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 
@@ -36,6 +35,8 @@ class CameraView @JvmOverloads constructor(
     // Camera controller object.
     private var cameraController: CameraController
 
+    private var captureType: String = "none"
+
     /**
      * Inflate CameraView layout and instantiate [CameraController].
      */
@@ -57,24 +58,29 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set different types os captures (face, barcode).
+     * Set different types os captures (none, face, barcode).
      */
-    fun setCaptureType(captureType: Int) {
-        cameraController.setCaptureType(CaptureType.values()[captureType])
+    fun startCaptureType(captureType: String) {
+        this.captureType = captureType
+        when (captureType) {
+            "none" -> this.cameraController.setCaptureType(CaptureType.NONE)
+            "face" -> this.cameraController.setCaptureType(CaptureType.FACE)
+            "barcode" -> this.cameraController.setCaptureType(CaptureType.QRCODE)
+        }
     }
 
     /**
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
-        cameraController.toggleCameraLens()
+        this.cameraController.toggleCameraLens()
     }
 
     /**
      * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
      */
     fun getCameraLens(): Int {
-        return cameraController.getCameraLens()
+        return this.cameraController.getCameraLens()
     }
 
     /**
@@ -103,7 +109,8 @@ class CameraView @JvmOverloads constructor(
      * Set to show face detection box when face detected.
      */
     fun setFaceDetectionBox(faceDetectionBox: Boolean) {
-        this.captureOptions.faceDetectionBox = faceDetectionBox
+        this.cameraController.showDetectionBox = faceDetectionBox
+        this.startCaptureType(this.captureType)
     }
 
     /**

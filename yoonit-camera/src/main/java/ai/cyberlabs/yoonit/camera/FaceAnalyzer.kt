@@ -4,7 +4,6 @@
  * CameraView
  *
  * Created by Haroldo Shigueaki Teruya on 04/08/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 
@@ -38,6 +37,7 @@ class FaceAnalyzer(
     private val cameraEventListener: CameraEventListener?,
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions,
+    private val showDetectionBox: Boolean,
     private val cameraCallback: CameraCallback
 ) : ImageAnalysis.Analyzer {
 
@@ -73,6 +73,7 @@ class FaceAnalyzer(
             .addOnSuccessListener { faces ->
                 //  Check if found face.
                 if (faces.isEmpty()) {
+                    this.graphicView.clear()
                     this.checkFaceHided()
                     return@addOnSuccessListener
                 }
@@ -101,7 +102,7 @@ class FaceAnalyzer(
                 this.isHided = false
 
                 // Draw face bounding box.
-                if (this.captureOptions.faceDetectionBox) this.graphicView.drawBoundingBox(faceBoundingBox)
+                toggleDetectionBox(faceBoundingBox)
 
                 if (this.cameraEventListener == null) return@addOnSuccessListener
 
@@ -130,6 +131,20 @@ class FaceAnalyzer(
     }
 
     /**
+     * Set to show face detection box when face detected..
+     *
+     * @param faceBoundingBox bounding box of the face.
+     */
+    private fun toggleDetectionBox(faceBoundingBox: RectF) {
+        if (this.showDetectionBox) {
+            this.graphicView.drawBoundingBox(faceBoundingBox)
+            return
+        }
+
+        this.graphicView.clear()
+    }
+
+    /**
      * Verify if has any limit of faces saved then save the cropped image and emit onFaceImageCreated event.
      *
      * @param mediaBitmap the original image bitmap.
@@ -140,7 +155,7 @@ class FaceAnalyzer(
 
         // process face number of images.
         if (this.captureOptions.faceNumberOfImages > 0) {
-            if (this.count <= captureOptions.faceNumberOfImages) {
+            if (this.count < captureOptions.faceNumberOfImages) {
                 this.count++
                 this.cameraEventListener?.onFaceImageCreated(
                     this.count,
@@ -163,7 +178,7 @@ class FaceAnalyzer(
         this.count = (this.count + 1) % ANALYZER_LIMIT
         this.cameraEventListener?.onFaceImageCreated(
             this.count,
-            this.count,
+            this.captureOptions.faceNumberOfImages,
             this.saveCroppedImage(
                 mediaBitmap,
                 boundingBox,
@@ -178,7 +193,6 @@ class FaceAnalyzer(
     private fun checkFaceHided() {
         if (!this.isHided) {
             this.isHided = true
-            this.graphicView.clear()
             if (this.cameraEventListener != null) {
                 this.cameraEventListener.onFaceDetected(false)
             }

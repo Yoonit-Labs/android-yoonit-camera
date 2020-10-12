@@ -4,7 +4,6 @@
  * CameraEventListener
  *
  * Created by Victor Goulart on 01/09/2020.
- * Copyright © 2020 CyberLabs.AI. All rights reserved.
  *
  */
 
