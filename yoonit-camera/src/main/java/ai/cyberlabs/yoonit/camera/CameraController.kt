@@ -1,10 +1,12 @@
 /**
+ * +-+-+-+-+-+-+
+ * |y|o|o|n|i|t|
+ * +-+-+-+-+-+-+
  *
- * CameraController.kt
- * CameraView
- *
- * Created by Haroldo Shigueaki Teruya on 05/08/2020.
- *
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Yoonit Camera lib for Android applications                      |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
 package ai.cyberlabs.yoonit.camera
