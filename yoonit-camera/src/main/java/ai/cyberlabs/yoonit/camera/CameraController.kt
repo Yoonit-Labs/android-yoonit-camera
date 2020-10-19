@@ -126,7 +126,7 @@ class CameraController(
     fun setCaptureType(captureType: CaptureType) {
         this.captureType = captureType
         this.imageAnalysis.clearAnalyzer()
-        buildCameraImageAnalyzer()
+        this.buildCameraImageAnalyzer()
     }
 
     /**
@@ -172,7 +172,7 @@ class CameraController(
 
         when (this.captureType) {
             CaptureType.NONE -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
+                Executors.newSingleThreadExecutor(),
                 ImageAnalysis.Analyzer {
                     this.graphicView.clear()
                     it.close()
@@ -180,7 +180,7 @@ class CameraController(
             )
 
             CaptureType.FACE -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
+                Executors.newSingleThreadExecutor(),
                 FaceAnalyzer(
                     this.context,
                     this.cameraEventListener,
@@ -192,7 +192,7 @@ class CameraController(
             )
 
             CaptureType.QRCODE -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
+                Executors.newSingleThreadExecutor(),
                 BarcodeAnalyzer(this.cameraEventListener, this.graphicView)
             )
         }

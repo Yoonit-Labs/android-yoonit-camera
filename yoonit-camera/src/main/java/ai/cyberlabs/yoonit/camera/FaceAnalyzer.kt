@@ -11,6 +11,7 @@ package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.resize
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
 import ai.cyberlabs.yoonit.camera.utils.toBitmap
 import android.annotation.SuppressLint
@@ -88,6 +89,9 @@ class FaceAnalyzer(
                     }
                 }
 
+                val size = max(boundingBox.width(), boundingBox.height())
+                boundingBox = boundingBox.resize(size, size)
+
                 if (this.captureOptions.facePaddingPercent != 0f) {
                     // Scale bounding box.
                     boundingBox = boundingBox.scaledBy(this.captureOptions.facePaddingPercent)
@@ -104,7 +108,7 @@ class FaceAnalyzer(
                 this.isHided = false
 
                 // Draw face bounding box.
-                toggleDetectionBox(faceBoundingBox)
+                this.toggleDetectionBox(faceBoundingBox)
 
                 if (this.cameraEventListener == null) return@addOnSuccessListener
 

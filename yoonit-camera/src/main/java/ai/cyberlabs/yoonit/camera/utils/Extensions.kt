@@ -49,3 +49,15 @@ fun Rect.scaledBy(percent: Float): Rect {
 
     return Rect((left + deltaX).toInt(), (top + deltaY).toInt(), (right - deltaX).toInt(), (bottom - deltaY).toInt())
 }
+
+fun Rect.resize(width: Int, height: Int): Rect {
+    val left = centerX() - (width / 2)
+    val top = centerY() - (height / 2)
+
+    return Rect(
+        left,
+        top,
+        left + width,
+        top + height
+    )
+}
