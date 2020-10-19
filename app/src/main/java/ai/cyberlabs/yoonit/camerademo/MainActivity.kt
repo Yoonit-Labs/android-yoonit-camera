@@ -140,6 +140,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
+
         override fun onFaceImageCreated(count: Int, total: Int, imagePath: String) {
             val imageFile = File(imagePath)
 
@@ -149,12 +150,18 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onFaceImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
 
                 image_preview.setImageBitmap(imageBitmap)
+                image_preview.visibility = View.VISIBLE
                 info_textview.text = "$count/$total"
             }
         }
 
-        override fun onFaceDetected(faceDetected: Boolean) {
-            Log.d(TAG, "onFaceDetected $faceDetected")
+        override fun onFaceDetected(x: Int, y: Int, width: Int, height: Int) {
+            Log.d(TAG, "onFaceDetected $x, $y, $width, $height.")
+        }
+
+        override fun onFaceUndetected() {
+            Log.d(TAG, "onFaceUndetected")
+            image_preview.visibility = View.INVISIBLE
         }
 
         override fun onEndCapture() {

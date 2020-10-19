@@ -13,7 +13,9 @@ interface CameraEventListener {
 
     fun onFaceImageCreated(count: Int, total: Int, imagePath: String)
 
-    fun onFaceDetected(faceDetected: Boolean)
+    fun onFaceDetected(x: Int, y: Int, width: Int, height: Int)
+
+    fun onFaceUndetected()
 
     fun onEndCapture()
 

@@ -47,7 +47,9 @@ class FaceAnalyzer(
     private var count = 0
 
     /**
-     * Analyzes camera image...
+     * Receive image from CameraX API.
+     *
+     * @param imageProxy image from CameraX API.
      */
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(imageProxy: ImageProxy) {
@@ -106,8 +108,13 @@ class FaceAnalyzer(
 
                 if (this.cameraEventListener == null) return@addOnSuccessListener
 
-                // Emit onFaceDetected.
-                this.cameraEventListener.onFaceDetected(true)
+                // Emit face detected.
+                this.cameraEventListener.onFaceDetected(
+                    faceBoundingBox.left.toInt(),
+                    faceBoundingBox.top.toInt(),
+                    faceBoundingBox.width().toInt(),
+                    faceBoundingBox.height().toInt()
+                )
 
                 // Process image only within interval equal ANALYZE_TIMER.
                 val currentTimestamp = System.currentTimeMillis()
@@ -117,7 +124,10 @@ class FaceAnalyzer(
                 this.analyzerTimeStamp = currentTimestamp
 
                 // Save face image.
-                this.saveFaceImage(mediaImage.toBitmap(), boundingBox, imageProxy.imageInfo.rotationDegrees.toFloat())
+                this.saveFaceImage(
+                    mediaImage.toBitmap(),
+                    boundingBox,
+                    imageProxy.imageInfo.rotationDegrees.toFloat())
             }
             .addOnFailureListener { e ->
                 if (this.cameraEventListener != null) {
@@ -194,7 +204,7 @@ class FaceAnalyzer(
         if (!this.isHided) {
             this.isHided = true
             if (this.cameraEventListener != null) {
-                this.cameraEventListener.onFaceDetected(false)
+                this.cameraEventListener.onFaceUndetected()
             }
         }
     }
