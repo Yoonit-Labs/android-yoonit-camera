@@ -43,9 +43,8 @@ class FaceAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     private var analyzerTimeStamp: Long = 0
-    private var isHided: Boolean = true
-
-    private var count = 0
+    private var isFaceDetected: Boolean = false
+    private var numberOfImages = 0
 
     /**
      * Receive image from CameraX API.
@@ -77,7 +76,7 @@ class FaceAnalyzer(
                 //  Check if found face.
                 if (faces.isEmpty()) {
                     this.graphicView.clear()
-                    this.checkFaceHided()
+                    this.checkFaceUndetected()
                     return@addOnSuccessListener
                 }
 
@@ -102,10 +101,10 @@ class FaceAnalyzer(
 
                 // Verify the face bounding box.
                 if (faceBoundingBox == null) {
-                    this.checkFaceHided()
+                    this.checkFaceUndetected()
                     return@addOnSuccessListener
                 }
-                this.isHided = false
+                this.isFaceDetected = true
 
                 // Draw face bounding box.
                 this.toggleDetectionBox(faceBoundingBox)
@@ -169,10 +168,10 @@ class FaceAnalyzer(
 
         // process face number of images.
         if (this.captureOptions.faceNumberOfImages > 0) {
-            if (this.count < captureOptions.faceNumberOfImages) {
-                this.count++
+            if (this.numberOfImages < captureOptions.faceNumberOfImages) {
+                this.numberOfImages++
                 this.cameraEventListener?.onFaceImageCreated(
-                    this.count,
+                    this.numberOfImages,
                     this.captureOptions.faceNumberOfImages,
                     saveCroppedImage(
                         mediaBitmap,
@@ -189,9 +188,9 @@ class FaceAnalyzer(
         }
 
         // process face unlimited.
-        this.count = (this.count + 1) % ANALYZER_LIMIT
+        this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
         this.cameraEventListener?.onFaceImageCreated(
-            this.count,
+            this.numberOfImages,
             this.captureOptions.faceNumberOfImages,
             this.saveCroppedImage(
                 mediaBitmap,
@@ -204,9 +203,10 @@ class FaceAnalyzer(
     /**
      * Clear [CameraGraphicView] and emit face not detected once.
      */
-    private fun checkFaceHided() {
-        if (!this.isHided) {
-            this.isHided = true
+    private fun checkFaceUndetected() {
+        if (this.isFaceDetected) {
+            this.isFaceDetected = false
+            this.graphicView.clear()
             if (this.cameraEventListener != null) {
                 this.cameraEventListener.onFaceUndetected()
             }
@@ -223,7 +223,7 @@ class FaceAnalyzer(
      */
     private fun saveCroppedImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float): String {
         val path = this.context.externalCacheDir.toString()
-        val file = File(path, "facetrack-".plus(this.count).plus(".jpg"))
+        val file = File(path, "yoonit-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
         var matrix = Matrix()
@@ -337,6 +337,6 @@ class FaceAnalyzer(
 
     companion object {
         private const val TAG = "FaceAnalyzer"
-        private const val ANALYZER_LIMIT = 20
+        private const val NUMBER_OF_IMAGES_LIMIT = 25
     }
 }
