@@ -237,7 +237,7 @@ class FaceAnalyzer(
                 mediaBitmap.width,
                 mediaBitmap.height,
                 matrix,
-                true
+                false
             )
 
         matrix = Matrix()
@@ -253,7 +253,7 @@ class FaceAnalyzer(
                 boundingBox.width(),
                 boundingBox.height(),
                 matrix,
-                true
+                false
             )
 
         val aspectRatio = max(
