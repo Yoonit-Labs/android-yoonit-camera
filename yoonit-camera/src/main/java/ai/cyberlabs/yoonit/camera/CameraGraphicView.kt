@@ -1,10 +1,12 @@
 /**
+ * +-+-+-+-+-+-+
+ * |y|o|o|n|i|t|
+ * +-+-+-+-+-+-+
  *
- * CameraGraphicView.kt
- * CameraGraphicView
- *
- * Created by Haroldo Shigueaki Teruya on 13/08/2020.
- *
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Yoonit Camera lib for Android applications                      |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
 package ai.cyberlabs.yoonit.camera

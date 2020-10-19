@@ -1,16 +1,19 @@
 /**
+ * +-+-+-+-+-+-+
+ * |y|o|o|n|i|t|
+ * +-+-+-+-+-+-+
  *
- * FaceAnalyzer.kt
- * CameraView
- *
- * Created by Haroldo Shigueaki Teruya on 04/08/2020.
- *
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Yoonit Camera lib for Android applications                      |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
 package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.resize
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
 import ai.cyberlabs.yoonit.camera.utils.toBitmap
 import android.annotation.SuppressLint
@@ -42,12 +45,13 @@ class FaceAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     private var analyzerTimeStamp: Long = 0
-    private var isHided: Boolean = true
-
-    private var count = 0
+    private var isFaceDetected: Boolean = false
+    private var numberOfImages = 0
 
     /**
-     * Analyzes camera image...
+     * Receive image from CameraX API.
+     *
+     * @param imageProxy image from CameraX API.
      */
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(imageProxy: ImageProxy) {
@@ -74,7 +78,7 @@ class FaceAnalyzer(
                 //  Check if found face.
                 if (faces.isEmpty()) {
                     this.graphicView.clear()
-                    this.checkFaceHided()
+                    this.checkFaceUndetected()
                     return@addOnSuccessListener
                 }
 
@@ -86,6 +90,9 @@ class FaceAnalyzer(
                     }
                 }
 
+                val size = max(boundingBox.width(), boundingBox.height())
+                boundingBox = boundingBox.resize(size, size)
+
                 if (this.captureOptions.facePaddingPercent != 0f) {
                     // Scale bounding box.
                     boundingBox = boundingBox.scaledBy(this.captureOptions.facePaddingPercent)
@@ -96,18 +103,23 @@ class FaceAnalyzer(
 
                 // Verify the face bounding box.
                 if (faceBoundingBox == null) {
-                    this.checkFaceHided()
+                    this.checkFaceUndetected()
                     return@addOnSuccessListener
                 }
-                this.isHided = false
+                this.isFaceDetected = true
 
                 // Draw face bounding box.
-                toggleDetectionBox(faceBoundingBox)
+                this.toggleDetectionBox(faceBoundingBox)
 
                 if (this.cameraEventListener == null) return@addOnSuccessListener
 
-                // Emit onFaceDetected.
-                this.cameraEventListener.onFaceDetected(true)
+                // Emit face detected.
+                this.cameraEventListener.onFaceDetected(
+                    faceBoundingBox.left.toInt(),
+                    faceBoundingBox.top.toInt(),
+                    faceBoundingBox.width().toInt(),
+                    faceBoundingBox.height().toInt()
+                )
 
                 // Process image only within interval equal ANALYZE_TIMER.
                 val currentTimestamp = System.currentTimeMillis()
@@ -117,7 +129,10 @@ class FaceAnalyzer(
                 this.analyzerTimeStamp = currentTimestamp
 
                 // Save face image.
-                this.saveFaceImage(mediaImage.toBitmap(), boundingBox, imageProxy.imageInfo.rotationDegrees.toFloat())
+                this.saveFaceImage(
+                    mediaImage.toBitmap(),
+                    boundingBox,
+                    imageProxy.imageInfo.rotationDegrees.toFloat())
             }
             .addOnFailureListener { e ->
                 if (this.cameraEventListener != null) {
@@ -155,10 +170,10 @@ class FaceAnalyzer(
 
         // process face number of images.
         if (this.captureOptions.faceNumberOfImages > 0) {
-            if (this.count < captureOptions.faceNumberOfImages) {
-                this.count++
+            if (this.numberOfImages < captureOptions.faceNumberOfImages) {
+                this.numberOfImages++
                 this.cameraEventListener?.onFaceImageCreated(
-                    this.count,
+                    this.numberOfImages,
                     this.captureOptions.faceNumberOfImages,
                     saveCroppedImage(
                         mediaBitmap,
@@ -175,9 +190,9 @@ class FaceAnalyzer(
         }
 
         // process face unlimited.
-        this.count = (this.count + 1) % ANALYZER_LIMIT
+        this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
         this.cameraEventListener?.onFaceImageCreated(
-            this.count,
+            this.numberOfImages,
             this.captureOptions.faceNumberOfImages,
             this.saveCroppedImage(
                 mediaBitmap,
@@ -190,11 +205,12 @@ class FaceAnalyzer(
     /**
      * Clear [CameraGraphicView] and emit face not detected once.
      */
-    private fun checkFaceHided() {
-        if (!this.isHided) {
-            this.isHided = true
+    private fun checkFaceUndetected() {
+        if (this.isFaceDetected) {
+            this.isFaceDetected = false
+            this.graphicView.clear()
             if (this.cameraEventListener != null) {
-                this.cameraEventListener.onFaceDetected(false)
+                this.cameraEventListener.onFaceUndetected()
             }
         }
     }
@@ -209,7 +225,7 @@ class FaceAnalyzer(
      */
     private fun saveCroppedImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float): String {
         val path = this.context.externalCacheDir.toString()
-        val file = File(path, "facetrack-".plus(this.count).plus(".jpg"))
+        val file = File(path, "yoonit-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
         var matrix = Matrix()
@@ -223,7 +239,7 @@ class FaceAnalyzer(
                 mediaBitmap.width,
                 mediaBitmap.height,
                 matrix,
-                true
+                false
             )
 
         matrix = Matrix()
@@ -239,7 +255,7 @@ class FaceAnalyzer(
                 boundingBox.width(),
                 boundingBox.height(),
                 matrix,
-                true
+                false
             )
 
         val aspectRatio = max(
@@ -323,6 +339,6 @@ class FaceAnalyzer(
 
     companion object {
         private const val TAG = "FaceAnalyzer"
-        private const val ANALYZER_LIMIT = 20
+        private const val NUMBER_OF_IMAGES_LIMIT = 25
     }
 }

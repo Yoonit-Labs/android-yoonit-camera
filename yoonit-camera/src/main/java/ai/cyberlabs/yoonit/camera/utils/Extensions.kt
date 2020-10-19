@@ -1,10 +1,12 @@
 /**
+ * +-+-+-+-+-+-+
+ * |y|o|o|n|i|t|
+ * +-+-+-+-+-+-+
  *
- * CameraCallback.kt
- * CameraCallback
- *
- * Created by Victor Goulart on 01/09/2020.
- *
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Yoonit Camera lib for Android applications                      |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
 package ai.cyberlabs.yoonit.camera.utils
@@ -48,4 +50,16 @@ fun Rect.scaledBy(percent: Float): Rect {
     val deltaY = (height() - newHeight) / 2
 
     return Rect((left + deltaX).toInt(), (top + deltaY).toInt(), (right - deltaX).toInt(), (bottom - deltaY).toInt())
+}
+
+fun Rect.resize(width: Int, height: Int): Rect {
+    val left = centerX() - (width / 2)
+    val top = centerY() - (height / 2)
+
+    return Rect(
+        left,
+        top,
+        left + width,
+        top + height
+    )
 }

@@ -1,10 +1,12 @@
 /**
+ * +-+-+-+-+-+-+
+ * |y|o|o|n|i|t|
+ * +-+-+-+-+-+-+
  *
- * CameraController.kt
- * CameraView
- *
- * Created by Haroldo Shigueaki Teruya on 05/08/2020.
- *
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Yoonit Camera lib for Android applications                      |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
 package ai.cyberlabs.yoonit.camera
@@ -126,7 +128,7 @@ class CameraController(
     fun setCaptureType(captureType: CaptureType) {
         this.captureType = captureType
         this.imageAnalysis.clearAnalyzer()
-        buildCameraImageAnalyzer()
+        this.buildCameraImageAnalyzer()
     }
 
     /**
@@ -172,7 +174,7 @@ class CameraController(
 
         when (this.captureType) {
             CaptureType.NONE -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
+                Executors.newSingleThreadExecutor(),
                 ImageAnalysis.Analyzer {
                     this.graphicView.clear()
                     it.close()
@@ -180,7 +182,7 @@ class CameraController(
             )
 
             CaptureType.FACE -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
+                Executors.newSingleThreadExecutor(),
                 FaceAnalyzer(
                     this.context,
                     this.cameraEventListener,
@@ -192,7 +194,7 @@ class CameraController(
             )
 
             CaptureType.QRCODE -> this.imageAnalysis.setAnalyzer(
-                Executors.newFixedThreadPool(1),
+                Executors.newSingleThreadExecutor(),
                 BarcodeAnalyzer(this.cameraEventListener, this.graphicView)
             )
         }
