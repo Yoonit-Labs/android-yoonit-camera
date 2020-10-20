@@ -65,10 +65,17 @@ class CameraView @JvmOverloads constructor(
     fun startCaptureType(captureType: String) {
         this.captureType = captureType
         when (captureType) {
-            "none" -> this.cameraController.setCaptureType(CaptureType.NONE)
-            "face" -> this.cameraController.setCaptureType(CaptureType.FACE)
-            "barcode" -> this.cameraController.setCaptureType(CaptureType.QRCODE)
+            "none" -> this.cameraController.startCaptureType(CaptureType.NONE)
+            "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
+            "barcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
         }
+    }
+
+    /**
+     * Stop camera image capture.
+     */
+    fun stopCapture() {
+        this.cameraController.stopAnalyzer()
     }
 
     /**
@@ -91,13 +98,6 @@ class CameraView @JvmOverloads constructor(
     fun setCameraEventListener(cameraEventListener: CameraEventListener) {
         this.cameraEventListener = cameraEventListener
         this.cameraController.cameraEventListener = cameraEventListener
-    }
-
-    /**
-     * Stop camera image capture.
-     */
-    fun stopCapture() {
-        this.cameraController.stopAnalyzer()
     }
 
     /**
