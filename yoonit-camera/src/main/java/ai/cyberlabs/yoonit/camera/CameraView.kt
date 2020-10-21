@@ -14,6 +14,7 @@ package ai.cyberlabs.yoonit.camera
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Size
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
@@ -132,8 +133,8 @@ class CameraView @JvmOverloads constructor(
     /**
      * Set face image size to be saved.
      */
-    fun setFaceImageSize(faceImageSize: Int) {
-        this.captureOptions.faceImageSize = faceImageSize
+    fun setFaceImageSize(width: Int, height: Int) {
+        this.captureOptions.faceImageSize = Size(width, height)
     }
 
     companion object {

@@ -174,7 +174,9 @@ class CameraController(
                 this as CameraCallback
             ))
 
-            CaptureType.QRCODE -> this.imageAnalyzerController.start(BarcodeAnalyzer(this.cameraEventListener, this.graphicView))
+            CaptureType.QRCODE -> this.imageAnalyzerController.start(BarcodeAnalyzer(
+                this.cameraEventListener,
+                this.graphicView))
         }
     }
 
