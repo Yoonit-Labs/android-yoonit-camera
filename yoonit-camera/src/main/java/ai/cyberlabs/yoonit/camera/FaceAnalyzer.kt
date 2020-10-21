@@ -175,7 +175,7 @@ class FaceAnalyzer(
                 this.cameraEventListener?.onFaceImageCreated(
                     this.numberOfImages,
                     this.captureOptions.faceNumberOfImages,
-                    saveCroppedImage(
+                    this.saveCroppedImage(
                         mediaBitmap,
                         boundingBox,
                         rotationDegrees
@@ -258,15 +258,10 @@ class FaceAnalyzer(
                 false
             )
 
-        val aspectRatio = max(
-            this.captureOptions.faceImageSize / croppedBitmap.width.toFloat(),
-            this.captureOptions.faceImageSize / croppedBitmap.height.toFloat()
-        )
-
         val scaledBitmap = Bitmap.createScaledBitmap(
             croppedBitmap,
-            (croppedBitmap.width * aspectRatio).toInt(),
-            (croppedBitmap.height * aspectRatio).toInt(),
+            this.captureOptions.faceImageSize.width,
+            this.captureOptions.faceImageSize.height,
             false
         )
 
