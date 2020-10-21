@@ -38,13 +38,9 @@ class MainActivity : AppCompatActivity() {
 
         this.cameraView = camera_view
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         if (this.allPermissionsGranted()) {
-            this.cameraView.setFaceNumberOfImages(10)
+            this.cameraView.setFaceTimeBetweenImages(2000)
             this.cameraView.startPreview()
             return
         }

@@ -17,13 +17,11 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import java.util.concurrent.Executors
 
 /**
  * Class responsible to handle the camera operations.
@@ -37,7 +35,7 @@ class CameraController(
     var cameraEventListener: CameraEventListener? = null
     var showDetectionBox: Boolean = true
 
-    private lateinit var imageAnalysis: ImageAnalysis
+    private var imageAnalyzerController = ImageAnalyzerController(this.graphicView)
     private lateinit var preview: Preview
     private var cameraProviderProcess: ProcessCameraProvider? = null
     private var captureType: CaptureType = CaptureType.NONE
@@ -64,6 +62,8 @@ class CameraController(
         val cameraProviderFuture = ProcessCameraProvider
             .getInstance(this.context)
 
+        this.imageAnalyzerController.build()
+
         cameraProviderFuture.addListener(
             Runnable {
                 try {
@@ -80,17 +80,10 @@ class CameraController(
 
                     this.cameraProviderProcess?.unbindAll()
 
-                    this.imageAnalysis = ImageAnalysis
-                        .Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-
-                    this.buildCameraImageAnalyzer()
-
                     this.cameraProviderProcess?.bindToLifecycle(
                         this.context as LifecycleOwner,
                         cameraSelector,
-                        this.imageAnalysis,
+                        this.imageAnalyzerController.analysis,
                         this.preview
                     )
 
@@ -106,28 +99,22 @@ class CameraController(
     }
 
     /**
-     * Stop camera face image analyzer and clear drawing.
+     * Stop camera face image analyzer and clear drawings.
      */
     fun stopAnalyzer() {
         this.captureType = CaptureType.NONE
-        this.imageAnalysis.clearAnalyzer()
-        this.graphicView.clear()
 
-        this.imageAnalysis.setAnalyzer(
-            Executors.newFixedThreadPool(1),
-            ImageAnalysis.Analyzer {
-                this.graphicView.clear()
-                it.close()
-            }
-        )
+        this.imageAnalyzerController.stop()
     }
 
     /**
-     * Change capture type of Image Analyzer.
+     * Start capture type of Image Analyzer.
+     * - Starts again if already has a capture process running.
      */
-    fun setCaptureType(captureType: CaptureType) {
+    fun startCaptureType(captureType: CaptureType) {
         this.captureType = captureType
-        this.imageAnalysis.clearAnalyzer()
+
+        this.imageAnalyzerController.stop()
         this.buildCameraImageAnalyzer()
     }
 
@@ -138,7 +125,8 @@ class CameraController(
         this.cameraLensFacing =
             if (this.cameraLensFacing == CameraSelector.LENS_FACING_FRONT)
                 CameraSelector.LENS_FACING_BACK
-            else CameraSelector.LENS_FACING_FRONT
+            else
+                CameraSelector.LENS_FACING_FRONT
 
         if (this.cameraProviderProcess != null) {
             val cameraSelector = CameraSelector
@@ -151,12 +139,13 @@ class CameraController(
             this.cameraProviderProcess?.bindToLifecycle(
                 this.context as LifecycleOwner,
                 cameraSelector,
-                this.imageAnalysis,
-                this.preview)
+                this.imageAnalyzerController.analysis,
+                this.preview
+            )
 
             this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
 
-            this.setCaptureType(this.captureType)
+            this.startCaptureType(this.captureType)
         }
     }
 
@@ -168,35 +157,24 @@ class CameraController(
     }
 
     /**
-     * Build ImageAnalyzis.Analyzer based on the capture type.
+     * Start image analyzer based on the capture type.
      */
     private fun buildCameraImageAnalyzer() {
 
         when (this.captureType) {
-            CaptureType.NONE -> this.imageAnalysis.setAnalyzer(
-                Executors.newSingleThreadExecutor(),
-                ImageAnalysis.Analyzer {
-                    this.graphicView.clear()
-                    it.close()
-                }
-            )
 
-            CaptureType.FACE -> this.imageAnalysis.setAnalyzer(
-                Executors.newSingleThreadExecutor(),
-                FaceAnalyzer(
-                    this.context,
-                    this.cameraEventListener,
-                    this.graphicView,
-                    this.captureOptions,
-                    this.showDetectionBox,
-                    this as CameraCallback
-                )
-            )
+            CaptureType.NONE -> this.imageAnalyzerController.stop()
 
-            CaptureType.QRCODE -> this.imageAnalysis.setAnalyzer(
-                Executors.newSingleThreadExecutor(),
-                BarcodeAnalyzer(this.cameraEventListener, this.graphicView)
-            )
+            CaptureType.FACE -> this.imageAnalyzerController.start(FaceAnalyzer(
+                this.context,
+                this.cameraEventListener,
+                this.graphicView,
+                this.captureOptions,
+                this.showDetectionBox,
+                this as CameraCallback
+            ))
+
+            CaptureType.QRCODE -> this.imageAnalyzerController.start(BarcodeAnalyzer(this.cameraEventListener, this.graphicView))
         }
     }
 
