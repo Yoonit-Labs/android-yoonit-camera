@@ -132,7 +132,8 @@ class FaceAnalyzer(
                 this.saveFaceImage(
                     mediaImage.toBitmap(),
                     boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat())
+                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                )
             }
             .addOnFailureListener { e ->
                 if (this.cameraEventListener != null) {

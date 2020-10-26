@@ -38,7 +38,6 @@ class CameraController(
     private var imageAnalyzerController = ImageAnalyzerController(this.graphicView)
     private lateinit var preview: Preview
     private var cameraProviderProcess: ProcessCameraProvider? = null
-    private var captureType: CaptureType = CaptureType.NONE
     private var cameraLensFacing: Int = CameraSelector.LENS_FACING_FRONT
 
     override fun onStopAnalyzer() {
@@ -102,7 +101,7 @@ class CameraController(
      * Stop camera face image analyzer and clear drawings.
      */
     fun stopAnalyzer() {
-        this.captureType = CaptureType.NONE
+        this.captureOptions.type = CaptureType.NONE
 
         this.imageAnalyzerController.stop()
     }
@@ -112,7 +111,7 @@ class CameraController(
      * - Starts again if already has a capture process running.
      */
     fun startCaptureType(captureType: CaptureType) {
-        this.captureType = captureType
+        this.captureOptions.type = captureType
 
         this.imageAnalyzerController.stop()
         this.buildCameraImageAnalyzer()
@@ -145,7 +144,7 @@ class CameraController(
 
             this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
 
-            this.startCaptureType(this.captureType)
+            this.startCaptureType(this.captureOptions.type)
         }
     }
 
@@ -161,22 +160,27 @@ class CameraController(
      */
     private fun buildCameraImageAnalyzer() {
 
-        when (this.captureType) {
+        when (this.captureOptions.type) {
 
             CaptureType.NONE -> this.imageAnalyzerController.stop()
 
-            CaptureType.FACE -> this.imageAnalyzerController.start(FaceAnalyzer(
-                this.context,
-                this.cameraEventListener,
-                this.graphicView,
-                this.captureOptions,
-                this.showDetectionBox,
-                this as CameraCallback
-            ))
+            CaptureType.FACE -> this.imageAnalyzerController.start(
+                FaceAnalyzer(
+                    this.context,
+                    this.cameraEventListener,
+                    this.graphicView,
+                    this.captureOptions,
+                    this.showDetectionBox,
+                    this as CameraCallback
+                )
+            )
 
-            CaptureType.QRCODE -> this.imageAnalyzerController.start(BarcodeAnalyzer(
-                this.cameraEventListener,
-                this.graphicView))
+            CaptureType.QRCODE -> this.imageAnalyzerController.start(
+                BarcodeAnalyzer(
+                    this.cameraEventListener,
+                    this.graphicView
+                )
+            )
         }
     }
 
