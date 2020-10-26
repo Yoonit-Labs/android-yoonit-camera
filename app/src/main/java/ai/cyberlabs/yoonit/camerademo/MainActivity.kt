@@ -20,9 +20,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
-import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 
         if (this.allPermissionsGranted()) {
-            this.cameraView.setFaceTimeBetweenImages(2000)
             this.cameraView.startPreview()
             return
         }
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onFaceBoxSwitchClick(view: View) {
-        if (view is Switch) {
+        if (view is SwitchCompat) {
             val checked = view.isChecked
             this.cameraView.setFaceDetectionBox(checked)
         }
