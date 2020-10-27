@@ -40,7 +40,6 @@ class FaceAnalyzer(
     private val cameraEventListener: CameraEventListener?,
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions,
-    private val showDetectionBox: Boolean,
     private val cameraCallback: CameraCallback
 ) : ImageAnalysis.Analyzer {
 
@@ -152,7 +151,7 @@ class FaceAnalyzer(
      * @param faceBoundingBox bounding box of the face.
      */
     private fun toggleDetectionBox(faceBoundingBox: RectF) {
-        if (this.showDetectionBox) {
+        if (this.captureOptions.faceDetectionBox) {
             this.graphicView.drawBoundingBox(faceBoundingBox)
             return
         }

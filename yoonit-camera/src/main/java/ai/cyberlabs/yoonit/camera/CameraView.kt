@@ -70,7 +70,6 @@ class CameraView @JvmOverloads constructor(
      * @param captureType The capture type: "none" | "face" | "barcode".
      */
     fun startCaptureType(captureType: String) {
-
         when (captureType) {
             "none" -> {
                 this.captureOptions.type = CaptureType.NONE
@@ -84,9 +83,14 @@ class CameraView @JvmOverloads constructor(
                 this.captureOptions.type = CaptureType.QRCODE
                 this.cameraController.startCaptureType(CaptureType.QRCODE)
             }
+            else -> {
+                if (this.cameraEventListener != null) {
+                    this.cameraEventListener!!.onError(KeyError.INVALID_CAPTURE_TYPE)
+                }
+            }
         }
     }
-
+    
     /**
      * Stop camera image capture.
      */
@@ -135,7 +139,7 @@ class CameraView @JvmOverloads constructor(
      * @param faceDetectionBox The indicator to show or hide the face detection box. Default value is true;
      */
     fun setFaceDetectionBox(faceDetectionBox: Boolean) {
-        this.cameraController.showDetectionBox = faceDetectionBox
+        this.captureOptions.faceDetectionBox = faceDetectionBox
         this.cameraController.startCaptureType(this.captureOptions.type)
     }
 

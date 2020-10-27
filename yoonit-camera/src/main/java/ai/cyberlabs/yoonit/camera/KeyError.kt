@@ -11,17 +11,6 @@
 
 package ai.cyberlabs.yoonit.camera
 
-import android.util.Size
-
-/**
- * Custom model to set [CameraView] features options.
- */
-data class CaptureOptions(
-    var type: CaptureType = CaptureType.NONE,
-
-    var faceDetectionBox: Boolean = true,
-    var faceNumberOfImages: Int = 0,
-    var faceTimeBetweenImages: Long = 1000,
-    var facePaddingPercent: Float = 0f,
-    var faceImageSize: Size = Size(200, 200)
-)
+object KeyError {
+    val INVALID_CAPTURE_TYPE: String = "INVALID_CAPTURE_TYPE"
+}

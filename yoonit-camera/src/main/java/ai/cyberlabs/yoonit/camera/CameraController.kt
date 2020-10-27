@@ -33,7 +33,6 @@ class CameraController(
     private val captureOptions: CaptureOptions
 ) : CameraCallback {
     var cameraEventListener: CameraEventListener? = null
-    var showDetectionBox: Boolean = true
 
     private var imageAnalyzerController = ImageAnalyzerController(this.graphicView)
     private lateinit var preview: Preview
@@ -170,7 +169,6 @@ class CameraController(
                     this.cameraEventListener,
                     this.graphicView,
                     this.captureOptions,
-                    this.showDetectionBox,
                     this as CameraCallback
                 )
             )
