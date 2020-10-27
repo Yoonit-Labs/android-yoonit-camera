@@ -32,12 +32,16 @@ class CameraController(
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions
 ) : CameraCallback {
+
+    // Camera interface event listeners object.
     var cameraEventListener: CameraEventListener? = null
 
+    // Image analyzer handle build, start and stop.
     private var imageAnalyzerController = ImageAnalyzerController(this.graphicView)
+
+    // Preview and ProcessCameraProvider both used to resume camera setup after toggle lens.
     private lateinit var preview: Preview
     private var cameraProviderProcess: ProcessCameraProvider? = null
-    private var cameraLensFacing: Int = CameraSelector.LENS_FACING_FRONT
 
     override fun onStopAnalyzer() {
         this.stopAnalyzer()
@@ -73,7 +77,7 @@ class CameraController(
 
                     val cameraSelector = CameraSelector
                         .Builder()
-                        .requireLensFacing(this.cameraLensFacing)
+                        .requireLensFacing(this.captureOptions.cameraLens)
                         .build()
 
                     this.cameraProviderProcess?.unbindAll()
@@ -107,7 +111,6 @@ class CameraController(
 
     /**
      * Start capture type of Image Analyzer.
-     * - Starts again if already has a capture process running.
      */
     fun startCaptureType(captureType: CaptureType) {
         this.captureOptions.type = captureType
@@ -120,8 +123,8 @@ class CameraController(
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
-        this.cameraLensFacing =
-            if (this.cameraLensFacing == CameraSelector.LENS_FACING_FRONT)
+        this.captureOptions.cameraLens =
+            if (this.captureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT)
                 CameraSelector.LENS_FACING_BACK
             else
                 CameraSelector.LENS_FACING_FRONT
@@ -129,7 +132,7 @@ class CameraController(
         if (this.cameraProviderProcess != null) {
             val cameraSelector = CameraSelector
                 .Builder()
-                .requireLensFacing(this.cameraLensFacing)
+                .requireLensFacing(this.captureOptions.cameraLens)
                 .build()
 
             this.cameraProviderProcess?.unbindAll()
@@ -151,7 +154,7 @@ class CameraController(
      * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
      */
     fun getCameraLens(): Int {
-        return this.cameraLensFacing
+        return this.captureOptions.cameraLens
     }
 
     /**

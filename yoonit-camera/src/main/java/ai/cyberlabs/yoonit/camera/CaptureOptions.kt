@@ -12,12 +12,15 @@
 package ai.cyberlabs.yoonit.camera
 
 import android.util.Size
+import androidx.camera.core.CameraSelector
 
 /**
  * Custom model to set [CameraView] features options.
  */
 data class CaptureOptions(
     var type: CaptureType = CaptureType.NONE,
+
+    var cameraLens: Int = CameraSelector.LENS_FACING_FRONT,
 
     var faceDetectionBox: Boolean = true,
     var faceNumberOfImages: Int = 0,
