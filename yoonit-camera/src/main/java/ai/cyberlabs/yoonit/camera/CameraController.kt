@@ -101,7 +101,7 @@ class CameraController(
     }
 
     /**
-     * Stop camera face image analyzer and clear drawings.
+     * Stop camera image analyzer and clear drawings.
      */
     fun stopAnalyzer() {
         this.captureOptions.type = CaptureType.NONE
@@ -111,8 +111,18 @@ class CameraController(
 
     /**
      * Start capture type of Image Analyzer.
+     * Must have started preview.
      */
     fun startCaptureType(captureType: CaptureType) {
+
+        // Must have started preview.
+        if (this.cameraProviderProcess == null) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener?.onError(KeyError.NOT_STARTED_PREVIEW)
+            }
+            return
+        }
+
         this.captureOptions.type = captureType
 
         this.imageAnalyzerController.stop()

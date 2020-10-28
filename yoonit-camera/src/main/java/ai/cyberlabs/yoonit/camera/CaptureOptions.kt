@@ -15,7 +15,7 @@ import android.util.Size
 import androidx.camera.core.CameraSelector
 
 /**
- * Custom model to set [CameraView] features options.
+ * Model to set [CameraView] features options.
  */
 data class CaptureOptions(
     var type: CaptureType = CaptureType.NONE,

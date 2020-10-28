@@ -12,5 +12,6 @@
 package ai.cyberlabs.yoonit.camera
 
 object KeyError {
-    val INVALID_CAPTURE_TYPE: String = "INVALID_CAPTURE_TYPE"
+    const val NOT_STARTED_PREVIEW: String = "NOT_STARTED_PREVIEW"
+    const val INVALID_CAPTURE_TYPE: String = "INVALID_CAPTURE_TYPE"
 }

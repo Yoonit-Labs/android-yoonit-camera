@@ -29,14 +29,14 @@ class CameraView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyle, defStyleRes) {
 
-    // Custom model to set CameraView features options.
+    // Model to set CameraView features options.
     private var captureOptions: CaptureOptions = CaptureOptions()
-
-    // Camera interface event listeners object.
-    private var cameraEventListener: CameraEventListener? = null
 
     // Camera controller object.
     private var cameraController: CameraController
+
+    // Camera interface event listeners object.
+    private var cameraEventListener: CameraEventListener? = null
 
     /**
      * Inflate CameraView layout and instantiate [CameraController].
@@ -67,22 +67,16 @@ class CameraView @JvmOverloads constructor(
      * Start capture type: none, face or barcode.
      * Must have started preview, see [startPreview].
      *
-     * @param captureType The capture type: "none" | "face" | "barcode".
+     * @param captureType The capture type: "none" | "face" | "barcode" and must have started preview;
      */
     fun startCaptureType(captureType: String) {
         when (captureType) {
-            "none" -> {
-                this.captureOptions.type = CaptureType.NONE
-                this.cameraController.startCaptureType(CaptureType.NONE)
-            }
-            "face" -> {
-                this.captureOptions.type = CaptureType.FACE
-                this.cameraController.startCaptureType(CaptureType.FACE)
-            }
-            "barcode" -> {
-                this.captureOptions.type = CaptureType.QRCODE
-                this.cameraController.startCaptureType(CaptureType.QRCODE)
-            }
+            "none" -> this.cameraController.startCaptureType(CaptureType.NONE)
+
+            "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
+
+            "barcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
+
             else -> {
                 if (this.cameraEventListener != null) {
                     this.cameraEventListener!!.onError(KeyError.INVALID_CAPTURE_TYPE)
