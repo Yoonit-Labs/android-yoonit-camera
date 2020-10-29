@@ -9,8 +9,10 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera
+package ai.cyberlabs.yoonit.camera.analyzers
 
+import ai.cyberlabs.yoonit.camera.CameraGraphicView
+import ai.cyberlabs.yoonit.camera.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.utils.resize
@@ -127,12 +129,13 @@ class FaceAnalyzer(
                 }
                 this.analyzerTimeStamp = currentTimestamp
 
-                // Save face image.
-                this.saveFaceImage(
-                    mediaImage.toBitmap(),
-                    boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                 val imagePath = this.saveCroppedImage(
+                     mediaImage.toBitmap(),
+                     boundingBox,
+                     imageProxy.imageInfo.rotationDegrees.toFloat()
                 )
+
+                this.handleEmitFaceImageCreated(imagePath)
             }
             .addOnFailureListener { e ->
                 if (this.cameraEventListener != null) {
@@ -160,13 +163,11 @@ class FaceAnalyzer(
     }
 
     /**
-     * Verify if has any limit of faces saved then save the cropped image and emit onFaceImageCreated event.
+     * Handle emit face image file created.
      *
-     * @param mediaBitmap the original image bitmap.
-     * @param boundingBox the face coordinates detected.
-     * @param rotationDegrees the rotation degrees to turn the image to portrait.
+     * @param imagePath image file path.
      */
-    private fun saveFaceImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float) {
+    private fun handleEmitFaceImageCreated(imagePath: String) {
 
         // process face number of images.
         if (this.captureOptions.faceNumberOfImages > 0) {
@@ -175,11 +176,7 @@ class FaceAnalyzer(
                 this.cameraEventListener?.onFaceImageCreated(
                     this.numberOfImages,
                     this.captureOptions.faceNumberOfImages,
-                    this.saveCroppedImage(
-                        mediaBitmap,
-                        boundingBox,
-                        rotationDegrees
-                    )
+                    imagePath
                 )
                 return
             }
@@ -194,11 +191,7 @@ class FaceAnalyzer(
         this.cameraEventListener?.onFaceImageCreated(
             this.numberOfImages,
             this.captureOptions.faceNumberOfImages,
-            this.saveCroppedImage(
-                mediaBitmap,
-                boundingBox,
-                rotationDegrees
-            )
+            imagePath
         )
     }
 
@@ -225,7 +218,7 @@ class FaceAnalyzer(
      */
     private fun saveCroppedImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float): String {
         val path = this.context.externalCacheDir.toString()
-        val file = File(path, "yoonit-".plus(this.numberOfImages).plus(".jpg"))
+        val file = File(path, "yoonit-face-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
         var matrix = Matrix()
