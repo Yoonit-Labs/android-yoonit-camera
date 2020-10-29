@@ -11,6 +11,9 @@
 
 package ai.cyberlabs.yoonit.camera
 
+import ai.cyberlabs.yoonit.camera.analyzers.BarcodeAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.FaceAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.FrameAnalyzer
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest
@@ -190,6 +193,16 @@ class CameraController(
                 BarcodeAnalyzer(
                     this.cameraEventListener,
                     this.graphicView
+                )
+            )
+
+            CaptureType.FRAME -> this.imageAnalyzerController.start(
+                FrameAnalyzer(
+                    this.context,
+                    this.cameraEventListener,
+                    this.captureOptions,
+                    this.graphicView,
+                    this as CameraCallback
                 )
             )
         }

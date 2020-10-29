@@ -67,7 +67,7 @@ class CameraView @JvmOverloads constructor(
      * Start capture type: none, face or barcode.
      * Must have started preview, see [startPreview].
      *
-     * @param captureType The capture type: "none" | "face" | "barcode" and must have started preview;
+     * @param captureType The capture type: "none" | "face" | "barcode" | "frame";
      */
     fun startCaptureType(captureType: String) {
         when (captureType) {
@@ -76,6 +76,8 @@ class CameraView @JvmOverloads constructor(
             "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
 
             "barcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
+
+            "frame" -> this.cameraController.startCaptureType(CaptureType.FRAME)
 
             else -> {
                 if (this.cameraEventListener != null) {
@@ -163,6 +165,26 @@ class CameraView @JvmOverloads constructor(
      */
     fun setFaceImageSize(width: Int, height: Int) {
         this.captureOptions.faceImageSize = Size(width, height)
+    }
+
+    /**
+     * Set number of frame file images to create;
+     * The time interval to create the image is 1000 milli second.
+     * See [setFrameTimeBetweenImages] to change the time interval.
+     *
+     * @param faceNumberOfImages The number of images to create;
+     */
+    fun setFrameNumberOfImages(frameNumberOfImages: Int) {
+        this.captureOptions.frameNumberOfImages = frameNumberOfImages
+    }
+
+    /**
+     * Set saving frame images time interval in milli seconds.
+     *
+     * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000;
+     */
+    fun setFrameTimeBetweenImages(frameTimeBetweenImages: Long) {
+        this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
     }
 
     companion object {

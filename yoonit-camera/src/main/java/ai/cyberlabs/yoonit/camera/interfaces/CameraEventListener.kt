@@ -28,4 +28,6 @@ interface CameraEventListener {
     fun onPermissionDenied()
 
     fun onBarcodeScanned(content: String)
+
+    fun onFrameImageCreated(count: Int, total: Int, imagePath: String)
 }
