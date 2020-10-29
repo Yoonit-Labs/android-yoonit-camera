@@ -2,9 +2,19 @@
 
 # android-yoonit-camera  
 
-![Generic badge](https://img.shields.io/badge/version-v1.0.2-<COLOR>.svg) ![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
+![Generic badge](https://img.shields.io/badge/version-v1.1.0-<COLOR>.svg) ![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
 
-Face image capture and QR Code scanning library for android using the [Standart Google ML Kit](https://developers.google.com/ml-kit).
+A Android plugin to provide:
+- Modern Android Camera API (Camera X)
+- [Standart Google ML Kit](https://developers.google.com/ml-kit)
+- Camera preview (Front & Back)
+- Face detection (With Min & Max size (Soon))
+- Landmark detection (Soon)
+- Face crop
+- Face capture
+- Frame capture
+- Face ROI (Soon)
+- QR Code scanning
 
 ## Install
   
@@ -104,7 +114,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | Function                        | Parameters                     | Return Type | Valid values                                                                      | Description
 | -                               | -                              | -           | -                                                                                 | -  
 | **`startPreview`**              | -                              | void        | -                                                                                 | Start camera preview if has permission.
-| **`startCaptureType`**          | `captureType: String`          | void        | <ul><li>`"none"`</li><li>`"face"`</li><li>`"barcode"`</li><li>`"frame"`</li></ul> | Set capture type none, face or barcode.
+| **`startCaptureType`**          | `captureType: String`          | void        | <ul><li>`"none"`</li><li>`"face"`</li><li>`"barcode"`</li><li>`"frame"`</li></ul> | Set capture type none, face, barcode or frame.
 | **`stopCapture`**               | -                              | void        | -                                                                                 | Stop any type of capture.
 | **`toggleCameraLens`**          | -                              | void        | -                                                                                 | Set camera lens facing front or back.
 | **`getCameraLens`**             | -                              | Int         | -                                                                                 | Return `Int` that represents lens face state: 0 for front 1 for back camera.  
