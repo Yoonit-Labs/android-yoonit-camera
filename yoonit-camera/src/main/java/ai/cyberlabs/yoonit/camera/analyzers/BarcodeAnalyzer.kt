@@ -9,8 +9,9 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera
+package ai.cyberlabs.yoonit.camera.analyzers
 
+import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.annotation.SuppressLint
 import android.graphics.Rect
@@ -30,7 +31,9 @@ class BarcodeAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     /**
-     * Analyzes camera image...
+     * Receive image from CameraX API.
+     *
+     * @param imageProxy image from CameraX API.
      */
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(imageProxy: ImageProxy) {
