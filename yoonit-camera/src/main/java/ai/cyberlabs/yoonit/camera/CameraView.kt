@@ -29,16 +29,14 @@ class CameraView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyle, defStyleRes) {
 
-    // Custom model to set CameraView features options.
+    // Model to set CameraView features options.
     private var captureOptions: CaptureOptions = CaptureOptions()
-
-    // Camera interface event listeners object.
-    private var cameraEventListener: CameraEventListener? = null
 
     // Camera controller object.
     private var cameraController: CameraController
 
-    private var captureType: String = "none"
+    // Camera interface event listeners object.
+    private var cameraEventListener: CameraEventListener? = null
 
     /**
      * Inflate CameraView layout and instantiate [CameraController].
@@ -50,7 +48,12 @@ class CameraView @JvmOverloads constructor(
             true
         )
 
-        this.cameraController = CameraController(context, previewView, graphicView, this.captureOptions)
+        this.cameraController = CameraController(
+            context,
+            previewView,
+            graphicView,
+            this.captureOptions
+        )
     }
 
     /**
@@ -61,17 +64,29 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set different types os captures (none, face, barcode).
+     * Start capture type: none, face or barcode.
+     * Must have started preview, see [startPreview].
+     *
+     * @param captureType The capture type: "none" | "face" | "barcode" | "frame";
      */
     fun startCaptureType(captureType: String) {
-        this.captureType = captureType
         when (captureType) {
             "none" -> this.cameraController.startCaptureType(CaptureType.NONE)
+
             "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
+
             "barcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
+
+            "frame" -> this.cameraController.startCaptureType(CaptureType.FRAME)
+
+            else -> {
+                if (this.cameraEventListener != null) {
+                    this.cameraEventListener!!.onError(KeyError.INVALID_CAPTURE_TYPE)
+                }
+            }
         }
     }
-
+    
     /**
      * Stop camera image capture.
      */
@@ -87,7 +102,9 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
+     * Get current camera lens.
+     *
+     * @return: value 0 is front camera; value 1 is back camera.
      */
     fun getCameraLens(): Int {
         return this.cameraController.getCameraLens()
@@ -102,39 +119,72 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set number of images to save when detected.
+     * Set number of face file images to create;
+     * The time interval to create the image is 1000 milli second.
+     * See [setFaceTimeBetweenImages] to change the time interval.
+     *
+     * @param faceNumberOfImages The number of images to create;
      */
     fun setFaceNumberOfImages(faceNumberOfImages: Int) {
         this.captureOptions.faceNumberOfImages = faceNumberOfImages
     }
 
     /**
-     * Set to show face detection box when face detected.
+     * Set to show/hide face detection box when face detected.
+     *
+     * @param faceDetectionBox The indicator to show or hide the face detection box. Default value is true;
      */
     fun setFaceDetectionBox(faceDetectionBox: Boolean) {
-        this.cameraController.showDetectionBox = faceDetectionBox
-        this.startCaptureType(this.captureType)
+        this.captureOptions.faceDetectionBox = faceDetectionBox
+        this.cameraController.startCaptureType(this.captureOptions.type)
     }
 
     /**
      * Set saving face images time interval in milli seconds.
+     *
+     * @param faceTimeBetweenImages The time in milli seconds. Default value is 1000;
      */
     fun setFaceTimeBetweenImages(faceTimeBetweenImages: Long) {
         this.captureOptions.faceTimeBetweenImages = faceTimeBetweenImages
     }
 
     /**
-     * Set face image and bounding box padding in percent.
+     * Enlarge the face bounding box by percent.
+     *
+     * @param facePaddingPercent The percent to enlarge the bounding box. Default value is 0.0;
      */
     fun setFacePaddingPercent(facePaddingPercent: Float) {
         this.captureOptions.facePaddingPercent = facePaddingPercent
     }
 
     /**
-     * Set face image size to be saved.
+     * Set face image width and height to be saved.
+     *
+     * @param width The file image width in pixels. Default value is 200;
+     * @param height The file image height in pixels. Default value is 200;
      */
     fun setFaceImageSize(width: Int, height: Int) {
         this.captureOptions.faceImageSize = Size(width, height)
+    }
+
+    /**
+     * Set number of frame file images to create;
+     * The time interval to create the image is 1000 milli second.
+     * See [setFrameTimeBetweenImages] to change the time interval.
+     *
+     * @param faceNumberOfImages The number of images to create;
+     */
+    fun setFrameNumberOfImages(frameNumberOfImages: Int) {
+        this.captureOptions.frameNumberOfImages = frameNumberOfImages
+    }
+
+    /**
+     * Set saving frame images time interval in milli seconds.
+     *
+     * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000;
+     */
+    fun setFrameTimeBetweenImages(frameTimeBetweenImages: Long) {
+        this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
     }
 
     companion object {

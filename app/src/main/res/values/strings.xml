@@ -9,5 +9,6 @@
     <string name="capture_type_none">NONE</string>
     <string name="capture_type_face">FACE</string>
     <string name="capture_type_qrcode">QRCODE</string>
+    <string name="capture_type_frame">FRAME</string>
     <string name="face_number">Number of face to capture:</string>
 </resources>

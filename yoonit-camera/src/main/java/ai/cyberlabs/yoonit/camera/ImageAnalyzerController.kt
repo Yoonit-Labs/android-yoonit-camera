@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 
 class ImageAnalyzerController(private val graphicView: CameraGraphicView) {
 
-    lateinit var analysis: ImageAnalysis
+    var analysis: ImageAnalysis? = null
 
     /**
      * Instantiate [ImageAnalysis] object.
@@ -32,7 +32,11 @@ class ImageAnalyzerController(private val graphicView: CameraGraphicView) {
      * Start camera image analyzer.
      */
     fun start(analyzer: ImageAnalysis.Analyzer) {
-        this.analysis.setAnalyzer(
+        if (this.analysis == null) {
+            return
+        }
+
+        this.analysis?.setAnalyzer(
             Executors.newSingleThreadExecutor(),
             analyzer
         )
@@ -42,8 +46,12 @@ class ImageAnalyzerController(private val graphicView: CameraGraphicView) {
      * Stop camera image analyzer and clean graphic view.
      */
     fun stop() {
-        this.analysis.clearAnalyzer()
-        this.analysis.setAnalyzer(
+        if (this.analysis == null) {
+            return
+        }
+
+        this.analysis?.clearAnalyzer()
+        this.analysis?.setAnalyzer(
             Executors.newFixedThreadPool(1),
             ImageAnalysis.Analyzer {
                 this.graphicView.clear()

@@ -11,6 +11,9 @@
 
 package ai.cyberlabs.yoonit.camera
 
+import ai.cyberlabs.yoonit.camera.analyzers.BarcodeAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.FaceAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.FrameAnalyzer
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest
@@ -32,14 +35,16 @@ class CameraController(
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions
 ) : CameraCallback {
-    var cameraEventListener: CameraEventListener? = null
-    var showDetectionBox: Boolean = true
 
+    // Camera interface event listeners object.
+    var cameraEventListener: CameraEventListener? = null
+
+    // Image analyzer handle build, start and stop.
     private var imageAnalyzerController = ImageAnalyzerController(this.graphicView)
+
+    // Preview and ProcessCameraProvider both used to resume camera setup after toggle lens.
     private lateinit var preview: Preview
     private var cameraProviderProcess: ProcessCameraProvider? = null
-    private var captureType: CaptureType = CaptureType.NONE
-    private var cameraLensFacing: Int = CameraSelector.LENS_FACING_FRONT
 
     override fun onStopAnalyzer() {
         this.stopAnalyzer()
@@ -75,7 +80,7 @@ class CameraController(
 
                     val cameraSelector = CameraSelector
                         .Builder()
-                        .requireLensFacing(this.cameraLensFacing)
+                        .requireLensFacing(this.captureOptions.cameraLens)
                         .build()
 
                     this.cameraProviderProcess?.unbindAll()
@@ -99,20 +104,29 @@ class CameraController(
     }
 
     /**
-     * Stop camera face image analyzer and clear drawings.
+     * Stop camera image analyzer and clear drawings.
      */
     fun stopAnalyzer() {
-        this.captureType = CaptureType.NONE
+        this.captureOptions.type = CaptureType.NONE
 
         this.imageAnalyzerController.stop()
     }
 
     /**
      * Start capture type of Image Analyzer.
-     * - Starts again if already has a capture process running.
+     * Must have started preview.
      */
     fun startCaptureType(captureType: CaptureType) {
-        this.captureType = captureType
+
+        // Must have started preview.
+        if (this.cameraProviderProcess == null) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener?.onError(KeyError.NOT_STARTED_PREVIEW)
+            }
+            return
+        }
+
+        this.captureOptions.type = captureType
 
         this.imageAnalyzerController.stop()
         this.buildCameraImageAnalyzer()
@@ -122,8 +136,8 @@ class CameraController(
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
-        this.cameraLensFacing =
-            if (this.cameraLensFacing == CameraSelector.LENS_FACING_FRONT)
+        this.captureOptions.cameraLens =
+            if (this.captureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT)
                 CameraSelector.LENS_FACING_BACK
             else
                 CameraSelector.LENS_FACING_FRONT
@@ -131,7 +145,7 @@ class CameraController(
         if (this.cameraProviderProcess != null) {
             val cameraSelector = CameraSelector
                 .Builder()
-                .requireLensFacing(this.cameraLensFacing)
+                .requireLensFacing(this.captureOptions.cameraLens)
                 .build()
 
             this.cameraProviderProcess?.unbindAll()
@@ -145,7 +159,7 @@ class CameraController(
 
             this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
 
-            this.startCaptureType(this.captureType)
+            this.startCaptureType(this.captureOptions.type)
         }
     }
 
@@ -153,7 +167,7 @@ class CameraController(
      * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
      */
     fun getCameraLens(): Int {
-        return this.cameraLensFacing
+        return this.captureOptions.cameraLens
     }
 
     /**
@@ -161,22 +175,36 @@ class CameraController(
      */
     private fun buildCameraImageAnalyzer() {
 
-        when (this.captureType) {
+        when (this.captureOptions.type) {
 
             CaptureType.NONE -> this.imageAnalyzerController.stop()
 
-            CaptureType.FACE -> this.imageAnalyzerController.start(FaceAnalyzer(
-                this.context,
-                this.cameraEventListener,
-                this.graphicView,
-                this.captureOptions,
-                this.showDetectionBox,
-                this as CameraCallback
-            ))
+            CaptureType.FACE -> this.imageAnalyzerController.start(
+                FaceAnalyzer(
+                    this.context,
+                    this.cameraEventListener,
+                    this.graphicView,
+                    this.captureOptions,
+                    this as CameraCallback
+                )
+            )
 
-            CaptureType.QRCODE -> this.imageAnalyzerController.start(BarcodeAnalyzer(
-                this.cameraEventListener,
-                this.graphicView))
+            CaptureType.QRCODE -> this.imageAnalyzerController.start(
+                BarcodeAnalyzer(
+                    this.cameraEventListener,
+                    this.graphicView
+                )
+            )
+
+            CaptureType.FRAME -> this.imageAnalyzerController.start(
+                FrameAnalyzer(
+                    this.context,
+                    this.cameraEventListener,
+                    this.captureOptions,
+                    this.graphicView,
+                    this as CameraCallback
+                )
+            )
         }
     }
 
