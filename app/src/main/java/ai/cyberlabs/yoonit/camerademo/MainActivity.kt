@@ -12,6 +12,7 @@
 package ai.cyberlabs.yoonit.camerademo
 
 import ai.cyberlabs.yoonit.camera.CameraView
+import ai.cyberlabs.yoonit.camera.CaptureType
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest
 import android.content.pm.PackageManager
@@ -117,6 +118,17 @@ class MainActivity : AppCompatActivity() {
 
                         this.qrcode_textview.visibility = View.VISIBLE
                     }
+                R.id.frame_radio_button ->
+                    if (checked) {
+                        this.cameraView.setFaceNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                        this.cameraView.startCaptureType("frame")
+                        this.image_preview.visibility = View.VISIBLE
+                        this.info_textview.visibility = View.VISIBLE
+                        this.face_number_edittext.visibility = View.VISIBLE
+                        this.face_numer_textview.visibility = View.VISIBLE
+
+                        this.qrcode_textview.visibility = View.INVISIBLE
+                    }
             }
         }
     }
@@ -156,8 +168,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onFaceImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
 
                 image_preview.setImageBitmap(imageBitmap)
-                image_preview.visibility = View.VISIBLE
                 info_textview.text = "$count/$total"
+                image_preview.visibility = View.VISIBLE
             }
         }
 
@@ -191,6 +203,20 @@ class MainActivity : AppCompatActivity() {
         override fun onBarcodeScanned(content: String) {
             qrcode_textview.text = content
             Log.d(TAG, "onBarcodeScanned")
+        }
+
+        override fun onFrameImageCreated(count: Int, total: Int, imagePath: String) {
+            val imageFile = File(imagePath)
+
+            if (imageFile.exists()) {
+                val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+
+                Log.d(TAG, "onFrameImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
+
+                image_preview.setImageBitmap(imageBitmap)
+                info_textview.text = "$count/$total"
+                image_preview.visibility = View.VISIBLE
+            }
         }
     }
 
