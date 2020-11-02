@@ -73,6 +73,7 @@ class CameraController(
             Runnable {
                 try {
                     this.cameraProviderProcess = cameraProviderFuture.get()
+                    this.cameraProviderProcess?.unbindAll()
 
                     this.preview = Preview
                         .Builder()
@@ -82,8 +83,6 @@ class CameraController(
                         .Builder()
                         .requireLensFacing(this.captureOptions.cameraLens)
                         .build()
-
-                    this.cameraProviderProcess?.unbindAll()
 
                     this.cameraProviderProcess?.bindToLifecycle(
                         this.context as LifecycleOwner,
