@@ -20,6 +20,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.os.Handler
+import android.os.Looper
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.io.File
@@ -57,7 +59,9 @@ class FrameAnalyzer(
                 imageProxy.imageInfo.rotationDegrees.toFloat()
             )
 
-            this.handleEmitFrameImageCreated(imagePath)
+            Handler(Looper.getMainLooper()).post {
+                this.handleEmitFrameImageCreated(imagePath)
+            }
         }
 
         imageProxy.close()
