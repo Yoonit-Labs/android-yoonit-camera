@@ -11,9 +11,9 @@
 
 package ai.cyberlabs.yoonit.camera
 
-import ai.cyberlabs.yoonit.camera.analyzers.BarcodeAnalyzer
-import ai.cyberlabs.yoonit.camera.analyzers.FaceAnalyzer
-import ai.cyberlabs.yoonit.camera.analyzers.FrameAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.barcode.BarcodeAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.face.FaceAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.frame.FrameAnalyzer
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest

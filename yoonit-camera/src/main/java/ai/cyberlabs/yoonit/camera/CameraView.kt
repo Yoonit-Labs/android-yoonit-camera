@@ -168,6 +168,34 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Limit the minimum face capture size.
+     * This variable is the face detection box percentage in relation with the UI graphic view.
+     * The value must be between 0 and 1.
+     *
+     * For example, if set 0.5, will capture face with the detection box width occupying
+     * at least 50% of the screen width.
+     *
+     * @param faceCaptureMinSize The face capture min size value. Default value is 0.0f;
+     */
+    fun setFaceCaptureMinSize(faceCaptureMinSize: Float) {
+        this.captureOptions.faceCaptureMinSize = faceCaptureMinSize
+    }
+
+    /**
+     * Limit the maximum face capture size.
+     * This variable is the face detection box percentage in relation with the UI graphic view.
+     * The value must be between 0 and 1.
+     *
+     * For example, if set 0.7, will capture face with the detection box width occupying
+     * at least 70% of the screen width.
+     *
+     * @param faceCaptureMaxSize The face capture max size value. Default value is 1.0f;
+     */
+    fun setFaceCaptureMaxSize(faceCaptureMaxSize: Float) {
+        this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize
+    }
+
+    /**
      * Set number of frame file images to create;
      * The time interval to create the image is 1000 milli second.
      * See [setFrameTimeBetweenImages] to change the time interval.
