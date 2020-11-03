@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CameraDemo</string>
+    <string name="app_name">Yoonit Camera</string>
     <string name="stop">STOP</string>
     <string name="face_box">Face Box</string>
     <string name="camera_lens">CAMERA LENS:</string>

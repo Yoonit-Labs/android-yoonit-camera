@@ -9,30 +9,27 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera.analyzers
+package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
-import ai.cyberlabs.yoonit.camera.utils.resize
-import ai.cyberlabs.yoonit.camera.utils.scaledBy
 import ai.cyberlabs.yoonit.camera.utils.toBitmap
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Rect
-import android.graphics.RectF
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.android.gms.vision.face.FaceDetector
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.math.max
 
 /**
  * Custom camera image analyzer based on face detection bounded on [CameraController].
@@ -48,6 +45,12 @@ class FaceAnalyzer(
     private var analyzerTimeStamp: Long = 0
     private var isFaceDetected: Boolean = false
     private var numberOfImages = 0
+
+    private val faceBoundingBoxController = FaceBoundingBoxController(
+        this.cameraEventListener,
+        this.graphicView,
+        this.captureOptions
+    )
 
     /**
      * Receive image from CameraX API.
@@ -76,51 +79,45 @@ class FaceAnalyzer(
         detector
             .process(image)
             .addOnSuccessListener { faces ->
-                //  Check if found face.
-                if (faces.isEmpty()) {
-                    this.graphicView.clear()
-                    this.checkFaceUndetected()
-                    return@addOnSuccessListener
-                }
 
                 // Get closest face.
-                var boundingBox = Rect()
-                faces.forEach {
-                    if (it.boundingBox.width() > boundingBox.width()) {
-                        boundingBox = it.boundingBox
-                    }
-                }
+                // Can be null if no face found.
+                val closestFace: Face? = this.faceBoundingBoxController.getClosestFace(faces)
 
-                val size = max(boundingBox.width(), boundingBox.height())
-                boundingBox = boundingBox.resize(size, size)
-
-                if (this.captureOptions.facePaddingPercent != 0f) {
-                    // Scale bounding box.
-                    boundingBox = boundingBox.scaledBy(this.captureOptions.facePaddingPercent)
-                }
-
-                // Scale the closest face.
-                val faceBoundingBox = this.scaleBoundingBox(boundingBox, image)
+                // Transform the camera face coordinates to UI graphic coordinates.
+                val detectionBox = this.faceBoundingBoxController.getDetectionBox(
+                    closestFace,
+                    image
+                )
 
                 // Verify the face bounding box.
-                if (faceBoundingBox == null) {
-                    this.checkFaceUndetected()
+                if (closestFace == null || detectionBox == null) {
+                    if (this.isFaceDetected) {
+                        this.isFaceDetected = false
+                        this.graphicView.clear()
+                        if (this.cameraEventListener != null) {
+                            this.cameraEventListener.onFaceUndetected()
+                        }
+                    }
                     return@addOnSuccessListener
                 }
                 this.isFaceDetected = true
 
-                // Draw face bounding box.
-                this.toggleDetectionBox(faceBoundingBox)
-
-                if (this.cameraEventListener == null) return@addOnSuccessListener
+                if (this.captureOptions.faceDetectionBox) {
+                    this.graphicView.drawBoundingBox(detectionBox)
+                } else {
+                    this.graphicView.clear()
+                }
 
                 // Emit face detected.
-                this.cameraEventListener.onFaceDetected(
-                    faceBoundingBox.left.toInt(),
-                    faceBoundingBox.top.toInt(),
-                    faceBoundingBox.width().toInt(),
-                    faceBoundingBox.height().toInt()
-                )
+                if (this.cameraEventListener != null) {
+                    this.cameraEventListener.onFaceDetected(
+                        detectionBox.left.toInt(),
+                        detectionBox.top.toInt(),
+                        detectionBox.width().toInt(),
+                        detectionBox.height().toInt()
+                    )
+                }
 
                 // Process image only within interval equal ANALYZE_TIMER.
                 val currentTimestamp = System.currentTimeMillis()
@@ -129,13 +126,15 @@ class FaceAnalyzer(
                 }
                 this.analyzerTimeStamp = currentTimestamp
 
-                 val imagePath = this.saveCroppedImage(
-                     mediaImage.toBitmap(),
-                     boundingBox,
-                     imageProxy.imageInfo.rotationDegrees.toFloat()
+                val imagePath = this.saveImage(
+                    mediaImage.toBitmap(),
+                    closestFace.boundingBox,
+                    imageProxy.imageInfo.rotationDegrees.toFloat()
                 )
 
-                this.handleEmitFaceImageCreated(imagePath)
+                if (this.cameraEventListener != null) {
+                    this.handleEmitFaceImageCreated(imagePath)
+                }
             }
             .addOnFailureListener { e ->
                 if (this.cameraEventListener != null) {
@@ -146,20 +145,6 @@ class FaceAnalyzer(
                 imageProxy.close()
                 detector.close()
             }
-    }
-
-    /**
-     * Set to show face detection box when face detected..
-     *
-     * @param faceBoundingBox bounding box of the face.
-     */
-    private fun toggleDetectionBox(faceBoundingBox: RectF) {
-        if (this.captureOptions.faceDetectionBox) {
-            this.graphicView.drawBoundingBox(faceBoundingBox)
-            return
-        }
-
-        this.graphicView.clear()
     }
 
     /**
@@ -196,19 +181,6 @@ class FaceAnalyzer(
     }
 
     /**
-     * Clear [CameraGraphicView] and emit face not detected once.
-     */
-    private fun checkFaceUndetected() {
-        if (this.isFaceDetected) {
-            this.isFaceDetected = false
-            this.graphicView.clear()
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener.onFaceUndetected()
-            }
-        }
-    }
-
-    /**
      * Crop an image bitmap with a face based on the detected face rect coordinates.
      *
      * @param mediaBitmap the original image bitmap.
@@ -216,7 +188,7 @@ class FaceAnalyzer(
      * @param rotationDegrees the rotation degrees to turn the image to portrait.
      * @return the image file path created.
      */
-    private fun saveCroppedImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float): String {
+    private fun saveImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float): String {
         val path = this.context.externalCacheDir.toString()
         val file = File(path, "yoonit-face-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
@@ -240,7 +212,7 @@ class FaceAnalyzer(
             matrix.preScale(-1.0f, 1.0f)
         }
 
-        val croppedBitmap =
+        var croppedBitmap =
             Bitmap.createBitmap(
                 rotateBitmap,
                 boundingBox.left,
@@ -251,79 +223,19 @@ class FaceAnalyzer(
                 false
             )
 
-        val scaledBitmap = Bitmap.createScaledBitmap(
+        croppedBitmap = Bitmap.createScaledBitmap(
             croppedBitmap,
             this.captureOptions.faceImageSize.width,
             this.captureOptions.faceImageSize.height,
             false
         )
 
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
 
         fileOutputStream.close()
 
         return file.absolutePath
     }
-
-    /**
-     * Scale the face bounding box coordinates inside the camera input image.
-     *
-     * @param boundingBox the detected face bounding box.
-     * @param cameraInputImage the camera image input with the face detected.
-     * @return the scaled rect of the detected face.
-     */
-    private fun scaleBoundingBox(boundingBox: Rect, cameraInputImage: InputImage): RectF? {
-        val imageHeight = cameraInputImage.height.toFloat()
-        val imageWidth = cameraInputImage.width.toFloat()
-
-        if (imageHeight <= 0 || imageWidth <= 0) {
-            return null
-        }
-
-        val viewAspectRatio: Float = this.graphicView.width.toFloat() / this.graphicView.height.toFloat()
-        val imageAspectRatio: Float = imageHeight / imageWidth
-
-        var postScaleWidthOffset = 0f
-        var postScaleHeightOffset = 0f
-        val scaleFactor: Float
-
-        if (viewAspectRatio > imageAspectRatio) {
-            // The image needs to be vertically cropped to be displayed in this view.
-            scaleFactor = this.graphicView.width.toFloat() / imageHeight
-            postScaleHeightOffset = (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
-        } else {
-            // The image needs to be horizontally cropped to be displayed in this view.
-            scaleFactor = this.graphicView.height.toFloat() / imageWidth
-            postScaleWidthOffset = ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
-        }
-
-        val x = if (cameraInputImage.rotationDegrees == 90) {
-            this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
-        } else {
-            this.graphicView.width - (this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
-        }
-        val y = this.scale(boundingBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
-
-        val left = x - this.scale(boundingBox.width() / 2.0f, scaleFactor)
-        val top = y - this.scale(boundingBox.height() / 2.0f, scaleFactor)
-        val right = x + this.scale(boundingBox.width() / 2.0f, scaleFactor)
-        val bottom = y + this.scale(boundingBox.height() / 2.0f, scaleFactor)
-
-        if (left < 0 || top < 0 || right > this.graphicView.width || bottom > this.graphicView.height) {
-            return null
-        }
-
-        return RectF(left, top, right, bottom)
-    }
-
-    /**
-     * Scale the image pixel dimension.
-     *
-     * @param dimension dimension in pixels.
-     * @param scaleFactor scale factor to apply.
-     * @return the scaled image pixel.
-     */
-    private fun scale(dimension: Float, scaleFactor: Float): Float = dimension * scaleFactor
 
     companion object {
         private const val TAG = "FaceAnalyzer"

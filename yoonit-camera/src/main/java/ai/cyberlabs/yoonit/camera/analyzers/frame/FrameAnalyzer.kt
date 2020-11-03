@@ -9,7 +9,7 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera.analyzers
+package ai.cyberlabs.yoonit.camera.analyzers.frame
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.CaptureOptions
@@ -26,7 +26,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.io.File
 import java.io.FileOutputStream
-
 
 /**
  * Custom camera image analyzer based on frame bounded on [CameraController].
