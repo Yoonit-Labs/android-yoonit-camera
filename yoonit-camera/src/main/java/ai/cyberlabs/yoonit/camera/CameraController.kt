@@ -114,6 +114,8 @@ class CameraController(
     /**
      * Start capture type of Image Analyzer.
      * Must have started preview.
+     *
+     * @param captureType The capture type: "none" | "face" | "barcode" | "frame";
      */
     fun startCaptureType(captureType: CaptureType) {
 

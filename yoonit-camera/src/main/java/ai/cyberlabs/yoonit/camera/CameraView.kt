@@ -67,7 +67,7 @@ class CameraView @JvmOverloads constructor(
      * Start capture type: none, face or barcode.
      * Must have started preview, see [startPreview].
      *
-     * @param captureType The capture type: "none" | "face" | "barcode" | "frame";
+     * @param captureType The capture type: "none" | "face" | "barcode" | "frame".
      */
     fun startCaptureType(captureType: String) {
         when (captureType) {
@@ -86,7 +86,7 @@ class CameraView @JvmOverloads constructor(
             }
         }
     }
-    
+
     /**
      * Stop camera image capture.
      */
@@ -104,7 +104,7 @@ class CameraView @JvmOverloads constructor(
     /**
      * Get current camera lens.
      *
-     * @return: value 0 is front camera; value 1 is back camera.
+     * @return value 0 is front camera. value 1 is back camera.
      */
     fun getCameraLens(): Int {
         return this.cameraController.getCameraLens()
@@ -119,11 +119,11 @@ class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set number of face file images to create;
+     * Set number of face file images to create.
      * The time interval to create the image is 1000 milli second.
      * See [setFaceTimeBetweenImages] to change the time interval.
      *
-     * @param faceNumberOfImages The number of images to create;
+     * @param faceNumberOfImages The number of images to create.
      */
     fun setFaceNumberOfImages(faceNumberOfImages: Int) {
         this.captureOptions.faceNumberOfImages = faceNumberOfImages
@@ -132,7 +132,7 @@ class CameraView @JvmOverloads constructor(
     /**
      * Set to show/hide face detection box when face detected.
      *
-     * @param faceDetectionBox The indicator to show or hide the face detection box. Default value is true;
+     * @param faceDetectionBox The indicator to show or hide the face detection box. Default value is true.
      */
     fun setFaceDetectionBox(faceDetectionBox: Boolean) {
         this.captureOptions.faceDetectionBox = faceDetectionBox
@@ -142,7 +142,7 @@ class CameraView @JvmOverloads constructor(
     /**
      * Set saving face images time interval in milli seconds.
      *
-     * @param faceTimeBetweenImages The time in milli seconds. Default value is 1000;
+     * @param faceTimeBetweenImages The time in milli seconds. Default value is 1000.
      */
     fun setFaceTimeBetweenImages(faceTimeBetweenImages: Long) {
         this.captureOptions.faceTimeBetweenImages = faceTimeBetweenImages
@@ -151,7 +151,7 @@ class CameraView @JvmOverloads constructor(
     /**
      * Enlarge the face bounding box by percent.
      *
-     * @param facePaddingPercent The percent to enlarge the bounding box. Default value is 0.0;
+     * @param facePaddingPercent The percent to enlarge the bounding box. Default value is 0.0.
      */
     fun setFacePaddingPercent(facePaddingPercent: Float) {
         this.captureOptions.facePaddingPercent = facePaddingPercent
@@ -160,8 +160,8 @@ class CameraView @JvmOverloads constructor(
     /**
      * Set face image width and height to be saved.
      *
-     * @param width The file image width in pixels. Default value is 200;
-     * @param height The file image height in pixels. Default value is 200;
+     * @param width The file image width in pixels. Default value is 200.
+     * @param height The file image height in pixels. Default value is 200.
      */
     fun setFaceImageSize(width: Int, height: Int) {
         this.captureOptions.faceImageSize = Size(width, height)
@@ -175,7 +175,7 @@ class CameraView @JvmOverloads constructor(
      * For example, if set 0.5, will capture face with the detection box width occupying
      * at least 50% of the screen width.
      *
-     * @param faceCaptureMinSize The face capture min size value. Default value is 0.0f;
+     * @param faceCaptureMinSize The face capture min size value. Default value is 0.0f.
      */
     fun setFaceCaptureMinSize(faceCaptureMinSize: Float) {
         this.captureOptions.faceCaptureMinSize = faceCaptureMinSize
@@ -189,18 +189,18 @@ class CameraView @JvmOverloads constructor(
      * For example, if set 0.7, will capture face with the detection box width occupying
      * at least 70% of the screen width.
      *
-     * @param faceCaptureMaxSize The face capture max size value. Default value is 1.0f;
+     * @param faceCaptureMaxSize The face capture max size value. Default value is 1.0f.
      */
     fun setFaceCaptureMaxSize(faceCaptureMaxSize: Float) {
         this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize
     }
 
     /**
-     * Set number of frame file images to create;
+     * Set number of frame file images to create.
      * The time interval to create the image is 1000 milli second.
      * See [setFrameTimeBetweenImages] to change the time interval.
      *
-     * @param faceNumberOfImages The number of images to create;
+     * @param faceNumberOfImages The number of images to create.
      */
     fun setFrameNumberOfImages(frameNumberOfImages: Int) {
         this.captureOptions.frameNumberOfImages = frameNumberOfImages
@@ -209,7 +209,7 @@ class CameraView @JvmOverloads constructor(
     /**
      * Set saving frame images time interval in milli seconds.
      *
-     * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000;
+     * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000.
      */
     fun setFrameTimeBetweenImages(frameTimeBetweenImages: Long) {
         this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
