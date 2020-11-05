@@ -114,10 +114,6 @@ class FaceBoundingBoxController(
         val right = x + this.scale(boundingBox.width() / 2.0f, scaleFactor)
         val bottom = y + this.scale(boundingBox.height() / 2.0f, scaleFactor)
 
-        if (left < 0 || top < 0 || right > this.graphicView.width || bottom > this.graphicView.height) {
-            return null
-        }
-
         return RectF(left, top, right, bottom)
     }
 

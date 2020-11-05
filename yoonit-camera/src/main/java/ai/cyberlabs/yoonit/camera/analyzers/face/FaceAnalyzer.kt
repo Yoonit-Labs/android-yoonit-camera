@@ -169,6 +169,15 @@ class FaceAnalyzer(
         }
 
         if (this.cameraEventListener != null) {
+            if (
+                detectionBox.left < 0 ||
+                detectionBox.top < 0 ||
+                detectionBox.right > this.graphicView.width ||
+                detectionBox.bottom > this.graphicView.height
+            ) {
+                return ""
+            }
+
             // This variable is the face detection box percentage in relation with the
             // UI graphic view. The value must be between 0 and 1.
             val detectionBoxRelatedWithScreen: Float =
