@@ -146,19 +146,28 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 Pre-define key error constants used by the `onError`event.
 
-| KeyError                     | Description
-| -                            | -
-| NOT_STARTED_PREVIEW          | Tried to start a process that depends to start the camera preview.
-| INVALID_CAPTURE_TYPE         | Tried to start a non existent capture type.
+| KeyError                          | Description
+| -                                 | -
+| NOT_STARTED_PREVIEW               | Tried to start a process that depends on to start the camera preview.
+| INVALID_CAPTURE_TYPE              | Tried to start a non-existent capture type.
+| INVALID_FACE_NUMBER_OF_IMAGES     | Tried to input invalid face number of images to capture. 
+| INVALID_FACE_TIME_BETWEEN_IMAGES  | Tried to input invalid face time interval to capture face.
+| INVALID_FACE_PADDING_PERCENT      | Tried to input invalid face padding percent.
+| INVALID_FACE_IMAGE_SIZE           | Tried to input invalid image width or height.
+| INVALID_FACE_CAPTURE_MIN_SIZE     | Tried to input invalid face capture minimum size. 
+| INVALID_FACE_CAPTURE_MAX_SIZE     | Tried to input invalid face capture maximum size.
+| INVALID_FRAME_NUMBER_OF_IMAGES    | Tried to input invalid frame number of images to capture.
+| INVALID_FRAME_TIME_BETWEEN_IMAGES | Tried to input invalid frame time interval to capture face.
 
 ### Message
 
-Pre-define message constants used by the `onError`event.
+Pre-define message constants used by the `onMessage`event.
 
-| KeyError                      | Description
+| Message                       | Description
 | -                             | -
-| INVALID_CAPTURE_FACE_MIN_SIZE | Face bounding box width percentage in relation of the the screen width is less than the setted (`setFaceCaptureMinSize`).
-| INVALID_CAPTURE_FACE_MAX_SIZE | Face bounding box width percentage in relation of the the screen width is more than the setted (`setFaceCaptureMaxSize`).
+| INVALID_CAPTURE_FACE_MIN_SIZE | Face bounding box width percentage in relation of the screen width is less than the setted (`setFaceCaptureMinSize`).
+| INVALID_CAPTURE_FACE_MAX_SIZE | Face bounding box width percentage in relation of the screen width is more than the setted (`setFaceCaptureMaxSize`).
+
 
 ## To contribute and make it better
 
