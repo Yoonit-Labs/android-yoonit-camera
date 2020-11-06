@@ -126,6 +126,13 @@ class CameraView @JvmOverloads constructor(
      * @param faceNumberOfImages The number of images to create.
      */
     fun setFaceNumberOfImages(faceNumberOfImages: Int) {
+        if (faceNumberOfImages < 0) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_NUMBER_OF_IMAGES)
+            }
+            return
+        }
+
         this.captureOptions.faceNumberOfImages = faceNumberOfImages
     }
 
@@ -145,6 +152,13 @@ class CameraView @JvmOverloads constructor(
      * @param faceTimeBetweenImages The time in milli seconds. Default value is 1000.
      */
     fun setFaceTimeBetweenImages(faceTimeBetweenImages: Long) {
+        if (faceTimeBetweenImages < 0) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_TIME_BETWEEN_IMAGES)
+            }
+            return
+        }
+
         this.captureOptions.faceTimeBetweenImages = faceTimeBetweenImages
     }
 
@@ -154,6 +168,13 @@ class CameraView @JvmOverloads constructor(
      * @param facePaddingPercent The percent to enlarge the bounding box. Default value is 0.0.
      */
     fun setFacePaddingPercent(facePaddingPercent: Float) {
+        if (facePaddingPercent < 0.0f) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_PADDING_PERCENT)
+            }
+            return
+        }
+
         this.captureOptions.facePaddingPercent = facePaddingPercent
     }
 
@@ -164,6 +185,13 @@ class CameraView @JvmOverloads constructor(
      * @param height The file image height in pixels. Default value is 200.
      */
     fun setFaceImageSize(width: Int, height: Int) {
+        if (width <= 0 || height <= 0) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_IMAGE_SIZE)
+            }
+            return
+        }
+
         this.captureOptions.faceImageSize = Size(width, height)
     }
 
@@ -178,6 +206,13 @@ class CameraView @JvmOverloads constructor(
      * @param faceCaptureMinSize The face capture min size value. Default value is 0.0f.
      */
     fun setFaceCaptureMinSize(faceCaptureMinSize: Float) {
+        if (faceCaptureMinSize < 0.0f || faceCaptureMinSize > 1.0f) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
+            }
+            return
+        }
+
         this.captureOptions.faceCaptureMinSize = faceCaptureMinSize
     }
 
@@ -192,6 +227,13 @@ class CameraView @JvmOverloads constructor(
      * @param faceCaptureMaxSize The face capture max size value. Default value is 1.0f.
      */
     fun setFaceCaptureMaxSize(faceCaptureMaxSize: Float) {
+        if (faceCaptureMaxSize < 0.0f || faceCaptureMaxSize > 1.0f) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
+            }
+            return
+        }
+
         this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize
     }
 
@@ -203,6 +245,13 @@ class CameraView @JvmOverloads constructor(
      * @param faceNumberOfImages The number of images to create.
      */
     fun setFrameNumberOfImages(frameNumberOfImages: Int) {
+        if (frameNumberOfImages < 0) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FRAME_NUMBER_OF_IMAGES)
+            }
+            return
+        }
+
         this.captureOptions.frameNumberOfImages = frameNumberOfImages
     }
 
@@ -212,6 +261,13 @@ class CameraView @JvmOverloads constructor(
      * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000.
      */
     fun setFrameTimeBetweenImages(frameTimeBetweenImages: Long) {
+        if (frameTimeBetweenImages < 0) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FRAME_TIME_BETWEEN_IMAGES)
+            }
+            return
+        }
+
         this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
     }
 
