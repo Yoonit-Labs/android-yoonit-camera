@@ -2,8 +2,6 @@ package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.CaptureOptions
-import ai.cyberlabs.yoonit.camera.KeyError
-import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.utils.resize
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
 import android.graphics.Rect
@@ -13,10 +11,10 @@ import com.google.mlkit.vision.face.Face
 import kotlin.math.max
 
 class FaceBoundingBoxController(
-    private val cameraEventListener: CameraEventListener?,
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions
 ) {
+
     /**
      * Get closest face.
      * Can be null if no face found.
@@ -115,29 +113,6 @@ class FaceBoundingBoxController(
         val top = y - this.scale(boundingBox.height() / 2.0f, scaleFactor)
         val right = x + this.scale(boundingBox.width() / 2.0f, scaleFactor)
         val bottom = y + this.scale(boundingBox.height() / 2.0f, scaleFactor)
-
-        if (left < 0 || top < 0 || right > this.graphicView.width || bottom > this.graphicView.height) {
-            return null
-        }
-
-        val width = right - left
-
-        // This variable is the face detection box percentage in relation with the
-        // UI graphic view. The value must be between 0 and 1.
-        val detectionBoxRelatedWithScreen: Float = width / this.graphicView.width
-
-        if (detectionBoxRelatedWithScreen < this.captureOptions.faceCaptureMinSize) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener.onError(KeyError.INVALID_CAPTURE_FACE_MIN_SIZE)
-            }
-            return null
-        }
-        if (detectionBoxRelatedWithScreen > this.captureOptions.faceCaptureMaxSize) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener.onError(KeyError.INVALID_CAPTURE_FACE_MAX_SIZE)
-            }
-            return null
-        }
 
         return RectF(left, top, right, bottom)
     }
