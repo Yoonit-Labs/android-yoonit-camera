@@ -15,7 +15,7 @@ import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Size
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
@@ -65,26 +65,27 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Start capture type: none, face or barcode.
+     * Start capture type: none, face or qrcode.
      * Must have started preview, see [startPreview].
      *
-     * @param captureType The capture type: "none" | "face" | "barcode" | "frame".
+     * @param captureType The capture type: "none" | "face" | "qrcode" | "frame".
      */
     fun startCaptureType(captureType: String) {
+        if (!this.cameraController.isPreviewStarted) {
+            Log.w(TAG, KeyError.NOT_STARTED_PREVIEW)
+            return
+        }
+
         when (captureType) {
             "none" -> this.cameraController.startCaptureType(CaptureType.NONE)
 
             "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
 
-            "barcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
+            "qrcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
 
             "frame" -> this.cameraController.startCaptureType(CaptureType.FRAME)
 
-            else -> {
-                if (this.cameraEventListener != null) {
-                    this.cameraEventListener!!.onError(KeyError.INVALID_CAPTURE_TYPE)
-                }
-            }
+            else -> throw IllegalArgumentException(KeyError.INVALID_CAPTURE_TYPE)
         }
     }
 
@@ -120,21 +121,29 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set number of face file images to create.
-     * The time interval to create the image is 1000 milli second.
-     * See [setFaceTimeBetweenImages] to change the time interval.
+     * Set number of face/frame file images to create.
      *
-     * @param faceNumberOfImages The number of images to create.
+     * @param numberOfImages The number of images to create.
      */
-    fun setFaceNumberOfImages(faceNumberOfImages: Int) {
-        if (faceNumberOfImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_NUMBER_OF_IMAGES)
-            }
-            return
+    fun setNumberOfImages(numberOfImages: Int) {
+        if (numberOfImages < 0) {
+            throw IllegalArgumentException(KeyError.INVALID_NUMBER_OF_IMAGES)
         }
 
-        this.captureOptions.faceNumberOfImages = faceNumberOfImages
+        this.captureOptions.numberOfImages = numberOfImages
+    }
+
+    /**
+     * Set saving face/frame images time interval in milli seconds.
+     *
+     * @param timeBetweenImages The time in milli seconds. Default value is 1000.
+     */
+    fun setTimeBetweenImages(timeBetweenImages: Long) {
+        if (timeBetweenImages < 0) {
+            throw IllegalArgumentException(KeyError.INVALID_TIME_BETWEEN_IMAGES)
+        }
+
+        this.captureOptions.timeBetweenImages = timeBetweenImages
     }
 
     /**
@@ -159,50 +168,40 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Set saving face images time interval in milli seconds.
      *
-     * @param faceTimeBetweenImages The time in milli seconds. Default value is 1000.
-     */
-    fun setFaceTimeBetweenImages(faceTimeBetweenImages: Long) {
-        if (faceTimeBetweenImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_TIME_BETWEEN_IMAGES)
-            }
-            return
-        }
-
-        this.captureOptions.faceTimeBetweenImages = faceTimeBetweenImages
-    }
-
-    /**
-     * Enlarge the face bounding box by percent.
-     *
      * @param facePaddingPercent The percent to enlarge the bounding box. Default value is 0.0.
      */
     fun setFacePaddingPercent(facePaddingPercent: Float) {
         if (facePaddingPercent < 0.0f) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_PADDING_PERCENT)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_PADDING_PERCENT)
         }
 
         this.captureOptions.facePaddingPercent = facePaddingPercent
     }
 
     /**
-     * Set face image width and height to be saved.
+     * Set face/frame image width to be created.
      *
      * @param width The file image width in pixels. Default value is 200.
-     * @param height The file image height in pixels. Default value is 200.
      */
-    fun setFaceImageSize(width: Int, height: Int) {
-        if (width <= 0 || height <= 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_IMAGE_SIZE)
-            }
-            return
+    fun setOutputImageWidth(width: Int) {
+        if (width <= 0) {
+            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_WIDTH)
         }
 
-        this.captureOptions.faceImageSize = Size(width, height)
+        this.captureOptions.imageOutputWidth = width
+    }
+
+    /**
+     * Set face/frame image height to be created.
+     *
+     * @param height The file image height in pixels. Default value is 200.
+     */
+    fun setOutputImageHeight(height: Int) {
+        if (height <= 0) {
+            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_HEIGHT)
+        }
+
+        this.captureOptions.imageOutputHeight = height
     }
 
     /**
@@ -217,10 +216,7 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceCaptureMinSize(faceCaptureMinSize: Float) {
         if (faceCaptureMinSize < 0.0f || faceCaptureMinSize > 1.0f) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
         }
 
         this.captureOptions.faceCaptureMinSize = faceCaptureMinSize
@@ -238,10 +234,7 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceCaptureMaxSize(faceCaptureMaxSize: Float) {
         if (faceCaptureMaxSize < 0.0f || faceCaptureMaxSize > 1.0f) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
         }
 
         this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize

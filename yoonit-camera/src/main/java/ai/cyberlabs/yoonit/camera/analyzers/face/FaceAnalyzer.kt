@@ -138,7 +138,7 @@ class FaceAnalyzer(
 
                 // Process image only within interval equal ANALYZE_TIMER.
                 val currentTimestamp = System.currentTimeMillis()
-                if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.faceTimeBetweenImages) {
+                if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.timeBetweenImages) {
                     return@addOnSuccessListener
                 }
                 this.analyzerTimeStamp = currentTimestamp
@@ -172,12 +172,12 @@ class FaceAnalyzer(
     private fun handleEmitFaceImageCreated(imagePath: String) {
 
         // process face number of images.
-        if (this.captureOptions.faceNumberOfImages > 0) {
-            if (this.numberOfImages < captureOptions.faceNumberOfImages) {
+        if (this.captureOptions.numberOfImages > 0) {
+            if (this.numberOfImages < captureOptions.numberOfImages) {
                 this.numberOfImages++
                 this.cameraEventListener?.onFaceImageCreated(
                     this.numberOfImages,
-                    this.captureOptions.faceNumberOfImages,
+                    this.captureOptions.numberOfImages,
                     imagePath
                 )
                 return
@@ -192,7 +192,7 @@ class FaceAnalyzer(
         this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
         this.cameraEventListener?.onFaceImageCreated(
             this.numberOfImages,
-            this.captureOptions.faceNumberOfImages,
+            this.captureOptions.numberOfImages,
             imagePath
         )
     }
@@ -243,8 +243,8 @@ class FaceAnalyzer(
 
         croppedBitmap = Bitmap.createScaledBitmap(
             croppedBitmap,
-            this.captureOptions.faceImageSize.width,
-            this.captureOptions.faceImageSize.height,
+            this.captureOptions.imageOutputWidth,
+            this.captureOptions.imageOutputHeight,
             false
         )
 

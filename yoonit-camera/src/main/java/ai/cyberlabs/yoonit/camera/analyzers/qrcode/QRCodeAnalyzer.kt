@@ -9,7 +9,7 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera.analyzers.barcode
+package ai.cyberlabs.yoonit.camera.analyzers.qrcode
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
@@ -25,7 +25,7 @@ import com.google.mlkit.vision.common.InputImage
 /**
  * Custom camera image analyzer based on barcode detection bounded on [CameraController].
  */
-class BarcodeAnalyzer(
+class QRCodeAnalyzer(
     private val cameraEventListener: CameraEventListener?,
     private val graphicView: CameraGraphicView
 ) : ImageAnalysis.Analyzer {
@@ -72,7 +72,7 @@ class BarcodeAnalyzer(
                     }
                 }
 
-                this.cameraEventListener.onBarcodeScanned(rawValue)
+                this.cameraEventListener.onQRCodeScanned(rawValue)
             }
             .addOnFailureListener { e ->
                 if (this.cameraEventListener != null) {

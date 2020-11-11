@@ -12,7 +12,6 @@
 package ai.cyberlabs.yoonit.camerademo
 
 import ai.cyberlabs.yoonit.camera.CameraView
-import ai.cyberlabs.yoonit.camera.CaptureType
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest
 import android.content.pm.PackageManager
@@ -43,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 
         if (this.allPermissionsGranted()) {
+            this.cameraView.setNumberOfImages(0)
             this.cameraView.startPreview()
 
             Timer("SettingUp", false).schedule(500) {
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 R.id.face_radio_button ->
                     if (checked) {
-                        this.cameraView.setFaceNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                        this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
                         this.cameraView.startCaptureType("face")
                         this.image_preview.visibility = View.VISIBLE
                         this.info_textview.visibility = View.VISIBLE
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 R.id.qrcode_radio_button ->
                     if (checked) {
-                        this.cameraView.startCaptureType("barcode")
+                        this.cameraView.startCaptureType("qrcode")
                         this.image_preview.visibility = View.INVISIBLE
                         this.info_textview.visibility = View.INVISIBLE
                         this.face_number_edittext.visibility = View.INVISIBLE
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 R.id.frame_radio_button ->
                     if (checked) {
-                        this.cameraView.setFaceNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                        this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
                         this.cameraView.startCaptureType("frame")
                         this.image_preview.visibility = View.VISIBLE
                         this.info_textview.visibility = View.VISIBLE
@@ -227,9 +227,9 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "onPermissionDenied")
         }
 
-        override fun onBarcodeScanned(content: String) {
+        override fun onQRCodeScanned(content: String) {
             qrcode_textview.text = content
-            Log.d(TAG, "onBarcodeScanned")
+            Log.d(TAG, "onQRCodeScanned")
         }
 
         override fun onFrameImageCreated(count: Int, total: Int, imagePath: String) {
