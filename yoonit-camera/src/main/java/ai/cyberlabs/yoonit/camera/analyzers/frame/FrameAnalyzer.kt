@@ -102,7 +102,8 @@ class FrameAnalyzer(
         if (this.captureOptions.numberOfImages > 0) {
             if (this.numberOfImages < captureOptions.numberOfImages) {
                 this.numberOfImages++
-                this.cameraEventListener?.onFrameImageCreated(
+                this.cameraEventListener?.onImageCaptured(
+                    "frame",
                     this.numberOfImages,
                     this.captureOptions.numberOfImages,
                     imagePath
@@ -117,7 +118,8 @@ class FrameAnalyzer(
 
         // process face unlimited.
         this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
-        this.cameraEventListener?.onFrameImageCreated(
+        this.cameraEventListener?.onImageCaptured(
+            "frame",
             this.numberOfImages,
             this.captureOptions.numberOfImages,
             imagePath

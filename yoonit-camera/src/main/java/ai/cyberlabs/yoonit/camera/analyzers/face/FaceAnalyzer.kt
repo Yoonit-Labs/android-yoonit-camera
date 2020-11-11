@@ -175,7 +175,8 @@ class FaceAnalyzer(
         if (this.captureOptions.numberOfImages > 0) {
             if (this.numberOfImages < captureOptions.numberOfImages) {
                 this.numberOfImages++
-                this.cameraEventListener?.onFaceImageCreated(
+                this.cameraEventListener?.onImageCaptured(
+                    "face",
                     this.numberOfImages,
                     this.captureOptions.numberOfImages,
                     imagePath
@@ -190,7 +191,8 @@ class FaceAnalyzer(
 
         // process face unlimited.
         this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
-        this.cameraEventListener?.onFaceImageCreated(
+        this.cameraEventListener?.onImageCaptured(
+            "face",
             this.numberOfImages,
             this.captureOptions.numberOfImages,
             imagePath
