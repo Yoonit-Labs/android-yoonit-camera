@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.cameraview_layout.view.*
 /**
  * This class represents the camera layout and your functions.
  */
-class CameraView @JvmOverloads constructor(
+open class CameraView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0,
