@@ -37,31 +37,6 @@ class CameraGraphicView constructor(
         }
 
         canvas.drawRect(this.boundingBox!!, FACE_BOUNDING_BOX_PAINT)
-
-//        val xOffset = this.boundingBox!!.width() / 2.0f
-//        val yOffset = this.boundingBox!!.height() / 2.0f
-//
-//        val left: Float = this.boundingBox!!.left
-//        val top: Float = this.boundingBox!!.top
-//        val right: Float = this.boundingBox!!.width()
-//        val bottom: Float = this.boundingBox!!.height()
-//
-//        // edge - top-left > bottom-left
-//        canvas?.drawLine(left, top, left, bottom - yOffset * 1.24.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - top-right > bottom-right
-//        canvas?.drawLine(right, top, right, bottom - yOffset * 1.24.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-left > top-left
-//        canvas?.drawLine(left, bottom, left, bottom - yOffset * 0.5.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-right > top-right
-//        canvas?.drawLine(right, bottom, right, bottom - yOffset * 0.5.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - top-left > top-right
-//        canvas?.drawLine(left, top, left + yOffset * 0.5.toFloat(), top, FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - top-right > left-right
-//        canvas?.drawLine(right, top, right - yOffset * 0.5.toFloat(), top, FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-left > right-left
-//        canvas?.drawLine(left, bottom, left + yOffset * 0.5.toFloat(), bottom, FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-right > right-left
-//        canvas?.drawLine(right, bottom, right - yOffset * 0.5.toFloat(), bottom, FACE_BOUNDING_BOX_LINE_PAINT)
     }
 
     /**
@@ -92,13 +67,6 @@ class CameraGraphicView constructor(
             this.color = Color.WHITE
             this.style = Paint.Style.STROKE
             this.strokeWidth = 5.0f
-        }
-
-        val FACE_BOUNDING_BOX_LINE_PAINT = Paint().apply {
-            this.color = Color.WHITE
-            this.style = Paint.Style.STROKE
-            this.strokeWidth = 16.0f
-            this.strokeCap = Paint.Cap.ROUND
         }
     }
 }

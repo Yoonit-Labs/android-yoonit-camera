@@ -11,7 +11,6 @@
 
 package ai.cyberlabs.yoonit.camera.utils
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
@@ -19,12 +18,6 @@ import android.graphics.Rect
 import android.graphics.YuvImage
 import android.media.Image
 import java.io.ByteArrayOutputStream
-
-fun pxToDPI(context: Context, value: Float): Float {
-    val density = context.resources.displayMetrics.density
-
-    return value / density
-}
 
 fun Image.toBitmap(): Bitmap {
     val yBuffer = planes[0].buffer // Y
