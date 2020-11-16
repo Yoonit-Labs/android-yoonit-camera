@@ -16,6 +16,7 @@ import ai.cyberlabs.yoonit.camera.CaptureOptions
 import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.pxToDPI
 import ai.cyberlabs.yoonit.camera.utils.toBitmap
 import android.annotation.SuppressLint
 import android.content.Context
@@ -119,12 +120,14 @@ class FaceAnalyzer(
 
                 // Emit face detected.
                 if (this.cameraEventListener != null) {
-                    this.cameraEventListener.onFaceDetected(
-                        detectionBox!!.left.toInt(),
-                        detectionBox!!.top.toInt(),
-                        detectionBox!!.width().toInt(),
-                        detectionBox!!.height().toInt()
-                    )
+                    if (detectionBox != null) {
+                        this.cameraEventListener.onFaceDetected(
+                                pxToDPI(this.context, detectionBox.left).toInt(),
+                                pxToDPI(this.context, detectionBox.top).toInt(),
+                                pxToDPI(this.context, detectionBox.width()).toInt(),
+                                pxToDPI(this.context, detectionBox.height()).toInt()
+                        )
+                    }
                 }
 
                 // Process image only within interval equal ANALYZE_TIMER.
