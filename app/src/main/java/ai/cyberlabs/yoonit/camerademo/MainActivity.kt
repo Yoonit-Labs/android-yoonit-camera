@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 
         if (this.allPermissionsGranted()) {
-            this.cameraView.setNumberOfImages(0)
             this.cameraView.startPreview()
 
             Timer("SettingUp", false).schedule(500) {
@@ -186,13 +185,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 
-        override fun onFaceImageCreated(count: Int, total: Int, imagePath: String) {
+        override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {
             val imageFile = File(imagePath)
 
             if (imageFile.exists()) {
                 val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
-                Log.d(TAG, "onFaceImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
+                Log.d(TAG, "onImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
 
                 image_preview.setImageBitmap(imageBitmap)
                 info_textview.text = "$count/$total"
@@ -230,20 +229,6 @@ class MainActivity : AppCompatActivity() {
         override fun onQRCodeScanned(content: String) {
             qrcode_textview.text = content
             Log.d(TAG, "onQRCodeScanned")
-        }
-
-        override fun onFrameImageCreated(count: Int, total: Int, imagePath: String) {
-            val imageFile = File(imagePath)
-
-            if (imageFile.exists()) {
-                val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
-                Log.d(TAG, "onFrameImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
-
-                image_preview.setImageBitmap(imageBitmap)
-                info_textview.text = "$count/$total"
-                image_preview.visibility = View.VISIBLE
-            }
         }
     }
 

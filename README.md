@@ -77,7 +77,7 @@ this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 ...
 fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 ...
-	override fun onFaceImageCreated(count: Int, total: Int, imagePath: String) {  
+	override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {  
 		// YOUR CODE
 	}
 ...
@@ -134,17 +134,16 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 ### Events
 
-| Event                     | Parameters                                  | Description
-| -                         | -                                           | -
-| **`onFaceImageCreated`**  | `count: Int, total: Int, imagePath: String` | Must have started capture type of face (see `startCaptureType`). Emitted when the face image file is created: <ul><li>count: current index</li><li>total: total to create</li><li>imagePath: the face image path</li><ul>  
-| **`onFrameImageCreated`** | `count: Int, total: Int, imagePath: String` | Must have started capture type of frame (see `startCaptureType`). Emitted when the frame image file is created: <ul><li>count: current index</li><li>total: total to create</li><li>imagePath: the frame image path</li><ul>  
-| **`onFaceDetected`**      | `x: Int, y: Int, width: Int, height: Int`   | Must have started capture type of face. Emit the detected face bounding box.
-| **`onFaceUndetected`**    | -                                           | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
-| **`onEndCapture`**        | -                                           | Must have started capture type of face or frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).   
-| **`onQRCodeScanned`**     | `content: String`                           | Must have started capture type of qrcode (see `startCaptureType`). Emitted when the camera scan a QR Code.   
-| **`onError`**             | `error: String`                             | Emit message error.
-| **`onMessage`**           | `message: String`                           | Emit message.
-| **`onPermissionDenied`**  | -                                           | Emit when try to `startPreview` but there is not camera permission.
+| Event                     | Parameters                                                | Description
+| -                         | -                                                         | -
+| **`onImageCaptured`**     | `type: String, count: Int, total: Int, imagePath: String` | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the face image file is created: <ul><li>type: 'face' | 'frame'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><ul>  
+| **`onFaceDetected`**      | `x: Int, y: Int, width: Int, height: Int`                 | Must have started capture type of face. Emit the detected face bounding box.
+| **`onFaceUndetected`**    | -                                                         | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
+| **`onEndCapture`**        | -                                                         | Must have started capture type of face or frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).   
+| **`onQRCodeScanned`**     | `content: String`                                         | Must have started capture type of qrcode (see `startCaptureType`). Emitted when the camera scan a QR Code.   
+| **`onError`**             | `error: String`                                           | Emit message error.
+| **`onMessage`**           | `message: String`                                         | Emit message.
+| **`onPermissionDenied`**  | -                                                         | Emit when try to `startPreview` but there is not camera permission.
 
 ### KeyError
 
