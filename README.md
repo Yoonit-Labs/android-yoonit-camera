@@ -2,7 +2,7 @@
 
 # android-yoonit-camera  
 
-![Generic badge](https://img.shields.io/badge/version-v1.1.0-<COLOR>.svg) ![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge)
 
 A Android plugin to provide:
 - Modern Android Camera API (Camera X)
