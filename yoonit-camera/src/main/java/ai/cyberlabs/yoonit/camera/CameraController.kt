@@ -47,9 +47,12 @@ class CameraController(
     private lateinit var preview: Preview
     private var cameraProviderProcess: ProcessCameraProvider? = null
 
-    var isPreviewStarted: Boolean = false
+    // Preview started only if camera provider started.
+    val isPreviewStarted: Boolean
         get() = this.cameraProviderProcess != null
 
+
+    // Called when number of images reached.
     override fun onStopAnalyzer() {
         this.stopAnalyzer()
     }
