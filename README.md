@@ -33,7 +33,7 @@ Add the dependency
 
 ```groovy  
 dependencies {
-	implementation 'com.github.Yoonit-Labs:android-yoonit-camera:development'
+	implementation 'com.github.Yoonit-Labs:android-yoonit-camera:master-SNAPSHOT'
 }
 ```  
 
