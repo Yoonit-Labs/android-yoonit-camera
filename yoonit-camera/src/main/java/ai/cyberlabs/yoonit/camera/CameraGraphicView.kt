@@ -38,30 +38,31 @@ class CameraGraphicView constructor(
 
         canvas.drawRect(this.boundingBox!!, FACE_BOUNDING_BOX_PAINT)
 
-//        val xOffset = this.boundingBox!!.width() / 2.0f
-//        val yOffset = this.boundingBox!!.height() / 2.0f
-//
-//        val left: Float = this.boundingBox!!.left
-//        val top: Float = this.boundingBox!!.top
-//        val right: Float = this.boundingBox!!.width()
-//        val bottom: Float = this.boundingBox!!.height()
-//
-//        // edge - top-left > bottom-left
-//        canvas?.drawLine(left, top, left, bottom - yOffset * 1.24.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - top-right > bottom-right
-//        canvas?.drawLine(right, top, right, bottom - yOffset * 1.24.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-left > top-left
-//        canvas?.drawLine(left, bottom, left, bottom - yOffset * 0.5.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-right > top-right
-//        canvas?.drawLine(right, bottom, right, bottom - yOffset * 0.5.toFloat(), FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - top-left > top-right
-//        canvas?.drawLine(left, top, left + yOffset * 0.5.toFloat(), top, FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - top-right > left-right
-//        canvas?.drawLine(right, top, right - yOffset * 0.5.toFloat(), top, FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-left > right-left
-//        canvas?.drawLine(left, bottom, left + yOffset * 0.5.toFloat(), bottom, FACE_BOUNDING_BOX_LINE_PAINT)
-//        // edge - bottom-right > right-left
-//        canvas?.drawLine(right, bottom, right - yOffset * 0.5.toFloat(), bottom, FACE_BOUNDING_BOX_LINE_PAINT)
+        val left: Float = this.boundingBox!!.left
+        val top: Float = this.boundingBox!!.top
+        val right: Float = left + this.boundingBox!!.width()
+        val bottom: Float = top + this.boundingBox!!.height()
+        val toBottom = top + (this.boundingBox!!.height() * 0.3).toFloat()
+        val toTop = top + (this.boundingBox!!.height() * 0.7).toFloat()
+        val toRight = left + (this.boundingBox!!.width() * 0.3).toFloat()
+        val toLeft = left + (this.boundingBox!!.width() * 0.7).toFloat()
+
+        // edge - top-left > bottom-left
+        canvas.drawLine(left, top, left, toBottom, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - top-right > bottom-right
+        canvas.drawLine(right, top, right, toBottom, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - bottom-left > top-left
+        canvas.drawLine(left, bottom, left, toTop, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - bottom-right > top-right
+        canvas.drawLine(right, bottom, right, toTop, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - top-left > top-right
+        canvas.drawLine(left, top, toRight, top, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - top-right > left-right
+        canvas.drawLine(right, top, toLeft, top, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - bottom-left > right-left
+        canvas.drawLine(left, bottom, toRight, bottom, FACE_BOUNDING_BOX_LINE_PAINT)
+        // edge - bottom-right > right-left
+        canvas.drawLine(right, bottom, toLeft, bottom, FACE_BOUNDING_BOX_LINE_PAINT)
     }
 
     /**
