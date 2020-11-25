@@ -100,6 +100,19 @@ class CameraController(
             },
             ContextCompat.getMainExecutor(this.context)
         )
+
+        if (this.captureOptions.faceDetection) {
+            this.imageAnalyzerController.start(
+                FaceAnalyzer(
+                    this.context,
+                    this.cameraEventListener,
+                    this.graphicView,
+                    this.captureOptions,
+                    false,
+                    this as CameraCallback
+                )
+            )
+        }
     }
 
     /**
@@ -178,7 +191,22 @@ class CameraController(
 
         when (this.captureOptions.type) {
 
-            CaptureType.NONE -> this.imageAnalyzerController.stop()
+            CaptureType.NONE -> {
+                if (this.captureOptions.faceDetection) {
+                    return this.imageAnalyzerController.start(
+                        FaceAnalyzer(
+                            this.context,
+                            this.cameraEventListener,
+                            this.graphicView,
+                            this.captureOptions,
+                            false,
+                            this as CameraCallback
+                        )
+                    )
+                }
+
+                return this.imageAnalyzerController.stop()
+            }
 
             CaptureType.FACE -> this.imageAnalyzerController.start(
                 FaceAnalyzer(
@@ -186,6 +214,7 @@ class CameraController(
                     this.cameraEventListener,
                     this.graphicView,
                     this.captureOptions,
+                    true,
                     this as CameraCallback
                 )
             )

@@ -24,6 +24,8 @@ data class CaptureOptions(
     // Camera lens facing: CameraSelector.LENS_FACING_FRONT and CameraSelector.LENS_FACING_BACK.
     var cameraLens: Int = CameraSelector.LENS_FACING_FRONT,
 
+    var faceDetection: Boolean = true,
+
     // Draw or not the face detection box.
     var faceDetectionBox: Boolean = true,
 

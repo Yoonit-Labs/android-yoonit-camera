@@ -42,6 +42,7 @@ class FaceAnalyzer(
     private val cameraEventListener: CameraEventListener?,
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions,
+    private val saveCapture: Boolean,
     private val cameraCallback: CameraCallback
 ) : ImageAnalysis.Analyzer {
 
@@ -76,24 +77,27 @@ class FaceAnalyzer(
             .enableTracking()
             .build()
 
+        if (!this.captureOptions.faceDetection) {
+            return
+        }
+
         val detector = FaceDetection.getClient(faceDetectorOptions)
 
         detector
             .process(image)
             .addOnSuccessListener { faces ->
-
                 // Get closest face.
                 // Can be null if no face found.
                 val closestFace: Face? = this.faceBoundingBoxController.getClosestFace(faces)
 
                 // Transform the camera face coordinates to UI graphic coordinates.
-                val detectionBox = this.faceBoundingBoxController.getDetectionBox(
+                val faceDetected = this.faceBoundingBoxController.getDetectionBox(
                     closestFace,
                     image
                 )
 
                 // Get status if exist.
-                val status = this.getStatus(closestFace, detectionBox)
+                val status = this.getStatus(closestFace, faceDetected)
 
                 // Emit once if has error.
                 if (status != null) {
@@ -113,19 +117,19 @@ class FaceAnalyzer(
 
                 // Draw or clean the bounding box based on the "faceDetectionBox".
                 if (this.captureOptions.faceDetectionBox) {
-                    this.graphicView.drawBoundingBox(detectionBox!!)
+                    this.graphicView.drawBoundingBox(faceDetected!!)
                 } else {
                     this.graphicView.clear()
                 }
 
                 // Emit face detected.
                 if (this.cameraEventListener != null) {
-                    if (detectionBox != null) {
+                    if (faceDetected != null) {
                         this.cameraEventListener.onFaceDetected(
-                                pxToDPI(this.context, detectionBox.left).toInt(),
-                                pxToDPI(this.context, detectionBox.top).toInt(),
-                                pxToDPI(this.context, detectionBox.width()).toInt(),
-                                pxToDPI(this.context, detectionBox.height()).toInt()
+                                pxToDPI(this.context, faceDetected.left).toInt(),
+                                pxToDPI(this.context, faceDetected.top).toInt(),
+                                pxToDPI(this.context, faceDetected.width()).toInt(),
+                                pxToDPI(this.context, faceDetected.height()).toInt()
                         )
                     }
                 }
@@ -137,14 +141,16 @@ class FaceAnalyzer(
                 }
                 this.analyzerTimeStamp = currentTimestamp
 
-                val imagePath = this.saveImage(
-                    mediaImage.toBitmap(),
-                    closestFace!!.boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
-                )
+                if (saveCapture) {
+                    val imagePath = this.saveImage(
+                        mediaImage.toBitmap(),
+                        closestFace!!.boundingBox,
+                        imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
 
-                if (this.cameraEventListener != null) {
-                    this.handleEmitFaceImageCreated(imagePath)
+                    if (this.cameraEventListener != null) {
+                        this.handleEmitFaceImageCreated(imagePath)
+                    }
                 }
             }
             .addOnFailureListener { e ->
