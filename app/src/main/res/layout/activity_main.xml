@@ -79,6 +79,15 @@
             android:onClick="onFaceBoxSwitchClick"
             android:text="@string/face_box" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/face_save_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:checked="true"
+            android:onClick="onFaceSaveSwitchClick"
+            android:text="@string/face_save_image" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

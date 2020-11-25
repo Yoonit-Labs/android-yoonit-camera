@@ -11,4 +11,5 @@
     <string name="capture_type_qrcode">QRCODE</string>
     <string name="capture_type_frame">FRAME</string>
     <string name="face_number">Number of face to capture:</string>
+    <string name="face_save_image">Face Save</string>
 </resources>
