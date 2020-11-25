@@ -63,6 +63,12 @@ class MainActivity : AppCompatActivity() {
         if (view is SwitchCompat) {
             val checked = view.isChecked
             this.cameraView.setFaceSaveImages(checked)
+
+            if (checked) {
+                this.image_preview.visibility = View.VISIBLE
+            } else {
+                this.image_preview.visibility = View.INVISIBLE
+            }
         }
     }
 
