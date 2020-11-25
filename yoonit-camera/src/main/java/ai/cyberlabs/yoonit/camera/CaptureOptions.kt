@@ -18,6 +18,7 @@ import androidx.camera.core.CameraSelector
  * Model to set [CameraView] capture features options.
  */
 data class CaptureOptions(
+
     // Camera image capture type: NONE, FACE, BARCODE and FRAME.
     var type: CaptureType = CaptureType.NONE,
 
@@ -26,6 +27,9 @@ data class CaptureOptions(
 
     // Draw or not the face detection box.
     var faceDetectionBox: Boolean = true,
+
+    // Face save cropped images.
+    var faceSaveImages: Boolean = false,
 
     // Face capture number of images. 0 capture unlimited.
     var faceNumberOfImages: Int = 0,

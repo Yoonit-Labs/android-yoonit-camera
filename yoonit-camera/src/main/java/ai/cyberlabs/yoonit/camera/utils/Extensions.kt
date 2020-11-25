@@ -20,11 +20,7 @@ import android.graphics.YuvImage
 import android.media.Image
 import java.io.ByteArrayOutputStream
 
-fun pxToDPI(context: Context, value: Float): Float {
-    val density = context.resources.displayMetrics.density
-
-    return value / density
-}
+fun Float.pxToDPI(context: Context) = (this / context.resources.displayMetrics.density).toInt()
 
 fun Image.toBitmap(): Bitmap {
     val yBuffer = planes[0].buffer // Y
