@@ -119,15 +119,14 @@ class FaceAnalyzer(
                 }
 
                 // Emit face detected.
-                if (this.cameraEventListener != null) {
-                    if (detectionBox != null) {
-                        this.cameraEventListener.onFaceDetected(
-                                pxToDPI(this.context, detectionBox.left).toInt(),
-                                pxToDPI(this.context, detectionBox.top).toInt(),
-                                pxToDPI(this.context, detectionBox.width()).toInt(),
-                                pxToDPI(this.context, detectionBox.height()).toInt()
-                        )
-                    }
+                if (this.cameraEventListener != null && detectionBox != null) {
+                    this.cameraEventListener.onFaceDetected(
+                        detectionBox.left.pxToDPI(this.context),
+                        detectionBox.top.pxToDPI(this.context),
+                        detectionBox.width().pxToDPI(this.context),
+                        detectionBox.height().pxToDPI(this.context)
+                    )
+                }
                 }
 
                 // Process image only within interval equal ANALYZE_TIMER.
