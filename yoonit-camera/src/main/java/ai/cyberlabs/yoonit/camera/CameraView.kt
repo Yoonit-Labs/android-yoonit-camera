@@ -146,6 +146,10 @@ open class CameraView @JvmOverloads constructor(
         this.cameraController.startCaptureType(this.captureOptions.type)
     }
 
+    fun setFaceSaveImages(faceSaveImages: Boolean) {
+        this.captureOptions.faceSaveImages = faceSaveImages
+    }
+
     /**
      * Set saving face images time interval in milli seconds.
      *

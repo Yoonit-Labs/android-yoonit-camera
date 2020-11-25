@@ -127,6 +127,9 @@ class FaceAnalyzer(
                         detectionBox.height().pxToDPI(this.context)
                     )
                 }
+
+                if (!this.captureOptions.faceSaveImages) {
+                    return@addOnSuccessListener
                 }
 
                 // Process image only within interval equal ANALYZE_TIMER.
