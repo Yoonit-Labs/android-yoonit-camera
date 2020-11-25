@@ -119,7 +119,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | **`toggleCameraLens`**          | -                              | -                                                                                 | void        | Set camera lens facing front or back.
 | **`getCameraLens`**             | -                              | -                                                                                 | Int         | Return `Int` that represents lens face state: 0 for front 1 for back camera.  
 | **`setFaceNumberOfImages`**     | `faceNumberOfImages: Int`      | Any positive `Int` value                                                          | void        | Default value is 0. For value 0 is saved infinity images. When saved images reached the "face number os images", the `onEndCapture` is triggered.
-| **`setFaceDetectionBox`**       | `faceDetectionBox: Boolean`    | `True` or `False`                                                                 | void        | Set to show face detection box when face detected.   
+| **`setFaceDetectionBox`**       | `faceDetectionBox: Boolean`    | `true` or `false`                                                                 | void        | Set to show face detection box when face detected.   
 | **`setFaceTimeBetweenImages`**  | `faceTimeBetweenImages: Long`  | Any positive number that represent time in milli seconds                          | void        | Set saving face images time interval in milli seconds.  
 | **`setFacePaddingPercent`**     | `facePaddingPercent: Float`    | Any positive `Float` value                                                        | void        | Set face image and bounding box padding in percent.  
 | **`setFaceImageSize`**          | `width: Int, height: Int`      | Any positive `Int` value                                                          | void        | Set face image size to be saved.
@@ -127,6 +127,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | **`setFaceCaptureMaxSize`**     | `faceCaptureMaxSize: Float`    | Value between `0` and `1`. Represents the percentage.                             | void        | Set the maximum face capture based on the screen width limit.
 | **`setFrameTimeBetweenImages`** | `frameTimeBetweenImages: Long` | Any positive number that represent time in milli seconds                          | void        | Set saving frame images time interval in milli seconds.
 | **`setFrameNumberOfImages`**    | `frameNumberOfImages: Int`     | Any positive `Int` value                                                          | void        | Default value is 0. For value 0 is saved infinity images. When saved images reached the "frame number os images", the `onEndCapture` is triggered. 
+| **`setFaceSaveImages`**         | `faceSaveImages: Boolean`      | `true` or `false`                                                                 | void        | Set to enable/disable face save images when capturing faces.
   
 ### Events
 

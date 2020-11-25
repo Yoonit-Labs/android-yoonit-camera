@@ -146,6 +146,11 @@ open class CameraView @JvmOverloads constructor(
         this.cameraController.startCaptureType(this.captureOptions.type)
     }
 
+    /**
+     * Set to enable/disable face save images when capturing faces.
+     *
+     * @param faceSaveImages The indicator to enable or disable the face save images. Default value is false.
+     */
     fun setFaceSaveImages(faceSaveImages: Boolean) {
         this.captureOptions.faceSaveImages = faceSaveImages
     }
