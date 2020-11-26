@@ -281,6 +281,65 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
     }
 
+    /**
+     * Set to apply enable/disable face region of interest.
+     *
+     * @param faceROIEnable The indicator to enable/disable face region of interest. Default value is `false`.
+     */
+    fun setFaceROIEnable(faceROIEnable: Boolean) {
+        this.captureOptions.faceROI.enable = faceROIEnable
+    }
+
+    /**
+     * Set face region of interest offset.
+     *
+     * @param topOffset Represents in percentage [0, 1]. Default value is `0`.
+     * @param rightOffset Represents in percentage [0, 1]. Default value is `0`.
+     * @param bottomOffset Represents in percentage [0, 1]. Default value is `0`.
+     * @param leftOffset Represents in percentage [0, 1]. Default value is `0`.
+     */
+    fun setFaceROIOffset(
+        topOffset: Float,
+        rightOffset: Float,
+        bottomOffset: Float,
+        leftOffset: Float
+    ) {
+
+        val isInvalid =
+            topOffset < 0.0 || topOffset > 1.0 ||
+                rightOffset < 0.0 || rightOffset > 1.0 ||
+                bottomOffset < 0.0 || bottomOffset > 1.0 ||
+                leftOffset < 0.0 || leftOffset > 1.0
+
+        if (isInvalid) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_ROI_OFFSET)
+            }
+            return
+        }
+
+        this.captureOptions.faceROI.topOffset = topOffset
+        this.captureOptions.faceROI.rightOffset = rightOffset
+        this.captureOptions.faceROI.bottomOffset = bottomOffset
+        this.captureOptions.faceROI.leftOffset = leftOffset
+    }
+
+    /**
+     * Set face minimum size in relation of the region of interest.
+     *
+     * @param minimumSize: Represents in percentage [0, 1]. Default value is `0`.
+     */
+    fun setFaceROIMinSize(minimumSize: Float) {
+        if (minimumSize < 0.0 || minimumSize > 1.0) {
+            if (this.cameraEventListener != null) {
+                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_ROI_MIN_SIZE)
+            }
+            return
+        }
+
+        this.captureOptions.faceROI.minimumSize = minimumSize
+    }
+
     companion object {
         private const val TAG = "CameraView"
     }
