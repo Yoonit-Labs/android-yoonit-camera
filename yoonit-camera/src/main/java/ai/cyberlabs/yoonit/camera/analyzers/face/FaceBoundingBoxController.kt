@@ -103,12 +103,12 @@ class FaceBoundingBoxController(
                 ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
         }
 
-        val x = if (cameraInputImage.rotationDegrees == 90) {
+        val x = if (cameraInputImage.rotationDegrees == 270) {
             this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
         } else {
             this.graphicView.width - (this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
         }
-        val y = this.scale(boundingBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
+        val y = boundingBox.centerY().toFloat() - postScaleHeightOffset
 
         val left = x - this.scale(boundingBox.width() / 2.0f, scaleFactor)
         val top = y - this.scale(boundingBox.height() / 2.0f, scaleFactor)

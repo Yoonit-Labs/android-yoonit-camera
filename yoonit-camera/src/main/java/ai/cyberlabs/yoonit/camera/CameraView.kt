@@ -61,6 +61,7 @@ open class CameraView @JvmOverloads constructor(
      * Start camera preview if has permission.
      */
     fun startPreview() {
+        this.rotation = 180f
         this.cameraController.startPreview()
     }
 

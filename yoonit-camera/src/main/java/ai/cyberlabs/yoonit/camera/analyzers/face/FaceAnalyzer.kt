@@ -66,7 +66,7 @@ class FaceAnalyzer(
 
         val image = InputImage.fromMediaImage(
             mediaImage,
-            imageProxy.imageInfo.rotationDegrees
+            270
         )
 
         val faceDetectorOptions = FaceDetectorOptions
@@ -210,7 +210,7 @@ class FaceAnalyzer(
         val fileOutputStream = FileOutputStream(file)
 
         var matrix = Matrix()
-        matrix.postRotate(rotationDegrees)
+        matrix.postRotate(270f)
 
         val rotateBitmap =
             Bitmap.createBitmap(
