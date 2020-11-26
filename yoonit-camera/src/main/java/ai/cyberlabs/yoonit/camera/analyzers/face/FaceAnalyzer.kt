@@ -12,10 +12,10 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
-import ai.cyberlabs.yoonit.camera.CaptureOptions
 import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.utils.pxToDPI
 import ai.cyberlabs.yoonit.camera.utils.toBitmap
 import android.annotation.SuppressLint

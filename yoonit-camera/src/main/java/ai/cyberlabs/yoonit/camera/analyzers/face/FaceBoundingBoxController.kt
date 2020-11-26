@@ -1,7 +1,7 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
-import ai.cyberlabs.yoonit.camera.CaptureOptions
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.utils.resize
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
 import android.graphics.Rect

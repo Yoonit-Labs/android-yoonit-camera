@@ -12,6 +12,7 @@
 package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Size
