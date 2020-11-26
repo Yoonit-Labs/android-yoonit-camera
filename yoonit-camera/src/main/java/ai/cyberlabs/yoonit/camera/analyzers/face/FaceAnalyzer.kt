@@ -93,7 +93,9 @@ class FaceAnalyzer(
                 )
 
                 // Get status if exist.
-                val error = this.getError(closestFace, detectionBox)
+                val error = this
+                    .faceBoundingBoxController
+                    .getError(closestFace, detectionBox)
 
                 // Emit once if has error.
                 if (error != null) {
@@ -158,86 +160,6 @@ class FaceAnalyzer(
                 imageProxy.close()
                 detector.close()
             }
-    }
-
-    /**
-     *  Get the error message if exist based in the capture options rules,
-     *  closest face and detection box.
-     *
-     *  @param closestFace The closest face detected.
-     *  @param detectionBox The closest face detected bounding box normalized coordinates.
-     *
-     *  @return null for no error:
-     *  - INVALID_CAPTURE_FACE_MIN_SIZE
-     *  - INVALID_CAPTURE_FACE_MAX_SIZE
-     *  - INVALID_CAPTURE_FACE_OUT_OF_ROI
-     *  - INVALID_CAPTURE_FACE_ROI_MIN_SIZE
-     */
-    private fun getError(closestFace: Face?, detectionBox: RectF?): String? {
-
-        if (closestFace == null || detectionBox == null) {
-            return ""
-        }
-
-        val screenWidth = this.graphicView.width
-        val screenHeight = this.graphicView.height
-
-        val isOutOfTheScreen =
-            detectionBox.left < 0 ||
-                detectionBox.top < 0 ||
-                detectionBox.right > screenWidth ||
-                detectionBox.bottom > screenHeight
-
-        if (isOutOfTheScreen) {
-            return ""
-        }
-
-        // This variable is the face detection box percentage in relation with the
-        // UI graphic view. The value must be between 0 and 1.
-        val detectionBoxRelatedWithScreen: Float = detectionBox.width() / screenWidth
-
-        if (detectionBoxRelatedWithScreen < this.captureOptions.faceCaptureMinSize) {
-            return Message.INVALID_CAPTURE_FACE_MIN_SIZE
-        }
-
-        if (detectionBoxRelatedWithScreen > this.captureOptions.faceCaptureMaxSize) {
-            return Message.INVALID_CAPTURE_FACE_MAX_SIZE
-        }
-
-        if (this.captureOptions.faceROI.enable) {
-
-            // Detection box offsets.
-            val topOffset: Float = detectionBox.top / screenHeight
-            val rightOffset: Float = (screenWidth - detectionBox.right) / screenWidth
-            val bottomOffset: Float = (screenHeight - detectionBox.bottom) / screenHeight
-            val leftOffset: Float = detectionBox.left / screenWidth
-
-            if (this.captureOptions.faceROI.isOutOf(
-                    topOffset,
-                    rightOffset,
-                    bottomOffset,
-                    leftOffset
-                )
-            ) {
-                return Message.INVALID_CAPTURE_FACE_OUT_OF_ROI
-            }
-
-            if (this.captureOptions.faceROI.hasChanges) {
-
-                // Face is inside the region of interest and faceROI is setted.
-                // Face is smaller than the defined "minimumSize".
-                val roiWidth: Float =
-                    screenWidth -
-                        ((this.captureOptions.faceROI.rightOffset + this.captureOptions.faceROI.leftOffset) * screenWidth)
-                val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
-
-                if (this.captureOptions.faceROI.minimumSize > faceRelatedWithROI) {
-                    return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
-                }
-            }
-        }
-
-        return null
     }
 
     /**
