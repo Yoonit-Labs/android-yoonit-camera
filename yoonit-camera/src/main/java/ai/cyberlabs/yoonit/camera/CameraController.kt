@@ -16,6 +16,7 @@ import ai.cyberlabs.yoonit.camera.analyzers.face.FaceAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.frame.FrameAnalyzer
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager

@@ -12,10 +12,10 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
-import ai.cyberlabs.yoonit.camera.CaptureOptions
 import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.utils.pxToDPI
 import ai.cyberlabs.yoonit.camera.utils.toBitmap
 import android.annotation.SuppressLint
@@ -46,7 +46,7 @@ class FaceAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     private var analyzerTimeStamp: Long = 0
-    private var hasStatus: Boolean = false
+    private var isValid: Boolean = false
     private var numberOfImages = 0
 
     private val faceBoundingBoxController = FaceBoundingBoxController(
@@ -93,23 +93,25 @@ class FaceAnalyzer(
                 )
 
                 // Get status if exist.
-                val status = this.getStatus(closestFace, detectionBox)
+                val error = this
+                    .faceBoundingBoxController
+                    .getError(closestFace, detectionBox)
 
                 // Emit once if has error.
-                if (status != null) {
-                    if (this.hasStatus) {
-                        this.hasStatus = false
+                if (error != null) {
+                    if (this.isValid) {
+                        this.isValid = false
                         this.graphicView.clear()
                         if (this.cameraEventListener != null) {
-                            if (status != "") {
-                                this.cameraEventListener.onMessage(status)
+                            if (error != "") {
+                                this.cameraEventListener.onMessage(error)
                             }
                             this.cameraEventListener.onFaceUndetected()
                         }
                     }
                     return@addOnSuccessListener
                 }
-                this.hasStatus = true
+                this.isValid = true
 
                 // Draw or clean the bounding box based on the "faceDetectionBox".
                 if (this.captureOptions.faceDetectionBox) {
@@ -158,45 +160,6 @@ class FaceAnalyzer(
                 imageProxy.close()
                 detector.close()
             }
-    }
-
-    /**
-     *  Get the status if exist in the parameters.
-     *
-     *  @param closestFace The closest face detected.
-     *  @param detectionBox The closest face detected bounding box normalized coordinates.
-     *
-     *  @return "" for status undefined, string or null if no status found.
-     */
-    private fun getStatus(closestFace: Face?, detectionBox: RectF?): String? {
-        if (closestFace == null || detectionBox == null) {
-            return ""
-        }
-
-        if (this.cameraEventListener != null) {
-            if (
-                detectionBox.left < 0 ||
-                detectionBox.top < 0 ||
-                detectionBox.right > this.graphicView.width ||
-                detectionBox.bottom > this.graphicView.height
-            ) {
-                return ""
-            }
-
-            // This variable is the face detection box percentage in relation with the
-            // UI graphic view. The value must be between 0 and 1.
-            val detectionBoxRelatedWithScreen: Float =
-                detectionBox.width() / this.graphicView.width
-
-            if (detectionBoxRelatedWithScreen < this.captureOptions.faceCaptureMinSize) {
-                return Message.INVALID_CAPTURE_FACE_MIN_SIZE
-            }
-            if (detectionBoxRelatedWithScreen > this.captureOptions.faceCaptureMaxSize) {
-                return Message.INVALID_CAPTURE_FACE_MAX_SIZE
-            }
-        }
-
-        return null
     }
 
     /**

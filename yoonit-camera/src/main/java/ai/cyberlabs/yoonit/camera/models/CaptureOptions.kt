@@ -9,8 +9,9 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera
+package ai.cyberlabs.yoonit.camera.models
 
+import ai.cyberlabs.yoonit.camera.CaptureType
 import android.util.Size
 import androidx.camera.core.CameraSelector
 
@@ -18,6 +19,9 @@ import androidx.camera.core.CameraSelector
  * Model to set [CameraView] capture features options.
  */
 data class CaptureOptions(
+
+    // Face region of interesting. Default is all the screen area.
+    var faceROI: FaceROI = FaceROI(),
 
     // Camera image capture type: NONE, FACE, BARCODE and FRAME.
     var type: CaptureType = CaptureType.NONE,
