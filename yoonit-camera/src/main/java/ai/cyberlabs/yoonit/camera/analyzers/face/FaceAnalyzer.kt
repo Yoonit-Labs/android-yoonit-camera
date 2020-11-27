@@ -49,6 +49,8 @@ class FaceAnalyzer(
     private var isValid: Boolean = false
     private var numberOfImages = 0
 
+    var isScreenFlipped = false
+
     private val faceBoundingBoxController = FaceBoundingBoxController(
         this.graphicView,
         this.captureOptions
@@ -64,10 +66,14 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
+        val cameraRotation: Int = if (isScreenFlipped) 270 else imageProxy.imageInfo.rotationDegrees
+
         val image = InputImage.fromMediaImage(
             mediaImage,
-            270
+            cameraRotation
         )
+
+        this.faceBoundingBoxController.cameraRotation = cameraRotation
 
         val faceDetectorOptions = FaceDetectorOptions
             .Builder()
@@ -144,7 +150,7 @@ class FaceAnalyzer(
                 val imagePath = this.saveImage(
                     mediaImage.toBitmap(),
                     closestFace!!.boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                    cameraRotation.toFloat()
                 )
 
                 if (this.cameraEventListener != null) {
@@ -224,7 +230,9 @@ class FaceAnalyzer(
             )
 
         matrix = Matrix()
-        if (rotationDegrees == 270.0f) {
+        var cameraRotation = if (isScreenFlipped) 270f else 90f
+
+        if (rotationDegrees == cameraRotation) {
             matrix.preScale(-1.0f, 1.0f)
         }
 

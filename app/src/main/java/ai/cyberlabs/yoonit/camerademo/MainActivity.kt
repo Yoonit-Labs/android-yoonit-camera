@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         this.cameraView = camera_view
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
+        this.cameraView.flipScreen(true)
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
