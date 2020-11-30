@@ -12,7 +12,6 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
-import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
@@ -23,7 +22,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Rect
-import android.graphics.RectF
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.android.gms.vision.face.FaceDetector
@@ -49,8 +47,6 @@ class FaceAnalyzer(
     private var isValid: Boolean = false
     private var numberOfImages = 0
 
-    var isScreenFlipped = false
-
     private val faceBoundingBoxController = FaceBoundingBoxController(
         this.graphicView,
         this.captureOptions
@@ -66,14 +62,10 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
-        val cameraRotation: Int = if (isScreenFlipped) 270 else imageProxy.imageInfo.rotationDegrees
-
         val image = InputImage.fromMediaImage(
             mediaImage,
-            cameraRotation
+            imageProxy.imageInfo.rotationDegrees
         )
-
-        this.faceBoundingBoxController.cameraRotation = cameraRotation
 
         val faceDetectorOptions = FaceDetectorOptions
             .Builder()
@@ -150,7 +142,7 @@ class FaceAnalyzer(
                 val imagePath = this.saveImage(
                     mediaImage.toBitmap(),
                     closestFace!!.boundingBox,
-                    cameraRotation.toFloat()
+                    imageProxy.imageInfo.rotationDegrees.toFloat()
                 )
 
                 if (this.cameraEventListener != null) {
@@ -216,7 +208,7 @@ class FaceAnalyzer(
         val fileOutputStream = FileOutputStream(file)
 
         var matrix = Matrix()
-        matrix.postRotate(270f)
+        matrix.postRotate(rotationDegrees)
 
         val rotateBitmap =
             Bitmap.createBitmap(
@@ -230,9 +222,7 @@ class FaceAnalyzer(
             )
 
         matrix = Matrix()
-        var cameraRotation = if (isScreenFlipped) 270f else 90f
-
-        if (rotationDegrees == cameraRotation) {
+        if (rotationDegrees == 270f) {
             matrix.preScale(-1.0f, 1.0f)
         }
 

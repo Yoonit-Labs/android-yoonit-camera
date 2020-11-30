@@ -16,8 +16,6 @@ class FaceBoundingBoxController(
     private val captureOptions: CaptureOptions
 ) {
 
-    var cameraRotation: Int = 0
-
     /**
      * Get closest face.
      * Can be null if no face found.
@@ -100,17 +98,27 @@ class FaceBoundingBoxController(
                 (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
         } else {
             // The image needs to be horizontally cropped to be displayed in this view.
-            scaleFactor = this.graphicView.width.toFloat() / imageHeight
-            postScaleHeightOffset =
-                (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
+            scaleFactor = this.graphicView.height.toFloat() / imageWidth
+            postScaleWidthOffset =
+                ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
         }
 
-        val x = if (cameraInputImage.rotationDegrees == cameraRotation) {
+        var x = if (cameraInputImage.rotationDegrees == 90) {
             this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
         } else {
             this.graphicView.width - (this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
         }
-        val y = this.graphicView.height - (this.scale(boundingBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset)
+
+        var y = this.scale(boundingBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
+
+        // Adjust the "x" and "y" coordinates when screen flipped.
+        x =
+            if (this.captureOptions.isScreenFlipped) this.graphicView.width - x
+            else x
+        y =
+            if (this.captureOptions.isScreenFlipped) this.graphicView.height - y
+            else y
+
 
         val left = x - this.scale(boundingBox.width() / 2.0f, scaleFactor)
         val top = y - this.scale(boundingBox.height() / 2.0f, scaleFactor)

@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
         this.cameraView = camera_view
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
-        this.cameraView.flipScreen(true)
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
@@ -51,6 +50,13 @@ class MainActivity : AppCompatActivity() {
             REQUIRED_PERMISSIONS,
             PackageManager.PERMISSION_GRANTED
         )
+    }
+
+
+    fun onFlipScreenSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            this.cameraView.flipScreen()
+        }
     }
 
     fun onFaceBoxSwitchClick(view: View) {

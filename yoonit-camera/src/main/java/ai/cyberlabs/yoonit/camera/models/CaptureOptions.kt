@@ -65,5 +65,7 @@ data class CaptureOptions(
     var frameNumberOfImages: Int = 0,
 
     // Frame capture time between images in milliseconds.
-    var frameTimeBetweenImages: Long = 1000
+    var frameTimeBetweenImages: Long = 1000,
+
+    var isScreenFlipped: Boolean = false
 )

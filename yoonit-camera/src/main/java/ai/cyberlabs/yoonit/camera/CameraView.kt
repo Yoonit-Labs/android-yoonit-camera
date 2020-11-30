@@ -61,9 +61,6 @@ open class CameraView @JvmOverloads constructor(
      * Start camera preview if has permission.
      */
     fun startPreview() {
-        if (this.cameraController.isScreenFlipped) {
-            this.rotation = 180f
-        }
         this.cameraController.startPreview()
     }
 
@@ -343,8 +340,15 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.minimumSize = minimumSize
     }
 
-    fun flipScreen(isFlipped: Boolean) {
-        this.cameraController.isScreenFlipped = isFlipped
+    /**
+     *
+     */
+    fun flipScreen() {
+        this.captureOptions.isScreenFlipped = !this.captureOptions.isScreenFlipped
+
+        this.rotation =
+            if (this.captureOptions.isScreenFlipped) 180f
+            else 0f
     }
 
     companion object {

@@ -40,8 +40,6 @@ class CameraController(
     // Camera interface event listeners object.
     var cameraEventListener: CameraEventListener? = null
 
-    var isScreenFlipped = false
-
     // Image analyzer handle build, start and stop.
     private var imageAnalyzerController = ImageAnalyzerController(this.graphicView)
 
@@ -184,16 +182,15 @@ class CameraController(
             CaptureType.NONE -> this.imageAnalyzerController.stop()
 
             CaptureType.FACE -> {
-                var faceAnalyzer = FaceAnalyzer(
-                    this.context,
-                    this.cameraEventListener,
-                    this.graphicView,
-                    this.captureOptions,
-                    this as CameraCallback
+                this.imageAnalyzerController.start(
+                    FaceAnalyzer(
+                        this.context,
+                        this.cameraEventListener,
+                        this.graphicView,
+                        this.captureOptions,
+                        this as CameraCallback
+                    )
                 )
-                faceAnalyzer.isScreenFlipped = this.isScreenFlipped
-
-                this.imageAnalyzerController.start(faceAnalyzer)
             }
 
             CaptureType.QRCODE -> this.imageAnalyzerController.start(
