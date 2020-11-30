@@ -340,9 +340,6 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.minimumSize = minimumSize
     }
 
-    /**
-     *
-     */
     fun flipScreen() {
         this.captureOptions.isScreenFlipped = !this.captureOptions.isScreenFlipped
 

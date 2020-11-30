@@ -111,13 +111,14 @@ class FaceBoundingBoxController(
 
         var y = this.scale(boundingBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
 
-        // Adjust the "x" and "y" coordinates when screen flipped.
+        // Adjust the "x" and "y" coordinates when screen flipped. - - - - - - - - - - - - - - - -
         x =
             if (this.captureOptions.isScreenFlipped) this.graphicView.width - x
             else x
         y =
             if (this.captureOptions.isScreenFlipped) this.graphicView.height - y
             else y
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
         val left = x - this.scale(boundingBox.width() / 2.0f, scaleFactor)

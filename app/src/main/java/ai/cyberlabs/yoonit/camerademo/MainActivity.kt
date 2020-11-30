@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
             this.cameraView.startPreview()
 
             Timer("SettingUp", false).schedule(500) {
-                camera_view.setFaceSaveImages(true)
                 camera_view.startCaptureType("face")
             }
 
