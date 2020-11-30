@@ -28,6 +28,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.util.*
+import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,12 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
+
+            Timer("SettingUp", false).schedule(500) {
+                camera_view.setFaceSaveImages(true)
+                camera_view.startCaptureType("face")
+            }
+
             return
         }
 

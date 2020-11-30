@@ -62,9 +62,13 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
+        val cameraRotation: Int =
+            if (this.captureOptions.isScreenFlipped) 270
+            else imageProxy.imageInfo.rotationDegrees
+
         val image = InputImage.fromMediaImage(
             mediaImage,
-            imageProxy.imageInfo.rotationDegrees
+            cameraRotation
         )
 
         val faceDetectorOptions = FaceDetectorOptions
@@ -142,7 +146,7 @@ class FaceAnalyzer(
                 val imagePath = this.saveImage(
                     mediaImage.toBitmap(),
                     closestFace!!.boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                    cameraRotation.toFloat()
                 )
 
                 if (this.cameraEventListener != null) {
