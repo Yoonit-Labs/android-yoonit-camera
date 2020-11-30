@@ -28,6 +28,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.util.*
+import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,11 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
+
+            Timer("SettingUp", false).schedule(500) {
+                camera_view.startCaptureType("face")
+            }
+
             return
         }
 
@@ -50,6 +57,13 @@ class MainActivity : AppCompatActivity() {
             REQUIRED_PERMISSIONS,
             PackageManager.PERMISSION_GRANTED
         )
+    }
+
+
+    fun onFlipScreenSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            this.cameraView.flipScreen()
+        }
     }
 
     fun onFaceBoxSwitchClick(view: View) {

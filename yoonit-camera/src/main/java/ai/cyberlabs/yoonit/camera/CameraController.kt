@@ -181,15 +181,17 @@ class CameraController(
 
             CaptureType.NONE -> this.imageAnalyzerController.stop()
 
-            CaptureType.FACE -> this.imageAnalyzerController.start(
-                FaceAnalyzer(
-                    this.context,
-                    this.cameraEventListener,
-                    this.graphicView,
-                    this.captureOptions,
-                    this as CameraCallback
+            CaptureType.FACE -> {
+                this.imageAnalyzerController.start(
+                    FaceAnalyzer(
+                        this.context,
+                        this.cameraEventListener,
+                        this.graphicView,
+                        this.captureOptions,
+                        this as CameraCallback
+                    )
                 )
-            )
+            }
 
             CaptureType.QRCODE -> this.imageAnalyzerController.start(
                 BarcodeAnalyzer(

@@ -340,6 +340,14 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.minimumSize = minimumSize
     }
 
+    fun flipScreen() {
+        this.captureOptions.isScreenFlipped = !this.captureOptions.isScreenFlipped
+
+        this.rotation =
+            if (this.captureOptions.isScreenFlipped) 180f
+            else 0f
+    }
+
     companion object {
         private const val TAG = "CameraView"
     }

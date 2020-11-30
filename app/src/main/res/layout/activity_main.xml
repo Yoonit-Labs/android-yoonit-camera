@@ -71,6 +71,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/flip_screen_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:checked="false"
+            android:onClick="onFlipScreenSwitchClick"
+            android:text="@string/flip_screen" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/face_box_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

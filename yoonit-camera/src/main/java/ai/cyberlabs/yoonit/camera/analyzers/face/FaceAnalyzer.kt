@@ -12,7 +12,6 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
-import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
@@ -23,7 +22,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Rect
-import android.graphics.RectF
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.android.gms.vision.face.FaceDetector
@@ -64,9 +62,13 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
+        val cameraRotation: Int =
+            if (this.captureOptions.isScreenFlipped) 270
+            else imageProxy.imageInfo.rotationDegrees
+
         val image = InputImage.fromMediaImage(
             mediaImage,
-            imageProxy.imageInfo.rotationDegrees
+            cameraRotation
         )
 
         val faceDetectorOptions = FaceDetectorOptions
@@ -144,7 +146,7 @@ class FaceAnalyzer(
                 val imagePath = this.saveImage(
                     mediaImage.toBitmap(),
                     closestFace!!.boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                    cameraRotation.toFloat()
                 )
 
                 if (this.cameraEventListener != null) {
@@ -224,7 +226,7 @@ class FaceAnalyzer(
             )
 
         matrix = Matrix()
-        if (rotationDegrees == 270.0f) {
+        if (rotationDegrees == 270f) {
             matrix.preScale(-1.0f, 1.0f)
         }
 
