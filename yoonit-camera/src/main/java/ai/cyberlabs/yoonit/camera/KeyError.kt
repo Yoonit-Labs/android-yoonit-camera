@@ -40,12 +40,6 @@ object KeyError {
     // Tried to input invalid face capture maximum size.
     const val INVALID_FACE_CAPTURE_MAX_SIZE = "INVALID_FACE_CAPTURE_MAX_SIZE"
 
-    // Tried to input invalid frame number of images to capture.
-    const val INVALID_FRAME_NUMBER_OF_IMAGES = "INVALID_FRAME_NUMBER_OF_IMAGES"
-
-    // Tried to input invalid frame time interval to capture face.
-    const val INVALID_FRAME_TIME_BETWEEN_IMAGES = "INVALID_FRAME_TIME_BETWEEN_IMAGES"
-
     // Tried to input invalid face region of interesting offset.
     const val INVALID_FACE_ROI_OFFSET = "INVALID_FACE_ROI_OFFSET"
 

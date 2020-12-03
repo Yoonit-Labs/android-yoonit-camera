@@ -34,9 +34,6 @@ data class CaptureOptions(
     // Face/Frame capture time between images in milliseconds.
     var timeBetweenImages: Long = 1000,
 
-    // Face save cropped images.
-    var faceSaveImages: Boolean = false,
-
     // Face/Frame capture image width to create.
     var imageOutputWidth: Int = 200,
 
@@ -45,6 +42,9 @@ data class CaptureOptions(
 
     // Draw the face detection box.
     var faceDetectionBox: Boolean = true,
+
+    // Face save cropped images.
+    var faceSaveImages: Boolean = false,
 
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f,

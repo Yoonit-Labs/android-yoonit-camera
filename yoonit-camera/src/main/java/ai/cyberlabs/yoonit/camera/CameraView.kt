@@ -147,6 +147,32 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Set face image width to be created.
+     *
+     * @param width The file image width in pixels. Default value is 200.
+     */
+    fun setOutputImageWidth(width: Int) {
+        if (width <= 0) {
+            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_WIDTH)
+        }
+
+        this.captureOptions.imageOutputWidth = width
+    }
+
+    /**
+     * Set face image height to be created.
+     *
+     * @param height The file image height in pixels. Default value is 200.
+     */
+    fun setOutputImageHeight(height: Int) {
+        if (height <= 0) {
+            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_HEIGHT)
+        }
+
+        this.captureOptions.imageOutputHeight = height
+    }
+
+    /**
      * Set to show/hide face detection box when face detected.
      *
      * @param faceDetectionBox The indicator to show or hide the face detection box. Default value is true.
@@ -176,32 +202,6 @@ open class CameraView @JvmOverloads constructor(
         }
 
         this.captureOptions.facePaddingPercent = facePaddingPercent
-    }
-
-    /**
-     * Set face/frame image width to be created.
-     *
-     * @param width The file image width in pixels. Default value is 200.
-     */
-    fun setOutputImageWidth(width: Int) {
-        if (width <= 0) {
-            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_WIDTH)
-        }
-
-        this.captureOptions.imageOutputWidth = width
-    }
-
-    /**
-     * Set face/frame image height to be created.
-     *
-     * @param height The file image height in pixels. Default value is 200.
-     */
-    fun setOutputImageHeight(height: Int) {
-        if (height <= 0) {
-            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_HEIGHT)
-        }
-
-        this.captureOptions.imageOutputHeight = height
     }
 
     /**
@@ -238,40 +238,6 @@ open class CameraView @JvmOverloads constructor(
         }
 
         this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize
-    }
-
-    /**
-     * Set number of frame file images to create.
-     * The time interval to create the image is 1000 milli second.
-     * See [setFrameTimeBetweenImages] to change the time interval.
-     *
-     * @param faceNumberOfImages The number of images to create.
-     */
-    fun setFrameNumberOfImages(frameNumberOfImages: Int) {
-        if (frameNumberOfImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FRAME_NUMBER_OF_IMAGES)
-            }
-            return
-        }
-
-        this.captureOptions.frameNumberOfImages = frameNumberOfImages
-    }
-
-    /**
-     * Set saving frame images time interval in milli seconds.
-     *
-     * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000.
-     */
-    fun setFrameTimeBetweenImages(frameTimeBetweenImages: Long) {
-        if (frameTimeBetweenImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FRAME_TIME_BETWEEN_IMAGES)
-            }
-            return
-        }
-
-        this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
     }
 
     /**
