@@ -40,11 +40,11 @@ data class CaptureOptions(
     // Face/Frame capture image height to create.
     var imageOutputHeight: Int = 200,
 
+    // Face/Frame save images captured.
+    var saveImageCaptured: Boolean = false,
+
     // Draw the face detection box.
     var faceDetectionBox: Boolean = true,
-
-    // Face save cropped images.
-    var faceSaveImages: Boolean = false,
 
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f,

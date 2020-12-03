@@ -132,7 +132,7 @@ class FaceAnalyzer(
                     )
                 }
 
-                if (!this.captureOptions.faceSaveImages) {
+                if (!this.captureOptions.saveImageCaptured) {
                     return@addOnSuccessListener
                 }
 
