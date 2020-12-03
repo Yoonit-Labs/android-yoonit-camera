@@ -44,9 +44,7 @@ class MainActivity : AppCompatActivity() {
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
 
-            Timer("SettingUp", false).schedule(500) {
-                camera_view.startCaptureType("face")
-            }
+            // Timer("SettingUp", false).schedule(500) {}
 
             return
         }
@@ -94,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                     if (checked && this.cameraView.getCameraLens() == 1) {
                         this.cameraView.toggleCameraLens()
                     }
+
                 R.id.back_radio_button ->
                     if (checked && this.cameraView.getCameraLens() == 0) {
                         this.cameraView.toggleCameraLens()
