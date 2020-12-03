@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:checked="false"
-            android:onClick="onFaceSaveSwitchClick"
+            android:onClick="onImageSaveSwitchClick"
             android:text="@string/face_save_image" />
 
         <TextView
