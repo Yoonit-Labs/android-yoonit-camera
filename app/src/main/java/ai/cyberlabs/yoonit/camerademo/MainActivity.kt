@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
             if (imageFile.exists()) {
                 val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
-                Log.d(TAG, "onImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
+                Log.d(TAG, "onImageCaptured: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
 
                 image_preview.setImageBitmap(imageBitmap)
                 info_textview.text = "$count/$total"
