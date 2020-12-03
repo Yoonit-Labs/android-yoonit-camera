@@ -73,6 +73,11 @@ class FrameAnalyzer(
      */
     @SuppressLint("UnsafeExperimentalUsageError")
     private fun shouldAnalyze(imageProxy: ImageProxy): Boolean {
+
+        if (!this.captureOptions.saveImageCaptured) {
+            return false
+        }
+
         if (this.cameraEventListener == null) {
             return false
         }
