@@ -44,7 +44,7 @@ class FaceAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     private var analyzerTimeStamp: Long = 0
-    private var isValid: Boolean = false
+    private var isValid: Boolean = true
     private var numberOfImages = 0
 
     private val faceBoundingBoxController = FaceBoundingBoxController(
