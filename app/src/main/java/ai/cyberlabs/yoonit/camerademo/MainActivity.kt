@@ -43,9 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
-
-            // Timer("SettingUp", false).schedule(500) {}
-
+            
             return
         }
 
