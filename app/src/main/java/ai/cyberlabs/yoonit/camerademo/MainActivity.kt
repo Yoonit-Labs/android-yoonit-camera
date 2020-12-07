@@ -12,7 +12,6 @@
 package ai.cyberlabs.yoonit.camerademo
 
 import ai.cyberlabs.yoonit.camera.CameraView
-import ai.cyberlabs.yoonit.camera.CaptureType
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest
 import android.content.pm.PackageManager
@@ -44,11 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
-
-            Timer("SettingUp", false).schedule(500) {
-                camera_view.startCaptureType("face")
-            }
-
+            
             return
         }
 
@@ -73,10 +68,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onFaceSaveSwitchClick(view: View) {
+    fun onImageSaveSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setFaceSaveImages(checked)
+            this.cameraView.setSaveImageCaptured(checked)
 
             if (checked) {
                 this.image_preview.visibility = View.VISIBLE
@@ -95,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                     if (checked && this.cameraView.getCameraLens() == 1) {
                         this.cameraView.toggleCameraLens()
                     }
+
                 R.id.back_radio_button ->
                     if (checked && this.cameraView.getCameraLens() == 0) {
                         this.cameraView.toggleCameraLens()
@@ -126,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 R.id.face_radio_button ->
                     if (checked) {
-                        this.cameraView.setFaceNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                        this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
                         this.cameraView.startCaptureType("face")
                         this.image_preview.visibility = View.VISIBLE
                         this.info_textview.visibility = View.VISIBLE
@@ -137,7 +133,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 R.id.qrcode_radio_button ->
                     if (checked) {
-                        this.cameraView.startCaptureType("barcode")
+                        this.cameraView.startCaptureType("qrcode")
                         this.image_preview.visibility = View.INVISIBLE
                         this.info_textview.visibility = View.INVISIBLE
                         this.face_number_edittext.visibility = View.INVISIBLE
@@ -147,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 R.id.frame_radio_button ->
                     if (checked) {
-                        this.cameraView.setFaceNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                        this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
                         this.cameraView.startCaptureType("frame")
                         this.image_preview.visibility = View.VISIBLE
                         this.info_textview.visibility = View.VISIBLE
@@ -186,13 +182,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 
-        override fun onFaceImageCreated(count: Int, total: Int, imagePath: String) {
+        override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {
             val imageFile = File(imagePath)
 
             if (imageFile.exists()) {
                 val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
-                Log.d(TAG, "onFaceImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
+                Log.d(TAG, "onImageCaptured: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
 
                 image_preview.setImageBitmap(imageBitmap)
                 info_textview.text = "$count/$total"
@@ -227,23 +223,9 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "onPermissionDenied")
         }
 
-        override fun onBarcodeScanned(content: String) {
+        override fun onQRCodeScanned(content: String) {
             qrcode_textview.text = content
-            Log.d(TAG, "onBarcodeScanned")
-        }
-
-        override fun onFrameImageCreated(count: Int, total: Int, imagePath: String) {
-            val imageFile = File(imagePath)
-
-            if (imageFile.exists()) {
-                val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
-                Log.d(TAG, "onFrameImageCreated: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
-
-                image_preview.setImageBitmap(imageBitmap)
-                info_textview.text = "$count/$total"
-                image_preview.visibility = View.VISIBLE
-            }
+            Log.d(TAG, "onQRCodeScanned")
         }
     }
 

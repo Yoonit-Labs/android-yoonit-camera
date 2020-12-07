@@ -11,7 +11,7 @@
 
 package ai.cyberlabs.yoonit.camera
 
-import ai.cyberlabs.yoonit.camera.analyzers.barcode.BarcodeAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.qrcode.QRCodeAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.face.FaceAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.frame.FrameAnalyzer
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
@@ -47,6 +47,12 @@ class CameraController(
     private lateinit var preview: Preview
     private var cameraProviderProcess: ProcessCameraProvider? = null
 
+    // Preview started only if camera provider started.
+    val isPreviewStarted: Boolean
+        get() = this.cameraProviderProcess != null
+
+
+    // Called when number of images reached.
     override fun onStopAnalyzer() {
         this.stopAnalyzer()
     }
@@ -114,20 +120,10 @@ class CameraController(
 
     /**
      * Start capture type of Image Analyzer.
-     * Must have started preview.
      *
-     * @param captureType The capture type: "none" | "face" | "barcode" | "frame";
+     * @param captureType The capture type: "none" | "face" | "qrcode" | "frame";
      */
     fun startCaptureType(captureType: CaptureType) {
-
-        // Must have started preview.
-        if (this.cameraProviderProcess == null) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener?.onError(KeyError.NOT_STARTED_PREVIEW)
-            }
-            return
-        }
-
         this.captureOptions.type = captureType
 
         this.imageAnalyzerController.stop()
@@ -194,7 +190,7 @@ class CameraController(
             }
 
             CaptureType.QRCODE -> this.imageAnalyzerController.start(
-                BarcodeAnalyzer(
+                QRCodeAnalyzer(
                     this.cameraEventListener,
                     this.graphicView
                 )

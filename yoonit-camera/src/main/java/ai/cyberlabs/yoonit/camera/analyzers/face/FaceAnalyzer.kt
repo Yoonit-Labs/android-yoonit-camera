@@ -44,7 +44,7 @@ class FaceAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     private var analyzerTimeStamp: Long = 0
-    private var isValid: Boolean = false
+    private var isValid: Boolean = true
     private var numberOfImages = 0
 
     private val faceBoundingBoxController = FaceBoundingBoxController(
@@ -132,13 +132,13 @@ class FaceAnalyzer(
                     )
                 }
 
-                if (!this.captureOptions.faceSaveImages) {
+                if (!this.captureOptions.saveImageCaptured) {
                     return@addOnSuccessListener
                 }
 
                 // Process image only within interval equal ANALYZE_TIMER.
                 val currentTimestamp = System.currentTimeMillis()
-                if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.faceTimeBetweenImages) {
+                if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.timeBetweenImages) {
                     return@addOnSuccessListener
                 }
                 this.analyzerTimeStamp = currentTimestamp
@@ -172,12 +172,13 @@ class FaceAnalyzer(
     private fun handleEmitFaceImageCreated(imagePath: String) {
 
         // process face number of images.
-        if (this.captureOptions.faceNumberOfImages > 0) {
-            if (this.numberOfImages < captureOptions.faceNumberOfImages) {
+        if (this.captureOptions.numberOfImages > 0) {
+            if (this.numberOfImages < captureOptions.numberOfImages) {
                 this.numberOfImages++
-                this.cameraEventListener?.onFaceImageCreated(
+                this.cameraEventListener?.onImageCaptured(
+                    "face",
                     this.numberOfImages,
-                    this.captureOptions.faceNumberOfImages,
+                    this.captureOptions.numberOfImages,
                     imagePath
                 )
                 return
@@ -190,9 +191,10 @@ class FaceAnalyzer(
 
         // process face unlimited.
         this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
-        this.cameraEventListener?.onFaceImageCreated(
+        this.cameraEventListener?.onImageCaptured(
+            "face",
             this.numberOfImages,
-            this.captureOptions.faceNumberOfImages,
+            this.captureOptions.numberOfImages,
             imagePath
         )
     }
@@ -243,8 +245,8 @@ class FaceAnalyzer(
 
         croppedBitmap = Bitmap.createScaledBitmap(
             croppedBitmap,
-            this.captureOptions.faceImageSize.width,
-            this.captureOptions.faceImageSize.height,
+            this.captureOptions.imageOutputWidth,
+            this.captureOptions.imageOutputHeight,
             false
         )
 

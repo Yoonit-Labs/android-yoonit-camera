@@ -73,6 +73,11 @@ class FrameAnalyzer(
      */
     @SuppressLint("UnsafeExperimentalUsageError")
     private fun shouldAnalyze(imageProxy: ImageProxy): Boolean {
+
+        if (!this.captureOptions.saveImageCaptured) {
+            return false
+        }
+
         if (this.cameraEventListener == null) {
             return false
         }
@@ -83,7 +88,7 @@ class FrameAnalyzer(
 
         // Process image only within interval equal ANALYZE_TIMER.
         val currentTimestamp = System.currentTimeMillis()
-        if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.frameTimeBetweenImages) {
+        if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.timeBetweenImages) {
             return false
         }
         this.analyzerTimeStamp = currentTimestamp
@@ -99,12 +104,13 @@ class FrameAnalyzer(
     private fun handleEmitFrameImageCreated(imagePath: String) {
 
         // process face number of images.
-        if (this.captureOptions.frameNumberOfImages > 0) {
-            if (this.numberOfImages < captureOptions.frameNumberOfImages) {
+        if (this.captureOptions.numberOfImages > 0) {
+            if (this.numberOfImages < captureOptions.numberOfImages) {
                 this.numberOfImages++
-                this.cameraEventListener?.onFrameImageCreated(
+                this.cameraEventListener?.onImageCaptured(
+                    "frame",
                     this.numberOfImages,
-                    this.captureOptions.frameNumberOfImages,
+                    this.captureOptions.numberOfImages,
                     imagePath
                 )
                 return
@@ -117,9 +123,10 @@ class FrameAnalyzer(
 
         // process face unlimited.
         this.numberOfImages = (this.numberOfImages + 1) % NUMBER_OF_IMAGES_LIMIT
-        this.cameraEventListener?.onFrameImageCreated(
+        this.cameraEventListener?.onImageCaptured(
+            "frame",
             this.numberOfImages,
-            this.captureOptions.frameNumberOfImages,
+            this.captureOptions.numberOfImages,
             imagePath
         )
     }

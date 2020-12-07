@@ -12,7 +12,6 @@
 package ai.cyberlabs.yoonit.camera.models
 
 import ai.cyberlabs.yoonit.camera.CaptureType
-import android.util.Size
 import androidx.camera.core.CameraSelector
 
 /**
@@ -23,29 +22,32 @@ data class CaptureOptions(
     // Face region of interesting. Default is all the screen area.
     var faceROI: FaceROI = FaceROI(),
 
-    // Camera image capture type: NONE, FACE, BARCODE and FRAME.
+    // Camera image capture type: NONE, FACE, QRCODE and FRAME.
     var type: CaptureType = CaptureType.NONE,
 
     // Camera lens facing: CameraSelector.LENS_FACING_FRONT and CameraSelector.LENS_FACING_BACK.
     var cameraLens: Int = CameraSelector.LENS_FACING_FRONT,
 
-    // Draw or not the face detection box.
+    // Face/Frame capture number of images. 0 capture unlimited.
+    var numberOfImages: Int = 0,
+
+    // Face/Frame capture time between images in milliseconds.
+    var timeBetweenImages: Long = 1000,
+
+    // Face/Frame capture image width to create.
+    var imageOutputWidth: Int = 200,
+
+    // Face/Frame capture image height to create.
+    var imageOutputHeight: Int = 200,
+
+    // Face/Frame save images captured.
+    var saveImageCaptured: Boolean = false,
+
+    // Draw the face detection box.
     var faceDetectionBox: Boolean = true,
-
-    // Face save cropped images.
-    var faceSaveImages: Boolean = false,
-
-    // Face capture number of images. 0 capture unlimited.
-    var faceNumberOfImages: Int = 0,
-
-    // Face capture time between images in milliseconds.
-    var faceTimeBetweenImages: Long = 1000,
 
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f,
-
-    // Face capture image size to save.
-    var faceImageSize: Size = Size(200, 200),
 
     /**
      * Limit the minimum face capture size.
@@ -60,12 +62,6 @@ data class CaptureOptions(
      * The value must be between 0 and 1.
      */
     var faceCaptureMaxSize: Float = 1.0f,
-
-    // Frame capture number of images. 0 capture unlimited.
-    var frameNumberOfImages: Int = 0,
-
-    // Frame capture time between images in milliseconds.
-    var frameTimeBetweenImages: Long = 1000,
 
     var isScreenFlipped: Boolean = false
 )

@@ -15,7 +15,7 @@ import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Size
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
@@ -65,26 +65,27 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Start capture type: none, face or barcode.
+     * Start capture type: none, face or qrcode.
      * Must have started preview, see [startPreview].
      *
-     * @param captureType The capture type: "none" | "face" | "barcode" | "frame".
+     * @param captureType The capture type: "none" | "face" | "qrcode" | "frame".
      */
     fun startCaptureType(captureType: String) {
+        if (!this.cameraController.isPreviewStarted) {
+            Log.w(TAG, KeyError.NOT_STARTED_PREVIEW)
+            return
+        }
+
         when (captureType) {
             "none" -> this.cameraController.startCaptureType(CaptureType.NONE)
 
             "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
 
-            "barcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
+            "qrcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
 
             "frame" -> this.cameraController.startCaptureType(CaptureType.FRAME)
 
-            else -> {
-                if (this.cameraEventListener != null) {
-                    this.cameraEventListener!!.onError(KeyError.INVALID_CAPTURE_TYPE)
-                }
-            }
+            else -> throw IllegalArgumentException(KeyError.INVALID_CAPTURE_TYPE)
         }
     }
 
@@ -105,7 +106,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Get current camera lens.
      *
-     * @return value 0 is front camera. value 1 is back camera.
+     * @return value 0 is front camera. Value 1 is back camera.
      */
     fun getCameraLens(): Int {
         return this.cameraController.getCameraLens()
@@ -120,89 +121,93 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set number of face file images to create.
-     * The time interval to create the image is 1000 milli second.
-     * See [setFaceTimeBetweenImages] to change the time interval.
+     * Set number of face/frame file images to create.
      *
-     * @param faceNumberOfImages The number of images to create.
+     * @param numberOfImages The number of images to create.
      */
-    fun setFaceNumberOfImages(faceNumberOfImages: Int) {
-        if (faceNumberOfImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_NUMBER_OF_IMAGES)
-            }
-            return
+    fun setNumberOfImages(numberOfImages: Int) {
+        if (numberOfImages < 0) {
+            throw IllegalArgumentException(KeyError.INVALID_NUMBER_OF_IMAGES)
         }
 
-        this.captureOptions.faceNumberOfImages = faceNumberOfImages
+        this.captureOptions.numberOfImages = numberOfImages
+    }
+
+    /**
+     * Set saving face/frame images time interval in milli seconds.
+     *
+     * @param timeBetweenImages The time in milli seconds.
+     * Default value is 1000.
+     */
+    fun setTimeBetweenImages(timeBetweenImages: Long) {
+        if (timeBetweenImages < 0) {
+            throw IllegalArgumentException(KeyError.INVALID_TIME_BETWEEN_IMAGES)
+        }
+
+        this.captureOptions.timeBetweenImages = timeBetweenImages
+    }
+
+    /**
+     * Set face image width to be created.
+     *
+     * @param width The file image width in pixels.
+     * Default value is 200.
+     */
+    fun setOutputImageWidth(width: Int) {
+        if (width <= 0) {
+            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_WIDTH)
+        }
+
+        this.captureOptions.imageOutputWidth = width
+    }
+
+    /**
+     * Set face image height to be created.
+     *
+     * @param height The file image height in pixels.
+     * Default value is 200.
+     */
+    fun setOutputImageHeight(height: Int) {
+        if (height <= 0) {
+            throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_HEIGHT)
+        }
+
+        this.captureOptions.imageOutputHeight = height
+    }
+
+    /**
+     * Set to enable/disable save images when capturing face/frame.
+     *
+     * @param enable The indicator to enable or disable the face/frame save images.
+     * Default value is false.
+     */
+    fun setSaveImageCaptured(enable: Boolean) {
+        this.captureOptions.saveImageCaptured = enable
     }
 
     /**
      * Set to show/hide face detection box when face detected.
      *
-     * @param faceDetectionBox The indicator to show or hide the face detection box. Default value is true.
+     * @param enable The indicator to show or hide the face detection box.
+     * Default value is true.
      */
-    fun setFaceDetectionBox(faceDetectionBox: Boolean) {
-        this.captureOptions.faceDetectionBox = faceDetectionBox
+    fun setFaceDetectionBox(enable: Boolean) {
+        this.captureOptions.faceDetectionBox = enable
         this.cameraController.startCaptureType(this.captureOptions.type)
-    }
-
-    /**
-     * Set to enable/disable face save images when capturing faces.
-     *
-     * @param faceSaveImages The indicator to enable or disable the face save images. Default value is false.
-     */
-    fun setFaceSaveImages(faceSaveImages: Boolean) {
-        this.captureOptions.faceSaveImages = faceSaveImages
     }
 
     /**
      * Set saving face images time interval in milli seconds.
      *
-     * @param faceTimeBetweenImages The time in milli seconds. Default value is 1000.
-     */
-    fun setFaceTimeBetweenImages(faceTimeBetweenImages: Long) {
-        if (faceTimeBetweenImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_TIME_BETWEEN_IMAGES)
-            }
-            return
-        }
-
-        this.captureOptions.faceTimeBetweenImages = faceTimeBetweenImages
-    }
-
-    /**
-     * Enlarge the face bounding box by percent.
-     *
-     * @param facePaddingPercent The percent to enlarge the bounding box. Default value is 0.0.
+     * @param facePaddingPercent The percent to enlarge the bounding box.
+     * Default value is 0.0.
      */
     fun setFacePaddingPercent(facePaddingPercent: Float) {
         if (facePaddingPercent < 0.0f) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_PADDING_PERCENT)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_PADDING_PERCENT)
         }
 
         this.captureOptions.facePaddingPercent = facePaddingPercent
-    }
-
-    /**
-     * Set face image width and height to be saved.
-     *
-     * @param width The file image width in pixels. Default value is 200.
-     * @param height The file image height in pixels. Default value is 200.
-     */
-    fun setFaceImageSize(width: Int, height: Int) {
-        if (width <= 0 || height <= 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_IMAGE_SIZE)
-            }
-            return
-        }
-
-        this.captureOptions.faceImageSize = Size(width, height)
     }
 
     /**
@@ -213,14 +218,12 @@ open class CameraView @JvmOverloads constructor(
      * For example, if set 0.5, will capture face with the detection box width occupying
      * at least 50% of the screen width.
      *
-     * @param faceCaptureMinSize The face capture min size value. Default value is 0.0f.
+     * @param faceCaptureMinSize The face capture min size value.
+     * Default value is 0.0f.
      */
     fun setFaceCaptureMinSize(faceCaptureMinSize: Float) {
         if (faceCaptureMinSize < 0.0f || faceCaptureMinSize > 1.0f) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
         }
 
         this.captureOptions.faceCaptureMinSize = faceCaptureMinSize
@@ -234,60 +237,25 @@ open class CameraView @JvmOverloads constructor(
      * For example, if set 0.7, will capture face with the detection box width occupying
      * at least 70% of the screen width.
      *
-     * @param faceCaptureMaxSize The face capture max size value. Default value is 1.0f.
+     * @param faceCaptureMaxSize The face capture max size value.
+     * Default value is 1.0f.
      */
     fun setFaceCaptureMaxSize(faceCaptureMaxSize: Float) {
         if (faceCaptureMaxSize < 0.0f || faceCaptureMaxSize > 1.0f) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
         }
 
         this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize
     }
 
     /**
-     * Set number of frame file images to create.
-     * The time interval to create the image is 1000 milli second.
-     * See [setFrameTimeBetweenImages] to change the time interval.
-     *
-     * @param faceNumberOfImages The number of images to create.
-     */
-    fun setFrameNumberOfImages(frameNumberOfImages: Int) {
-        if (frameNumberOfImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FRAME_NUMBER_OF_IMAGES)
-            }
-            return
-        }
-
-        this.captureOptions.frameNumberOfImages = frameNumberOfImages
-    }
-
-    /**
-     * Set saving frame images time interval in milli seconds.
-     *
-     * @param frameTimeBetweenImages The time in milli seconds. Default value is 1000.
-     */
-    fun setFrameTimeBetweenImages(frameTimeBetweenImages: Long) {
-        if (frameTimeBetweenImages < 0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FRAME_TIME_BETWEEN_IMAGES)
-            }
-            return
-        }
-
-        this.captureOptions.frameTimeBetweenImages = frameTimeBetweenImages
-    }
-
-    /**
      * Set to apply enable/disable face region of interest.
      *
-     * @param faceROIEnable The indicator to enable/disable face region of interest. Default value is `false`.
+     * @param enable The indicator to enable/disable face region of interest.
+     * Default value is `false`.
      */
-    fun setFaceROIEnable(faceROIEnable: Boolean) {
-        this.captureOptions.faceROI.enable = faceROIEnable
+    fun setFaceROIEnable(enable: Boolean) {
+        this.captureOptions.faceROI.enable = enable
     }
 
     /**
@@ -312,10 +280,7 @@ open class CameraView @JvmOverloads constructor(
                 leftOffset < 0.0 || leftOffset > 1.0
 
         if (isInvalid) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_ROI_OFFSET)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_OFFSET)
         }
 
         this.captureOptions.faceROI.topOffset = topOffset
@@ -327,14 +292,12 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Set face minimum size in relation of the region of interest.
      *
-     * @param minimumSize: Represents in percentage [0, 1]. Default value is `0`.
+     * @param minimumSize: Represents in percentage [0, 1].
+     * Default value is `0`.
      */
     fun setFaceROIMinSize(minimumSize: Float) {
         if (minimumSize < 0.0 || minimumSize > 1.0) {
-            if (this.cameraEventListener != null) {
-                this.cameraEventListener!!.onError(KeyError.INVALID_FACE_ROI_MIN_SIZE)
-            }
-            return
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_MIN_SIZE)
         }
 
         this.captureOptions.faceROI.minimumSize = minimumSize

@@ -13,7 +13,7 @@ package ai.cyberlabs.yoonit.camera.interfaces
 
 interface CameraEventListener {
 
-    fun onFaceImageCreated(count: Int, total: Int, imagePath: String)
+    fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String)
 
     fun onFaceDetected(x: Int, y: Int, width: Int, height: Int)
 
@@ -27,7 +27,5 @@ interface CameraEventListener {
 
     fun onPermissionDenied()
 
-    fun onBarcodeScanned(content: String)
-
-    fun onFrameImageCreated(count: Int, total: Int, imagePath: String)
+    fun onQRCodeScanned(content: String)
 }
