@@ -290,6 +290,21 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Get array of the face region of interest offset values.
+     *
+     * @return [topOffset, rightOffset, bottomOffset, leftOffset]
+     * Default value is [200, 200, 200, 200].
+     */
+    fun getFaceROIOffset(): Array<Float> {
+        return arrayOf(
+            this.captureOptions.faceROI.topOffset,
+            this.captureOptions.faceROI.rightOffset,
+            this.captureOptions.faceROI.bottomOffset,
+            this.captureOptions.faceROI.leftOffset
+        )
+    }
+
+    /**
      * Set face minimum size in relation of the region of interest.
      *
      * @param minimumSize: Represents in percentage [0, 1].
