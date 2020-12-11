@@ -13,6 +13,7 @@ package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
+import ai.cyberlabs.yoonit.camera.models.FaceROI
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
@@ -290,18 +291,12 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Get array of the face region of interest offset values.
+     * Get the face region of interest object.
      *
-     * @return [topOffset, rightOffset, bottomOffset, leftOffset]
-     * Default value is [200, 200, 200, 200].
+     * @return [FaceROI]
      */
-    fun getFaceROIOffset(): Array<Float> {
-        return arrayOf(
-            this.captureOptions.faceROI.topOffset,
-            this.captureOptions.faceROI.rightOffset,
-            this.captureOptions.faceROI.bottomOffset,
-            this.captureOptions.faceROI.leftOffset
-        )
+    fun getFaceROI(): FaceROI {
+        return this.captureOptions.faceROI
     }
 
     /**
