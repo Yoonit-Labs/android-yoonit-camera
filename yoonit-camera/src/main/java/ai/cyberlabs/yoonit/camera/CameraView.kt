@@ -259,14 +259,8 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.enable = enable
     }
 
-    /**
-     * Set face region of interest offset.
-     *
-     * @param topOffset Represents in percentage [0, 1]. Default value is `0`.
-     * @param rightOffset Represents in percentage [0, 1]. Default value is `0`.
-     * @param bottomOffset Represents in percentage [0, 1]. Default value is `0`.
-     * @param leftOffset Represents in percentage [0, 1]. Default value is `0`.
-     */
+
+    // TODO: remove from the readme
     fun setFaceROIOffset(
         topOffset: Float,
         rightOffset: Float,
@@ -290,15 +284,35 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.leftOffset = leftOffset
     }
 
-    fun setFaceROILeftOffset(percentage: Float) {
-        this.captureOptions.faceROI.leftOffset = percentage
-    }
+    // TODO: add in the readme
+    var faceROITopOffset: Float
+        get() = this.captureOptions.faceROI.topOffset
+        set(value) {
+            this.captureOptions.faceROI.topOffset = value
+        }
 
-    /**
-     * Get the face region of interest object.
-     *
-     * @return [FaceROI]
-     */
+    // TODO: add in the readme
+    var faceROIRightOffset: Float
+        get() = this.captureOptions.faceROI.rightOffset
+        set(value) {
+            this.captureOptions.faceROI.rightOffset = value
+        }
+
+    // TODO: add in the readme
+    var faceROIBottomOffset: Float
+        get() = this.captureOptions.faceROI.bottomOffset
+        set(value) {
+            this.captureOptions.faceROI.bottomOffset = value
+        }
+
+    // TODO: add in the readme
+    var faceROILeftOffset: Float
+        get() = this.captureOptions.faceROI.leftOffset
+        set(value) {
+            this.captureOptions.faceROI.leftOffset = value
+        }
+
+    // TODO: remove from the readme
     fun getFaceROI(): FaceROI {
         return this.captureOptions.faceROI
     }
