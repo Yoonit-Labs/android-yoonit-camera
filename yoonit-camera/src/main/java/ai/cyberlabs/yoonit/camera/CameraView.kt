@@ -290,6 +290,10 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.leftOffset = leftOffset
     }
 
+    fun setFaceROILeftOffset(percentage: Float) {
+        this.captureOptions.faceROI.leftOffset = percentage
+    }
+
     /**
      * Get the face region of interest object.
      *
