@@ -285,32 +285,24 @@ open class CameraView @JvmOverloads constructor(
     }
 
     // TODO: add in the readme
-    var faceROITopOffset: Float
-        get() = this.captureOptions.faceROI.topOffset
-        set(value) {
-            this.captureOptions.faceROI.topOffset = value
-        }
+    fun setFaceROITopOffset(percentage: Float) {
+        this.captureOptions.faceROI.topOffset = percentage
+    }
 
     // TODO: add in the readme
-    var faceROIRightOffset: Float
-        get() = this.captureOptions.faceROI.rightOffset
-        set(value) {
-            this.captureOptions.faceROI.rightOffset = value
-        }
+    fun setFaceROIRightOffset(percentage: Float) {
+        this.captureOptions.faceROI.rightOffset = percentage
+    }
 
     // TODO: add in the readme
-    var faceROIBottomOffset: Float
-        get() = this.captureOptions.faceROI.bottomOffset
-        set(value) {
-            this.captureOptions.faceROI.bottomOffset = value
-        }
+    fun setFaceROIBottomOffset(percentage: Float) {
+        this.captureOptions.faceROI.bottomOffset = percentage
+    }
 
     // TODO: add in the readme
-    var faceROILeftOffset: Float
-        get() = this.captureOptions.faceROI.leftOffset
-        set(value) {
-            this.captureOptions.faceROI.leftOffset = value
-        }
+    fun setFaceROILeftOffset(percentage: Float) {
+        this.captureOptions.faceROI.leftOffset = percentage
+    }
 
     // TODO: remove from the readme
     fun getFaceROI(): FaceROI {
