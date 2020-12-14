@@ -44,7 +44,7 @@ data class CaptureOptions(
     var saveImageCaptured: Boolean = false,
 
     // Draw the face detection box.
-    var faceDetectionBox: Boolean = true,
+    var faceDetectionBox: Boolean = false,
 
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f,
