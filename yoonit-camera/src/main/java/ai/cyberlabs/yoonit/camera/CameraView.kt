@@ -13,6 +13,7 @@ package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
+import ai.cyberlabs.yoonit.camera.models.FaceROI
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
@@ -259,34 +260,59 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set face region of interest offset.
+     * Tried to input invalid face region of interest top offset.
      *
-     * @param topOffset Represents in percentage [0, 1]. Default value is `0`.
-     * @param rightOffset Represents in percentage [0, 1]. Default value is `0`.
-     * @param bottomOffset Represents in percentage [0, 1]. Default value is `0`.
-     * @param leftOffset Represents in percentage [0, 1]. Default value is `0`.
+     * @param percentage The "above" area of the face bounding box in percentage.
+     * Default value is 0.0f.
      */
-    fun setFaceROIOffset(
-        topOffset: Float,
-        rightOffset: Float,
-        bottomOffset: Float,
-        leftOffset: Float
-    ) {
-
-        val isInvalid =
-            topOffset < 0.0 || topOffset > 1.0 ||
-                rightOffset < 0.0 || rightOffset > 1.0 ||
-                bottomOffset < 0.0 || bottomOffset > 1.0 ||
-                leftOffset < 0.0 || leftOffset > 1.0
-
-        if (isInvalid) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_OFFSET)
+    fun setFaceROITopOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_TOP_OFFSET)
         }
 
-        this.captureOptions.faceROI.topOffset = topOffset
-        this.captureOptions.faceROI.rightOffset = rightOffset
-        this.captureOptions.faceROI.bottomOffset = bottomOffset
-        this.captureOptions.faceROI.leftOffset = leftOffset
+        this.captureOptions.faceROI.topOffset = percentage
+    }
+
+    /**
+     * Tried to input invalid face region of interest right offset.
+     *
+     * @param percentage The "right" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
+    fun setFaceROIRightOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_RIGHT_OFFSET)
+        }
+
+        this.captureOptions.faceROI.rightOffset = percentage
+    }
+
+    /**
+     * Tried to input invalid face region of interest bottom offset.
+     *
+     * @param percentage The "bottom" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
+    fun setFaceROIBottomOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_BOTTOM_OFFSET)
+        }
+
+        this.captureOptions.faceROI.bottomOffset = percentage
+    }
+
+    /**
+     * Tried to input invalid face region of interest left offset.
+     *
+     * @param percentage The "left" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
+    fun setFaceROILeftOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_LEFT_OFFSET)
+        }
+
+        this.captureOptions.faceROI.leftOffset = percentage
     }
 
     /**

@@ -51,7 +51,7 @@ Do not forget request camera permission. Use like this in the your layout XML:
 <ai.cyberlabs.yoonit.camera.CameraView  
   android:id="@+id/camera_view"  
   android:layout_width="match_parent"  
-  android:layout_height="match_parent"/>
+  android:layout_height="match_parent" />
 ```
 
 And inside your code:
@@ -111,25 +111,28 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
   
 ### Methods   
   
-| Function                        | Parameters                                                                    | Valid values                                                                      | Return Type | Description
-| -                               | -                                                                             | -                                                                                 | -           | -  
-| **`startPreview`**              | -                                                                             | -                                                                                 | void        | Start camera preview if has permission.
-| **`startCaptureType`**          | `captureType: String`                                                         | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qcode"`</li><li>`"frame"`</li></ul>   | void        | Set capture type none, face, QR Code or frame.
-| **`stopCapture`**               | -                                                                             | -                                                                                 | void        | Stop any type of capture.
-| **`toggleCameraLens`**          | -                                                                             | -                                                                                 | void        | Set camera lens facing front or back.
-| **`getCameraLens`**             | -                                                                             | -                                                                                 | Int         | Return `Int` that represents lens face state: 0 for front 1 for back camera.  
-| **`setNumberOfImages`**         | `numberOfImages: Int`                                                         | Any positive `Int` value                                                          | void        | Default value is 0. For value 0 is saved infinity images. When saved images reached the "number os images", the `onEndCapture` is triggered.
-| **`setTimeBetweenImages`**      | `timeBetweenImages: Long`                                                     | Any positive number that represent time in milli seconds                          | void        | Set saving face/frame images time interval in milli seconds.
-| **`setOutputImageWidth`**       | `width: Int`                                                                  | Any positive `number` value that represents in pixels                             | void        | Set face image width to be created in pixels.
-| **`setOutputImageHeight`**      | `height: Int`                                                                 | Any positive `number` value that represents in pixels                             | void        | Set face image height to be created in pixels.
-| **`setSaveImageCaptured`**      | `enable: Bool`                                                                | `true` or `false`                                                                 | void        | Set to enable/disable save image when capturing face and frame.
-| **`setFaceDetectionBox`**       | `enable: Bool`                                                                | `true` or `false`                                                                 | void        | Set to show a detection box when face detected.   
-| **`setFacePaddingPercent`**     | `facePaddingPercent: Float`                                                   | Any positive `Float` value                                                        | void        | Set face image and bounding box padding in percent.  
-| **`setFaceCaptureMinSize`**     | `faceCaptureMinSize: Float`                                                   | Value between `0` and `1`. Represents the percentage.                             | void        | Set the minimum face capture based on the screen width limit.
-| **`setFaceCaptureMaxSize`**     | `faceCaptureMaxSize: Float`                                                   | Value between `0` and `1`. Represents the percentage.                             | void        | Set the maximum face capture based on the screen width limit.
-| **`setFaceROIEnable`**          | `enable: Bool`                                                                | `true` or `false`                                                                 | void        | Enable/disable face region of interest capture.
-| **`setFaceROIOffset`**          | `topOffset: Float, rightOffset: Float,bottomOffset: Float, leftOffset: Float` | Values between `0` and `1`. Represents the percentage.                            | void        | <ul><li>topOffset: "Above" the face detected.</li><li>rightOffset: "Right" of the face detected.</li><li>bottomOffset: "Bottom" of the face detected.</li><li>leftOffset: "Left" of the face detected.</li></ul>
-| **`setFaceROIMinSize`**         | `minimumSize: Float`                                                          | Values between `0` and `1`. Represents the percentage.                            | void        | Set the minimum face size related with the region of interest.  
+| Function                        | Parameters                                                                     | Valid values                                                                      | Return Type  | Description
+| -                               | -                                                                              | -                                                                                 | -            | -  
+| **startPreview**              | -                                                                              | -                                                                                 | void         | Start camera preview if has permission.
+| **startCaptureType**          | `captureType: String`                                                          | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qcode"`</li><li>`"frame"`</li></ul>   | void         | Set capture type none, face, QR Code or frame.
+| **stopCapture**               | -                                                                              | -                                                                                 | void         | Stop any type of capture.
+| **toggleCameraLens**          | -                                                                              | -                                                                                 | void         | Set camera lens facing front or back.
+| **getCameraLens**             | -                                                                              | -                                                                                 | Int          | Return `Int` that represents lens face state: 0 for front 1 for back camera.  
+| **setNumberOfImages**         | `numberOfImages: Int`                                                          | Any positive `Int` value                                                          | void         | Default value is 0. For value 0 is saved infinity images. When saved images reached the "number os images", the `onEndCapture` is triggered.
+| **setTimeBetweenImages**      | `timeBetweenImages: Long`                                                      | Any positive number that represent time in milli seconds                          | void         | Set saving face/frame images time interval in milli seconds.
+| **setOutputImageWidth**       | `width: Int`                                                                   | Any positive `number` value that represents in pixels                             | void         | Set face image width to be created in pixels.
+| **setOutputImageHeight**      | `height: Int`                                                                  | Any positive `number` value that represents in pixels                             | void         | Set face image height to be created in pixels.
+| **setSaveImageCaptured**      | `enable: Bool`                                                                 | `true` or `false`                                                                 | void         | Set to enable/disable save image when capturing face and frame.
+| **setFaceDetectionBox**       | `enable: Bool`                                                                 | `true` or `false`                                                                 | void         | Set to show a detection box when face detected.   
+| **setFacePaddingPercent**     | `facePaddingPercent: Float`                                                    | Any positive `Float` value                                                        | void         | Set face image and bounding box padding in percent.  
+| **setFaceCaptureMinSize**     | `faceCaptureMinSize: Float`                                                    | Value between `0` and `1`. Represents the percentage.                             | void         | Set the minimum face capture based on the screen width.
+| **setFaceCaptureMaxSize**     | `faceCaptureMaxSize: Float`                                                    | Value between `0` and `1`. Represents the percentage.                             | void         | Set the maximum face capture based on the screen width.
+| **setFaceROIEnable**          | `enable: Bool`                                                                 | `true` or `false`                                                                 | void         | Enable/disable face region of interest capture.
+| **setFaceROITopOffset**       | `topOffset: Float`                                                             | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the top face bounding box with the top of the camera preview. 
+| **setFaceROIRightOffset**     | `rightOffset: Float`                                                           | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the right face bounding box with the right of the camera preview.
+| **setFaceROIBottomOffset**    | `bottomOffset: Float`                                                          | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the bottom face bounding box with the bottom of the camera preview.
+| **setFaceROILeftOffset**      | `leftOffset: Float`                                                            | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the left face bounding box with the left of the camera preview.
+| **setFaceROIMinSize**         | `minimumSize: Float`                                                           | Values between `0` and `1`. Represents the percentage.                            | void         | Set the minimum face size related with the region of interest.  
 
 ### Events
 
@@ -138,7 +141,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | **`onImageCaptured`**     | `type: String, count: Int, total: Int, imagePath: String` | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the face image file is created: <ul><li>type: 'face' | 'frame'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><ul>  
 | **`onFaceDetected`**      | `x: Int, y: Int, width: Int, height: Int`                 | Must have started capture type of face. Emit the detected face bounding box.
 | **`onFaceUndetected`**    | -                                                         | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
-| **`onEndCapture`**        | -                                                         | Must have started capture type of face or frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).   
+| **`onEndCapture`**        | -                                                         | Must have started capture type of face/frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).   
 | **`onQRCodeScanned`**     | `content: String`                                         | Must have started capture type of qrcode (see `startCaptureType`). Emitted when the camera scan a QR Code.   
 | **`onError`**             | `error: String`                                           | Emit message error.
 | **`onMessage`**           | `message: String`                                         | Emit message.
@@ -159,7 +162,10 @@ Pre-define key error constants used by the `onError` event.
 | INVALID_FACE_PADDING_PERCENT      | Tried to input invalid face padding percent.
 | INVALID_FACE_CAPTURE_MIN_SIZE     | Tried to input invalid face capture minimum size. 
 | INVALID_FACE_CAPTURE_MAX_SIZE     | Tried to input invalid face capture maximum size.
-| INVALID_FACE_ROI_OFFSET           | Tried to input invalid face region of interest offset.
+| INVALID_FACE_ROI_TOP_OFFSET       | Tried to input invalid face region of interest top offset.
+| INVALID_FACE_ROI_RIGHT_OFFSET     | Tried to input invalid face region of interest right offset.
+| INVALID_FACE_ROI_BOTTOM_OFFSET    | Tried to input invalid face region of interest bottom offset.
+| INVALID_FACE_ROI_LEFT_OFFSET      | Tried to input invalid face region of interest left offset.
 | INVALID_FACE_ROI_MIN_SIZE         | Tried to input invalid face region of interest minimum size.
 
 ### Message
@@ -168,10 +174,10 @@ Pre-define message constants used by the `onMessage` event.
 
 | Message                           | Description
 | -                                 | -
-| INVALID_CAPTURE_FACE_MIN_SIZE     | Face width percentage in relation of the screen width is less than the setted (`setFaceCaptureMinSize`).
-| INVALID_CAPTURE_FACE_MAX_SIZE     | Face width percentage in relation of the screen width is more than the setted (`setFaceCaptureMaxSize`).
-| INVALID_CAPTURE_FACE_OUT_OF_ROI   | Face bounding box is out of the setted region of interest (`setFaceROIOffset`).
-| INVALID_CAPTURE_FACE_ROI_MIN_SIZE | Face width percentage in relation of the screen width is less than the setted (`setFaceROIMinSize`).
+| INVALID_CAPTURE_FACE_MIN_SIZE     | Face width percentage in relation of the screen width is less than the set (`setFaceCaptureMinSize`).
+| INVALID_CAPTURE_FACE_MAX_SIZE     | Face width percentage in relation of the screen width is more than the set (`setFaceCaptureMaxSize`).
+| INVALID_CAPTURE_FACE_OUT_OF_ROI   | Face bounding box is out of the set region of interest (`setFaceROIOffset`).
+| INVALID_CAPTURE_FACE_ROI_MIN_SIZE | Face width percentage in relation of the screen width is less than the set (`setFaceROIMinSize`).
 
 ## To contribute and make it better
 
