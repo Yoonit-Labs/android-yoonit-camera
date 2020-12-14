@@ -259,54 +259,60 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.enable = enable
     }
 
-
-    // TODO: remove from the readme
-    fun setFaceROIOffset(
-        topOffset: Float,
-        rightOffset: Float,
-        bottomOffset: Float,
-        leftOffset: Float
-    ) {
-
-        val isInvalid =
-            topOffset < 0.0 || topOffset > 1.0 ||
-                rightOffset < 0.0 || rightOffset > 1.0 ||
-                bottomOffset < 0.0 || bottomOffset > 1.0 ||
-                leftOffset < 0.0 || leftOffset > 1.0
-
-        if (isInvalid) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_OFFSET)
+    /**
+     * Tried to input invalid face region of interest top offset.
+     *
+     * @param percentage The "above" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
+    fun setFaceROITopOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_TOP_OFFSET)
         }
 
-        this.captureOptions.faceROI.topOffset = topOffset
-        this.captureOptions.faceROI.rightOffset = rightOffset
-        this.captureOptions.faceROI.bottomOffset = bottomOffset
-        this.captureOptions.faceROI.leftOffset = leftOffset
-    }
-
-    // TODO: add in the readme
-    fun setFaceROITopOffset(percentage: Float) {
         this.captureOptions.faceROI.topOffset = percentage
     }
 
-    // TODO: add in the readme
+    /**
+     * Tried to input invalid face region of interest right offset.
+     *
+     * @param percentage The "right" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
     fun setFaceROIRightOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_RIGHT_OFFSET)
+        }
+
         this.captureOptions.faceROI.rightOffset = percentage
     }
 
-    // TODO: add in the readme
+    /**
+     * Tried to input invalid face region of interest bottom offset.
+     *
+     * @param percentage The "bottom" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
     fun setFaceROIBottomOffset(percentage: Float) {
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_BOTTOM_OFFSET)
+        }
+
         this.captureOptions.faceROI.bottomOffset = percentage
     }
 
-    // TODO: add in the readme
+    /**
+     * Tried to input invalid face region of interest left offset.
+     *
+     * @param percentage The "left" area of the face bounding box in percentage.
+     * Default value is 0.0f.
+     */
     fun setFaceROILeftOffset(percentage: Float) {
-        this.captureOptions.faceROI.leftOffset = percentage
-    }
+        if (percentage < 0.0f || percentage > 1.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_LEFT_OFFSET)
+        }
 
-    // TODO: remove from the readme
-    fun getFaceROI(): FaceROI {
-        return this.captureOptions.faceROI
+        this.captureOptions.faceROI.leftOffset = percentage
     }
 
     /**
