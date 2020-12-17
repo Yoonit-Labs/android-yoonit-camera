@@ -194,7 +194,6 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceDetectionBox(enable: Boolean) {
         this.captureOptions.faceDetectionBox = enable
-        this.cameraController.startCaptureType(this.captureOptions.type)
     }
 
     /**
