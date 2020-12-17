@@ -34,6 +34,55 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var cameraView: CameraView
 
+    private var captureType: String = ""
+        set(value) {
+            field = value
+
+            when (field) {
+                "none" -> {
+                    this.cameraView.startCaptureType("none")
+                    this.image_preview.visibility = View.INVISIBLE
+                    this.info_textview.visibility = View.INVISIBLE
+                    this.face_number_edittext.visibility = View.INVISIBLE
+                    this.face_numer_textview.visibility = View.INVISIBLE
+
+                    this.qrcode_textview.visibility = View.INVISIBLE
+                }
+
+                "face" -> {
+                    this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                    this.cameraView.startCaptureType("face")
+                    this.image_preview.visibility = View.VISIBLE
+                    this.info_textview.visibility = View.VISIBLE
+                    this.face_number_edittext.visibility = View.VISIBLE
+                    this.face_numer_textview.visibility = View.VISIBLE
+
+                    this.qrcode_textview.visibility = View.INVISIBLE
+                }
+
+                "frame" -> {
+                    this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                    this.cameraView.startCaptureType("frame")
+                    this.image_preview.visibility = View.VISIBLE
+                    this.info_textview.visibility = View.VISIBLE
+                    this.face_number_edittext.visibility = View.VISIBLE
+                    this.face_numer_textview.visibility = View.VISIBLE
+
+                    this.qrcode_textview.visibility = View.INVISIBLE
+                }
+
+                "qrcode" -> {
+                    this.cameraView.startCaptureType("qrcode")
+                    this.image_preview.visibility = View.INVISIBLE
+                    this.info_textview.visibility = View.INVISIBLE
+                    this.face_number_edittext.visibility = View.INVISIBLE
+                    this.face_numer_textview.visibility = View.INVISIBLE
+
+                    this.qrcode_textview.visibility = View.VISIBLE
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,7 +92,6 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
-            
             return
         }
 
@@ -108,50 +156,18 @@ class MainActivity : AppCompatActivity() {
     fun onCaptureTypeRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             val checked = view.isChecked
+            if (!checked) {
+                return
+            }
 
             when (view.getId()) {
-                R.id.none_radio_button ->
-                    if (checked) {
-                        this.cameraView.startCaptureType("none")
-                        this.image_preview.visibility = View.INVISIBLE
-                        this.info_textview.visibility = View.INVISIBLE
-                        this.face_number_edittext.visibility = View.INVISIBLE
-                        this.face_numer_textview.visibility = View.INVISIBLE
+                R.id.none_radio_button -> this.captureType = "none"
 
-                        this.qrcode_textview.visibility = View.INVISIBLE
-                    }
-                R.id.face_radio_button ->
-                    if (checked) {
-                        this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
-                        this.cameraView.startCaptureType("face")
-                        this.image_preview.visibility = View.VISIBLE
-                        this.info_textview.visibility = View.VISIBLE
-                        this.face_number_edittext.visibility = View.VISIBLE
-                        this.face_numer_textview.visibility = View.VISIBLE
+                R.id.face_radio_button -> this.captureType = "face"
 
-                        this.qrcode_textview.visibility = View.INVISIBLE
-                    }
-                R.id.qrcode_radio_button ->
-                    if (checked) {
-                        this.cameraView.startCaptureType("qrcode")
-                        this.image_preview.visibility = View.INVISIBLE
-                        this.info_textview.visibility = View.INVISIBLE
-                        this.face_number_edittext.visibility = View.INVISIBLE
-                        this.face_numer_textview.visibility = View.INVISIBLE
+                R.id.frame_radio_button -> this.captureType = "frame"
 
-                        this.qrcode_textview.visibility = View.VISIBLE
-                    }
-                R.id.frame_radio_button ->
-                    if (checked) {
-                        this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
-                        this.cameraView.startCaptureType("frame")
-                        this.image_preview.visibility = View.VISIBLE
-                        this.info_textview.visibility = View.VISIBLE
-                        this.face_number_edittext.visibility = View.VISIBLE
-                        this.face_numer_textview.visibility = View.VISIBLE
-
-                        this.qrcode_textview.visibility = View.INVISIBLE
-                    }
+                R.id.qrcode_radio_button -> this.captureType = "qrcode"
             }
         }
     }
