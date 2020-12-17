@@ -45,16 +45,17 @@ class CameraController(
 
     // Preview and ProcessCameraProvider both used to resume camera setup after toggle lens.
     private lateinit var preview: Preview
+    private var cameraProviderFuture = ProcessCameraProvider.getInstance(this.context)
     private var cameraProviderProcess: ProcessCameraProvider? = null
-
-    // Preview started only if camera provider started.
-    val isPreviewStarted: Boolean
-        get() = this.cameraProviderProcess != null
 
 
     // Called when number of images reached.
     override fun onStopAnalyzer() {
         this.stopAnalyzer()
+    }
+
+    init {
+        this.imageAnalyzerController.build()
     }
 
     /**
@@ -70,13 +71,7 @@ class CameraController(
             return
         }
 
-        // Initialize camera.
-        val cameraProviderFuture = ProcessCameraProvider
-            .getInstance(this.context)
-
-        this.imageAnalyzerController.build()
-
-        cameraProviderFuture.addListener(
+        this.cameraProviderFuture.addListener(
             Runnable {
                 try {
                     this.cameraProviderProcess = cameraProviderFuture.get()
@@ -86,19 +81,7 @@ class CameraController(
                         .Builder()
                         .build()
 
-                    val cameraSelector = CameraSelector
-                        .Builder()
-                        .requireLensFacing(this.captureOptions.cameraLens)
-                        .build()
-
-                    this.cameraProviderProcess?.bindToLifecycle(
-                        this.context as LifecycleOwner,
-                        cameraSelector,
-                        this.imageAnalyzerController.analysis,
-                        this.preview
-                    )
-
-                    this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
+                    this.buildCameraPreview()
                 } catch (e: Exception) {
                     if (this.cameraEventListener != null) {
                         this.cameraEventListener!!.onError(e.toString())
@@ -119,46 +102,83 @@ class CameraController(
     }
 
     /**
-     * Start capture type of Image Analyzer.
-     *
-     * @param captureType The capture type: "none" | "face" | "qrcode" | "frame";
+     * Start image analyzer based on the capture type.
      */
-    fun startCaptureType(captureType: CaptureType) {
-        this.captureOptions.type = captureType
+    fun startCaptureType() {
+        // If camera preview already is running, re-build camera preview.
+        if (this.cameraProviderProcess != null) {
+            this.imageAnalyzerController.stop()
 
-        this.imageAnalyzerController.stop()
-        this.buildCameraImageAnalyzer()
+            when(this.captureOptions.type) {
+
+                CaptureType.FACE -> {
+                    this.imageAnalyzerController.start(
+                        FaceAnalyzer(
+                            this.context,
+                            this.cameraEventListener,
+                            this.graphicView,
+                            this.captureOptions,
+                            this as CameraCallback
+                        )
+                    )
+                }
+
+                CaptureType.QRCODE -> this.imageAnalyzerController.start(
+                    QRCodeAnalyzer(
+                        this.cameraEventListener,
+                        this.graphicView
+                    )
+                )
+
+                CaptureType.FRAME -> this.imageAnalyzerController.start(
+                    FrameAnalyzer(
+                        this.context,
+                        this.cameraEventListener,
+                        this.captureOptions,
+                        this.graphicView,
+                        this as CameraCallback
+                    )
+                )
+            }
+        }
     }
 
     /**
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
+
+        // Set camera lens.
         this.captureOptions.cameraLens =
             if (this.captureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT)
                 CameraSelector.LENS_FACING_BACK
             else
                 CameraSelector.LENS_FACING_FRONT
 
+        // If camera preview already is running, re-build camera preview.
         if (this.cameraProviderProcess != null) {
-            val cameraSelector = CameraSelector
-                .Builder()
-                .requireLensFacing(this.captureOptions.cameraLens)
-                .build()
-
-            this.cameraProviderProcess?.unbindAll()
-
-            this.cameraProviderProcess?.bindToLifecycle(
-                this.context as LifecycleOwner,
-                cameraSelector,
-                this.imageAnalyzerController.analysis,
-                this.preview
-            )
-
-            this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
-
-            this.startCaptureType(this.captureOptions.type)
+            this.buildCameraPreview()
         }
+    }
+
+    private fun buildCameraPreview() {
+        this.cameraProviderProcess?.unbindAll()
+
+        val cameraSelector = CameraSelector
+            .Builder()
+            .requireLensFacing(this.captureOptions.cameraLens)
+            .build()
+
+        this.cameraProviderProcess?.bindToLifecycle(
+            this.context as LifecycleOwner,
+            cameraSelector,
+            this.imageAnalyzerController.analysis,
+            this.preview
+        )
+
+        this.preview.setSurfaceProvider(this.previewView.createSurfaceProvider())
+
+        this.startCaptureType()
     }
 
     /**
@@ -166,46 +186,6 @@ class CameraController(
      */
     fun getCameraLens(): Int {
         return this.captureOptions.cameraLens
-    }
-
-    /**
-     * Start image analyzer based on the capture type.
-     */
-    private fun buildCameraImageAnalyzer() {
-
-        when (this.captureOptions.type) {
-
-            CaptureType.NONE -> this.imageAnalyzerController.stop()
-
-            CaptureType.FACE -> {
-                this.imageAnalyzerController.start(
-                    FaceAnalyzer(
-                        this.context,
-                        this.cameraEventListener,
-                        this.graphicView,
-                        this.captureOptions,
-                        this as CameraCallback
-                    )
-                )
-            }
-
-            CaptureType.QRCODE -> this.imageAnalyzerController.start(
-                QRCodeAnalyzer(
-                    this.cameraEventListener,
-                    this.graphicView
-                )
-            )
-
-            CaptureType.FRAME -> this.imageAnalyzerController.start(
-                FrameAnalyzer(
-                    this.context,
-                    this.cameraEventListener,
-                    this.captureOptions,
-                    this.graphicView,
-                    this as CameraCallback
-                )
-            )
-        }
     }
 
     /**

@@ -67,24 +67,30 @@ open class CameraView @JvmOverloads constructor(
 
     /**
      * Start capture type: none, face or qrcode.
-     * Must have started preview, see [startPreview].
      *
      * @param captureType The capture type: "none" | "face" | "qrcode" | "frame".
      */
     fun startCaptureType(captureType: String) {
-        if (!this.cameraController.isPreviewStarted) {
-            Log.w(TAG, KeyError.NOT_STARTED_PREVIEW)
-            return
-        }
-
         when (captureType) {
-            "none" -> this.cameraController.startCaptureType(CaptureType.NONE)
+            "none" -> {
+                this.captureOptions.type = CaptureType.NONE
+                this.cameraController.startCaptureType()
+            }
 
-            "face" -> this.cameraController.startCaptureType(CaptureType.FACE)
+            "face" -> {
+                this.captureOptions.type = CaptureType.FACE
+                this.cameraController.startCaptureType()
+            }
 
-            "qrcode" -> this.cameraController.startCaptureType(CaptureType.QRCODE)
+            "qrcode" -> {
+                this.captureOptions.type = CaptureType.QRCODE
+                this.cameraController.startCaptureType()
+            }
 
-            "frame" -> this.cameraController.startCaptureType(CaptureType.FRAME)
+            "frame" -> {
+                this.captureOptions.type = CaptureType.FRAME
+                this.cameraController.startCaptureType()
+            }
 
             else -> throw IllegalArgumentException(KeyError.INVALID_CAPTURE_TYPE)
         }
@@ -194,7 +200,6 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceDetectionBox(enable: Boolean) {
         this.captureOptions.faceDetectionBox = enable
-        this.cameraController.startCaptureType(this.captureOptions.type)
     }
 
     /**
