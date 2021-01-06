@@ -13,12 +13,12 @@ package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
-import ai.cyberlabs.yoonit.camera.models.FaceROI
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.camera.core.CameraSelector
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
 
 /**
@@ -104,6 +104,27 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Set camera lens: "front" or "back".
+     *
+     * @param cameraLens "back" || "front"
+     */
+    fun setCameraLens(cameraLens: String) {
+        if (cameraLens != "front" && cameraLens != "back") {
+            throw IllegalArgumentException(KeyError.INVALID_CAMERA_LENS)
+        }
+
+        val cameraSelector: Int =
+            if (cameraLens == "front") CameraSelector.LENS_FACING_FRONT
+            else CameraSelector.LENS_FACING_BACK
+
+
+        if (this.captureOptions.cameraLens == cameraSelector)
+            this.cameraController.toggleCameraLens()
+        else
+            this.cameraController.toggleCameraLens()
+    }
+
+    /**
      * Toggle between Front and Back Camera.
      */
     fun toggleCameraLens() {
@@ -113,10 +134,11 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Get current camera lens.
      *
-     * @return value 0 is front camera. Value 1 is back camera.
+     * @return "front" || "back".
+     * Default value is "front".
      */
-    fun getCameraLens(): Int {
-        return this.cameraController.getCameraLens()
+    fun getCameraLens(): String {
+        return if (this.captureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT) "front" else "back"
     }
 
     /**
