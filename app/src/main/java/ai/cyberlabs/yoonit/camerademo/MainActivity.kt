@@ -27,8 +27,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.util.*
-import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
 
@@ -131,18 +129,20 @@ class MainActivity : AppCompatActivity() {
 
     fun onCameraLensRadioButtonClicked(view: View) {
         if (view is RadioButton) {
-            val checked = view.isChecked
+            if (!view.isChecked) {
+                return
+            }
 
             when (view.getId()) {
-                R.id.front_radio_button ->
-                    if (checked && this.cameraView.getCameraLens() == 1) {
-                        this.cameraView.toggleCameraLens()
-                    }
+                R.id.back_radio_button -> {
+                    camera_view.setCameraLens("back")
+                    Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
+                }
 
-                R.id.back_radio_button ->
-                    if (checked && this.cameraView.getCameraLens() == 0) {
-                        this.cameraView.toggleCameraLens()
-                    }
+                R.id.front_radio_button -> {
+                    camera_view.setCameraLens("front")
+                    Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
+                }
             }
         }
     }
