@@ -117,7 +117,7 @@ class FaceAnalyzer(
 
                 // Draw or clean the bounding box based on the "faceDetectionBox".
                 if (this.captureOptions.faceDetectionBox) {
-                    this.graphicView.drawBoundingBox(detectionBox!!)
+                    this.graphicView.drawBoundingBox(detectionBox!!, mediaImage.toBitmap(), imageProxy.imageInfo.rotationDegrees.toFloat())
                 } else {
                     this.graphicView.clear()
                 }
