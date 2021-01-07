@@ -334,6 +334,16 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.faceROI.minimumSize = minimumSize
     }
 
+    /**
+     * Enable/disable blur in face detection box.
+     *
+     * @param enable The indicator to enable/disable face detection box blur
+     * Default value is `false`.
+     */
+    fun setblurFaceDetectionBox(enable: Boolean) {
+        this.captureOptions.blurFaceDetectionBox = enable
+    }
+
     fun flipScreen() {
         this.captureOptions.isScreenFlipped = !this.captureOptions.isScreenFlipped
 

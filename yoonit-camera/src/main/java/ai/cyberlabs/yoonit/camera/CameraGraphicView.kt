@@ -12,6 +12,9 @@
 package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.utils.BlurBuilder
+import ai.cyberlabs.yoonit.camera.utils.crop
+import ai.cyberlabs.yoonit.camera.utils.mirror
+import ai.cyberlabs.yoonit.camera.utils.rotate
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -25,9 +28,9 @@ class CameraGraphicView constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private var boundingBox: RectF? = null
+    var blurFaceDetectionBox: Boolean = false
 
-    private var rotationDegrees: Float = 0f
+    private var boundingBox: RectF? = null
 
     private lateinit var imageBitmap: Bitmap
 
@@ -36,21 +39,9 @@ class CameraGraphicView constructor(
 
         boundingBox?.let {
 
-            var matrix = Matrix()
-            matrix.postRotate(rotationDegrees)
-
-            val rotateBitmap =
-                    Bitmap.createBitmap(
-                            imageBitmap,
-                            0,
-                            0,
-                            imageBitmap.width,
-                            imageBitmap.height,
-                            matrix,
-                            false
-                    )
-
-//            canvas.drawBitmap( BlurBuilder.blur(context, rotateBitmap), null, it, null)
+            if (blurFaceDetectionBox) {
+                canvas.drawBitmap(BlurBuilder.blur(context, imageBitmap), null, it, null)
+             }
 
             canvas.drawRect(it, FACE_BOUNDING_BOX_PAINT)
 
@@ -88,12 +79,10 @@ class CameraGraphicView constructor(
      *
      * @param boundingBox the face coordinates detected.
      */
-    fun drawBoundingBox(boundingBox: RectF, imageBitmap: Bitmap, rotationDegrees: Float) {
+    fun drawBoundingBox(boundingBox: RectF, imageBitmap: Bitmap) {
         this.boundingBox = boundingBox
 
         this.imageBitmap = imageBitmap
-
-        this.rotationDegrees = rotationDegrees
 
         this.postInvalidate()
     }

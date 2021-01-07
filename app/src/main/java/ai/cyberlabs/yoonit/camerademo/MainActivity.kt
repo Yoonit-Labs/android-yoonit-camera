@@ -129,6 +129,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onBlurFaceSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val checked = view.isChecked
+            this.cameraView.setblurFaceDetectionBox(checked)
+        }
+    }
+
     fun onCameraLensRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             val checked = view.isChecked
