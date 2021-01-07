@@ -182,13 +182,6 @@ class CameraController(
     }
 
     /**
-     * Return Integer that represents lens face state (0 for Front Camera, 1 for Back Camera).
-     */
-    fun getCameraLens(): Int {
-        return this.captureOptions.cameraLens
-    }
-
-    /**
      * Return if has permission or not to use the camera.
      */
     private fun isAllPermissionsGranted() = REQUIRED_PERMISSIONS.all {

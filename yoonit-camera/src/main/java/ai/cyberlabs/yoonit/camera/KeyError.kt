@@ -13,11 +13,11 @@ package ai.cyberlabs.yoonit.camera
 
 object KeyError {
 
-    // Tried to start a process that depends on to start the camera preview.
-    const val NOT_STARTED_PREVIEW = "NOT_STARTED_PREVIEW"
-
     // Tried to start a non-existent capture type.
     const val INVALID_CAPTURE_TYPE = "INVALID_CAPTURE_TYPE"
+
+    // Tried to input invalid camera lens.
+    const val INVALID_CAMERA_LENS = "INVALID_CAMERA_LENS"
 
     // Tried to input invalid face/frame number of images to capture.
     const val INVALID_NUMBER_OF_IMAGES = "INVALID_NUMBER_OF_IMAGES"
