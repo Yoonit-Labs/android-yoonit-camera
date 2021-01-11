@@ -121,8 +121,11 @@ class FaceAnalyzer(
 
                 // Draw or clean the bounding box based on the "faceDetectionBox".
                 if (this.captureOptions.faceDetectionBox) {
-                    this.graphicView.blurFaceDetectionBox = captureOptions.blurFaceDetectionBox
-                    this.graphicView.drawBoundingBox(detectionBox!!, faceBitmap)
+                    detectionBox?.let {
+                        if (this.captureOptions.blurFaceDetectionBox) {
+                            this.graphicView.drawFaceDetectionBox(it, faceBitmap)
+                        } else this.graphicView.drawBoundingBox(it)
+                    }
                 } else {
                     this.graphicView.clear()
                 }

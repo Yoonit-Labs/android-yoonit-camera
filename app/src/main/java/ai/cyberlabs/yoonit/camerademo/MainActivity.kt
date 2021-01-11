@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
     fun onBlurFaceSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setblurFaceDetectionBox(checked)
+            this.cameraView.setBlurFaceDetectionBox(checked)
         }
     }
 

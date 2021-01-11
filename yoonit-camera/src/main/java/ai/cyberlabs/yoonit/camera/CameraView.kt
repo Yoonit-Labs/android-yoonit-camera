@@ -360,7 +360,7 @@ open class CameraView @JvmOverloads constructor(
      * @param enable The indicator to enable/disable face detection box blur
      * Default value is `false`.
      */
-    fun setblurFaceDetectionBox(enable: Boolean) {
+    fun setBlurFaceDetectionBox(enable: Boolean) {
         this.captureOptions.blurFaceDetectionBox = enable
     }
 

@@ -28,20 +28,18 @@ class CameraGraphicView constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    var blurFaceDetectionBox: Boolean = false
-
     private var boundingBox: RectF? = null
 
-    private lateinit var imageBitmap: Bitmap
+    private var imageBitmap: Bitmap? = null
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
         boundingBox?.let {
 
-            if (blurFaceDetectionBox) {
-                canvas.drawBitmap(BlurBuilder.blur(context, imageBitmap), null, it, null)
-             }
+            imageBitmap?.let {bitmap ->
+                canvas.drawBitmap(BlurBuilder.blur(context, bitmap), null, it, null)
+            }
 
             canvas.drawRect(it, FACE_BOUNDING_BOX_PAINT)
 
@@ -79,7 +77,15 @@ class CameraGraphicView constructor(
      *
      * @param boundingBox the face coordinates detected.
      */
-    fun drawBoundingBox(boundingBox: RectF, imageBitmap: Bitmap) {
+    fun drawBoundingBox(boundingBox: RectF) {
+        this.boundingBox = boundingBox
+
+        this.imageBitmap = null
+
+        this.postInvalidate()
+    }
+
+    fun drawFaceDetectionBox(boundingBox: RectF, imageBitmap: Bitmap) {
         this.boundingBox = boundingBox
 
         this.imageBitmap = imageBitmap
