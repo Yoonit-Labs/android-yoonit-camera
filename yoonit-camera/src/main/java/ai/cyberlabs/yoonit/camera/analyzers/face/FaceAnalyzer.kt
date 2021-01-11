@@ -15,13 +15,10 @@ import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
-import ai.cyberlabs.yoonit.camera.utils.pxToDPI
-import ai.cyberlabs.yoonit.camera.utils.toBitmap
+import ai.cyberlabs.yoonit.camera.utils.*
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Matrix
-import android.graphics.Rect
+import android.graphics.*
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.android.gms.vision.face.FaceDetector
@@ -115,9 +112,20 @@ class FaceAnalyzer(
                 }
                 this.isValid = true
 
+                //Transform media image in bitmap and crop bitmap in the face
+                var faceBoundingBox = Rect(0,0,0,0)
+                closestFace?.let {
+                    faceBoundingBox = it.boundingBox
+                }
+                val faceBitmap = cropFaceBitmap(mediaImage.toBitmap(), cameraRotation.toFloat(), faceBoundingBox)
+
                 // Draw or clean the bounding box based on the "faceDetectionBox".
                 if (this.captureOptions.faceDetectionBox) {
-                    this.graphicView.drawBoundingBox(detectionBox!!)
+                    detectionBox?.let {
+                        if (this.captureOptions.blurFaceDetectionBox) {
+                            this.graphicView.drawFaceDetectionBox(it, faceBitmap)
+                        } else this.graphicView.drawBoundingBox(it)
+                    }
                 } else {
                     this.graphicView.clear()
                 }
@@ -144,9 +152,7 @@ class FaceAnalyzer(
                 this.analyzerTimeStamp = currentTimestamp
 
                 val imagePath = this.saveImage(
-                    mediaImage.toBitmap(),
-                    closestFace!!.boundingBox,
-                    cameraRotation.toFloat()
+                    faceBitmap
                 )
 
                 if (this.cameraEventListener != null) {
@@ -202,59 +208,36 @@ class FaceAnalyzer(
     /**
      * Crop an image bitmap with a face based on the detected face rect coordinates.
      *
-     * @param mediaBitmap the original image bitmap.
-     * @param boundingBox the face coordinates detected.
-     * @param rotationDegrees the rotation degrees to turn the image to portrait.
+     * @param croppedBitmap the cropped face bitmap.
      *
      * @return the image file path created.
      */
-    private fun saveImage(mediaBitmap: Bitmap, boundingBox: Rect, rotationDegrees: Float): String {
+    private fun saveImage(croppedBitmap: Bitmap): String {
         val path = this.context.externalCacheDir.toString()
         val file = File(path, "yoonit-face-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
-        var matrix = Matrix()
-        matrix.postRotate(rotationDegrees)
-
-        val rotateBitmap =
-            Bitmap.createBitmap(
-                mediaBitmap,
-                0,
-                0,
-                mediaBitmap.width,
-                mediaBitmap.height,
-                matrix,
-                false
-            )
-
-        matrix = Matrix()
-        if (rotationDegrees == 270f) {
-            matrix.preScale(-1.0f, 1.0f)
-        }
-
-        var croppedBitmap =
-            Bitmap.createBitmap(
-                rotateBitmap,
-                boundingBox.left,
-                boundingBox.top,
-                boundingBox.width(),
-                boundingBox.height(),
-                matrix,
-                false
-            )
-
-        croppedBitmap = Bitmap.createScaledBitmap(
+        val  scaledBitmap = Bitmap.createScaledBitmap(
             croppedBitmap,
             this.captureOptions.imageOutputWidth,
             this.captureOptions.imageOutputHeight,
             false
         )
 
-        croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
 
         fileOutputStream.close()
 
         return file.absolutePath
+    }
+
+    private fun cropFaceBitmap(imageBitmap: Bitmap, rotationDegrees: Float, faceRect: Rect): Bitmap {
+
+        val rotateBitmap = imageBitmap.rotate(rotationDegrees)
+
+        val mirroredBitmap = rotateBitmap.mirror(rotationDegrees)
+
+        return mirroredBitmap.crop(faceRect)
     }
 
     companion object {
