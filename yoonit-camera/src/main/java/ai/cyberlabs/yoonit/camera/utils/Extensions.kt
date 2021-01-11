@@ -12,11 +12,7 @@
 package ai.cyberlabs.yoonit.camera.utils
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageFormat
-import android.graphics.Rect
-import android.graphics.YuvImage
+import android.graphics.*
 import android.media.Image
 import java.io.ByteArrayOutputStream
 
@@ -26,6 +22,48 @@ import java.io.ByteArrayOutputStream
  * @param context application context to get device screen density.
  */
 fun Float.pxToDPI(context: Context) = (this / context.resources.displayMetrics.density).toInt()
+
+fun Bitmap.rotate(rotationDegrees: Float): Bitmap {
+    val matrix = Matrix()
+    matrix.postRotate(rotationDegrees)
+
+    return Bitmap.createBitmap(
+            this,
+            0,
+            0,
+            width,
+            height,
+            matrix,
+            false
+    )
+}
+
+fun Bitmap.mirror(rotationDegrees: Float): Bitmap {
+    val matrix = Matrix()
+    if (rotationDegrees == 270f) {
+        matrix.preScale(-1.0f, 1.0f)
+    }
+
+    return Bitmap.createBitmap(
+            this,
+            0,
+            0,
+            width,
+            height,
+            matrix,
+            false
+    )
+}
+
+fun Bitmap.crop(rect: Rect): Bitmap {
+    return Bitmap.createBitmap(
+                    this,
+                    rect.left,
+                    rect.top,
+                    rect.width(),
+                    rect.height()
+            )
+}
 
 
 fun Image.toBitmap(): Bitmap {

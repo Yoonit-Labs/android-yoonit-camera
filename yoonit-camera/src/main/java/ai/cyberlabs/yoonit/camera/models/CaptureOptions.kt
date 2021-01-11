@@ -49,6 +49,9 @@ data class CaptureOptions(
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f,
 
+    // Blur face detection box
+    var blurFaceDetectionBox: Boolean = false,
+
     /**
      * Limit the minimum face capture size.
      * This variable is the face detection box percentage in relation with the UI graphic view.

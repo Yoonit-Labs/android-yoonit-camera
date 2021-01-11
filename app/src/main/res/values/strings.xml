@@ -12,5 +12,6 @@
     <string name="capture_type_frame">FRAME</string>
     <string name="face_number">Number of face to capture:</string>
     <string name="face_save_image">Face Save</string>
+    <string name="blur_face_detection">Blur face</string>
     <string name="flip_screen">FLIP SCREEN</string>
 </resources>
