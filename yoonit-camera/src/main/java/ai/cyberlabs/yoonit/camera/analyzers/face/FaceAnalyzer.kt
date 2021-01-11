@@ -117,7 +117,7 @@ class FaceAnalyzer(
                 closestFace?.let {
                     faceBoundingBox = it.boundingBox
                 }
-                val faceBitmap = cropFaceBitmap(mediaImage.toBitmap(), cameraRotation.toFloat(), faceBoundingBox)
+                val faceBitmap = cropFaceBitmap(mediaImage.toRGBBitmap(context), cameraRotation.toFloat(), faceBoundingBox)
 
                 // Draw or clean the bounding box based on the "faceDetectionBox".
                 if (this.captureOptions.faceDetectionBox) {

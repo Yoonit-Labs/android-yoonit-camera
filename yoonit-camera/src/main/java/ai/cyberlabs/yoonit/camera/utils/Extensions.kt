@@ -14,7 +14,12 @@ package ai.cyberlabs.yoonit.camera.utils
 import android.content.Context
 import android.graphics.*
 import android.media.Image
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicYuvToRGB
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 
 /**
  * Convert pixel value to DPI.
@@ -65,8 +70,34 @@ fun Bitmap.crop(rect: Rect): Bitmap {
             )
 }
 
+fun Image.toRGBBitmap(context: Context): Bitmap {
 
-fun Image.toBitmap(): Bitmap {
+    // Get the YUV data
+    val yuvBytes: ByteBuffer = imageToByteBuffer(this)
+
+    // Convert YUV to RGB
+
+
+    // Convert YUV to RGB
+    val rs: RenderScript = RenderScript.create(context)
+
+    val bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+    val allocationRgb: Allocation = Allocation.createFromBitmap(rs, bitmap)
+
+    val allocationYuv: Allocation = Allocation.createSized(rs, Element.U8(rs), yuvBytes.array().size)
+    allocationYuv.copyFrom(yuvBytes.array())
+
+    val scriptYuvToRgb: ScriptIntrinsicYuvToRGB = ScriptIntrinsicYuvToRGB.create(rs, Element.U8_4(rs))
+    scriptYuvToRgb.setInput(allocationYuv)
+    scriptYuvToRgb.forEach(allocationRgb)
+
+    allocationRgb.copyTo(bitmap)
+
+    return bitmap
+}
+
+
+fun Image.toYUVBitmap(): Bitmap {
     val yBuffer = planes[0].buffer // Y
     val uBuffer = planes[1].buffer // U
     val vBuffer = planes[2].buffer // V

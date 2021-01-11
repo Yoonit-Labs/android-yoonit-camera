@@ -15,7 +15,7 @@ import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
-import ai.cyberlabs.yoonit.camera.utils.toBitmap
+import ai.cyberlabs.yoonit.camera.utils.toYUVBitmap
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
@@ -54,7 +54,7 @@ class FrameAnalyzer(
             val mediaImage = imageProxy.image
 
             val imagePath = this.saveImage(
-                mediaImage!!.toBitmap(),
+                mediaImage!!.toYUVBitmap(),
                 imageProxy.imageInfo.rotationDegrees.toFloat()
             )
 
@@ -143,7 +143,7 @@ class FrameAnalyzer(
         val file = File(path, "yoonit-frame-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
-        var matrix = Matrix()
+        val matrix = Matrix()
         matrix.postRotate(rotationDegrees)
 
         if (rotationDegrees == 270.0f) {
