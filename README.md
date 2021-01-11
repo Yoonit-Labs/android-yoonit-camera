@@ -134,7 +134,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setFaceROIBottomOffset    | `bottomOffset: Float`                                                          | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the bottom face bounding box with the bottom of the camera preview.
 | setFaceROILeftOffset      | `leftOffset: Float`                                                            | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the left face bounding box with the left of the camera preview.
 | setFaceROIMinSize         | `minimumSize: Float`                                                           | Values between `0` and `1`. Represents the percentage.                            | void         | Set the minimum face size related with the region of interest.
-| setblurFaceDetectionBox   | `enable: Bool`                                                                 | `true` or `false`                                                                 | void         | Enable/disable blur in face detection box.
+| setBlurFaceDetectionBox   | `enable: Bool`                                                                 | `true` or `false`                                                                 | void         | Enable/disable blur in face detection box.
 
 ### Events
 
