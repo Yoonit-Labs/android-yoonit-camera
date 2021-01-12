@@ -154,6 +154,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onColorEncodingRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            if (!view.isChecked) {
+                return
+            }
+
+            when (view.getId()) {
+                R.id.rgb_radio_button -> {
+                    camera_view.setColorEncodingCapture("RGB")
+                    Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
+                }
+
+                R.id.yuv_radio_button -> {
+                    camera_view.setColorEncodingCapture("YUV")
+                    Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
+                }
+            }
+        }
+    }
+
     fun onStopCaptureClick(view: View) {
         this.cameraView.stopCapture()
         this.image_preview.visibility = View.INVISIBLE
