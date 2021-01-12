@@ -135,6 +135,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setFaceROILeftOffset      | `leftOffset: Float`                                                            | Values between `0` and `1`. Represents the percentage.                            | void         | Distance in percentage of the left face bounding box with the left of the camera preview.
 | setFaceROIMinSize         | `minimumSize: Float`                                                           | Values between `0` and `1`. Represents the percentage.                            | void         | Set the minimum face size related with the region of interest.
 | setBlurFaceDetectionBox   | `enable: Bool`                                                                 | `true` or `false`                                                                 | void         | Enable/disable blur in face detection box.
+| setColorEncodingCapture   | `colorEncoding: String`                                                        | <ul><li>`"RGB"`</li><li>`"YUV"`</li>                                              | void         | Set the color encoding for the saved images.
 
 ### Events
 

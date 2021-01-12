@@ -372,6 +372,16 @@ open class CameraView @JvmOverloads constructor(
             else 0f
     }
 
+    /**
+     * Set the color encoding for the saved images
+     *
+     * @param setColorEncodingCapture The color encoding type: "RGB" | "YUV".
+     * Default value is `RGB`.
+     */
+    fun setColorEncodingCapture(colorEncoding: String) {
+        this.captureOptions.colorEncoding = colorEncoding
+    }
+
     companion object {
         private const val TAG = "CameraView"
     }
