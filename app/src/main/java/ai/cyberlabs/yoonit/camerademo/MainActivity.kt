@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     fun onImageSaveSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setSaveImageCaptured(checked)
+            this.cameraView.setSaveImageCaptured(checked, "RGB")
 
             if (checked) {
                 this.image_preview.visibility = View.VISIBLE
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onStopCaptureClick(view: View) {
+    fun onStopCaptureClick() {
         this.cameraView.stopCapture()
         this.image_preview.visibility = View.INVISIBLE
         this.qrcode_textview.visibility = View.INVISIBLE

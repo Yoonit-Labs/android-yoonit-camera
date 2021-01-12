@@ -52,6 +52,9 @@ data class CaptureOptions(
     // Blur face detection box
     var blurFaceDetectionBox: Boolean = false,
 
+    // Color encoding of the saved image
+    var colorEncoding: String = "RGB",
+
     /**
      * Limit the minimum face capture size.
      * This variable is the face detection box percentage in relation with the UI graphic view.

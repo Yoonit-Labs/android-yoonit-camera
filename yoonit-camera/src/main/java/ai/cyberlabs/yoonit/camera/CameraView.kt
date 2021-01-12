@@ -208,8 +208,9 @@ open class CameraView @JvmOverloads constructor(
      * @param enable The indicator to enable or disable the face/frame save images.
      * Default value is false.
      */
-    fun setSaveImageCaptured(enable: Boolean) {
+    fun setSaveImageCaptured(enable: Boolean, colorEncoding: String) {
         this.captureOptions.saveImageCaptured = enable
+        this.captureOptions.colorEncoding = colorEncoding
     }
 
     /**

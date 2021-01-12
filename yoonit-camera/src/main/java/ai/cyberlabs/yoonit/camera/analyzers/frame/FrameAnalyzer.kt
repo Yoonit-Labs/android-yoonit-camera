@@ -15,6 +15,7 @@ import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.toRGBBitmap
 import ai.cyberlabs.yoonit.camera.utils.toYUVBitmap
 import android.annotation.SuppressLint
 import android.content.Context
@@ -53,13 +54,21 @@ class FrameAnalyzer(
         if (this.shouldAnalyze(imageProxy)) {
             val mediaImage = imageProxy.image
 
-            val imagePath = this.saveImage(
-                mediaImage!!.toYUVBitmap(),
-                imageProxy.imageInfo.rotationDegrees.toFloat()
-            )
+            mediaImage?.let {
+                val imagePath = when (captureOptions.colorEncoding) {
+                    "YUV" -> this.saveImage(
+                            mediaImage.toYUVBitmap(),
+                            imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
+                    else -> this.saveImage(
+                            mediaImage.toRGBBitmap(context),
+                            imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
+                }
 
-            Handler(Looper.getMainLooper()).post {
-                this.handleEmitFrameImageCreated(imagePath)
+                Handler(Looper.getMainLooper()).post {
+                    this.handleEmitFrameImageCreated(imagePath)
+                }
             }
         }
 
