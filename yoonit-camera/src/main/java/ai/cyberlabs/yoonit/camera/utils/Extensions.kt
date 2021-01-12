@@ -76,9 +76,6 @@ fun Image.toRGBBitmap(context: Context): Bitmap {
     val yuvBytes: ByteBuffer = imageToByteBuffer(this)
 
     // Convert YUV to RGB
-
-
-    // Convert YUV to RGB
     val rs: RenderScript = RenderScript.create(context)
 
     val bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
