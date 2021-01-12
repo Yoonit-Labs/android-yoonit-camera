@@ -3,6 +3,9 @@
     <string name="stop">STOP</string>
     <string name="face_box">Face Box</string>
     <string name="camera_lens">CAMERA LENS:</string>
+    <string name="color_encoding">COLOR ENCODING:</string>
+    <string name="rgb_encoding">RGB</string>
+    <string name="yuv_encoding">YUV</string>
     <string name="camera_front">FRONT</string>
     <string name="camera_back">BACK</string>
     <string name="capture_types">CAPTURE TYPES:</string>

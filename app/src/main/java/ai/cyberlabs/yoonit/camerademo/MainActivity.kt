@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     fun onImageSaveSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setSaveImageCaptured(checked, "RGB")
+            this.cameraView.setSaveImageCaptured(checked)
 
             if (checked) {
                 this.image_preview.visibility = View.VISIBLE
@@ -154,7 +154,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onStopCaptureClick() {
+    fun onColorEncodingRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            if (!view.isChecked) {
+                return
+            }
+
+            when (view.getId()) {
+                R.id.rgb_radio_button -> {
+                    camera_view.setColorEncodingCapture("RGB")
+                    Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
+                }
+
+                R.id.yuv_radio_button -> {
+                    camera_view.setColorEncodingCapture("YUV")
+                    Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
+                }
+            }
+        }
+    }
+
+    fun onStopCaptureClick(view: View) {
         this.cameraView.stopCapture()
         this.image_preview.visibility = View.INVISIBLE
         this.qrcode_textview.visibility = View.INVISIBLE

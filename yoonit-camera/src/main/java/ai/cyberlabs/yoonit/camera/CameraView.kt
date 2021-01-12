@@ -208,9 +208,8 @@ open class CameraView @JvmOverloads constructor(
      * @param enable The indicator to enable or disable the face/frame save images.
      * Default value is false.
      */
-    fun setSaveImageCaptured(enable: Boolean, colorEncoding: String) {
+    fun setSaveImageCaptured(enable: Boolean) {
         this.captureOptions.saveImageCaptured = enable
-        this.captureOptions.colorEncoding = colorEncoding
     }
 
     /**
@@ -371,6 +370,16 @@ open class CameraView @JvmOverloads constructor(
         this.rotation =
             if (this.captureOptions.isScreenFlipped) 180f
             else 0f
+    }
+
+    /**
+     * Set the color encoding for the saved images
+     *
+     * @param setColorEncodingCapture The color encoding type: "RGB" | "YUV".
+     * Default value is `RGB`.
+     */
+    fun setColorEncodingCapture(colorEncoding: String) {
+        this.captureOptions.colorEncoding = colorEncoding
     }
 
     companion object {
