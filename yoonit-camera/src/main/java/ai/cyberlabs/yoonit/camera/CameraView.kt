@@ -118,8 +118,9 @@ open class CameraView @JvmOverloads constructor(
             else CameraSelector.LENS_FACING_BACK
 
 
-        if (this.captureOptions.cameraLens != cameraSelector)
+        if (this.captureOptions.cameraLens != cameraSelector) {
             this.cameraController.toggleCameraLens()
+        }
     }
 
     /**
