@@ -15,11 +15,11 @@ import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
+import java.io.File
 
 /**
  * This class represents the camera layout and your functions.
@@ -362,6 +362,39 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setBlurFaceDetectionBox(enable: Boolean) {
         this.captureOptions.blurFaceDetectionBox = enable
+    }
+
+    /**
+     * Enable/disable classifier usage.
+     *
+     * @param enable The indicator to enable/disable classifier usage.
+     * Default value is `false`.
+     */
+    fun setClassifier(enable: Boolean) {
+        this.captureOptions.classifier.enable = enable
+    }
+
+    /**
+     * Set the classifier paths.
+     *
+     * @param classifierPaths The classifier absolute file path array list.
+     * Default value is empty array.
+     */
+    fun setClassifierPaths(classifierPaths: ArrayList<String>) {
+        for (classifierPath in classifierPaths) {
+            if (!File(classifierPath).exists()) {
+                throw IllegalArgumentException("${KeyError.INVALID_MODEL_PATH} $classifierPath")
+            }
+        }
+
+        this.captureOptions.classifier.paths = classifierPaths
+    }
+
+    /**
+     * Clear classifier.
+     */
+    fun setClassifierClear() {
+        this.captureOptions.classifier.clear()
     }
 
     fun flipScreen() {

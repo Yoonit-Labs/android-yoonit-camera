@@ -22,6 +22,9 @@ data class CaptureOptions(
     // Face region of interesting. Default is all the screen area.
     var faceROI: FaceROI = FaceROI(),
 
+    // Image classifier.
+    var classifier: Classifier = Classifier(),
+
     // Camera image capture type: NONE, FACE, QRCODE and FRAME.
     var type: CaptureType = CaptureType.NONE,
 

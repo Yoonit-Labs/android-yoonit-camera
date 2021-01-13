@@ -54,4 +54,7 @@ object KeyError {
 
     // Tried to input invalid face region of interest minimum size.
     const val INVALID_FACE_ROI_MIN_SIZE = "INVALID_FACE_ROI_MIN_SIZE"
+
+    // Tried to input a non existent model file path.
+    const val INVALID_MODEL_PATH = "INVALID_MODEL_PATH"
 }
