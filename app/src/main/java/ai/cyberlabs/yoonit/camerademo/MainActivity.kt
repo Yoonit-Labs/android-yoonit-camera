@@ -26,7 +26,10 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import org.pytorch.Module
 import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -90,6 +93,12 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
+
+            this.cameraView.setClassifier(true)
+            this.cameraView.setClassifierPaths(arrayListOf(
+                this.getModelPath("mask_custom_model.pt")
+            ))
+
             return
         }
 
@@ -98,6 +107,22 @@ class MainActivity : AppCompatActivity() {
             REQUIRED_PERMISSIONS,
             PackageManager.PERMISSION_GRANTED
         )
+    }
+
+    private fun getModelPath(assetName: String): String {
+        val file = File(this.filesDir, assetName)
+
+        this.assets.open(assetName).use { `is` ->
+            FileOutputStream(file).use { os ->
+                val buffer = ByteArray(4 * 1024)
+                var read: Int
+                while (`is`.read(buffer).also { read = it } != -1) {
+                    os.write(buffer, 0, read)
+                }
+                os.flush()
+            }
+            return file.absolutePath
+        }
     }
 
 
