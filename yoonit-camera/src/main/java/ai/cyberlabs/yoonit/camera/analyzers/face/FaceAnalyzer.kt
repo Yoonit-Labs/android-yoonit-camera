@@ -15,6 +15,7 @@ import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
+import ai.cyberlabs.yoonit.camera.models.ColorEncoding
 import ai.cyberlabs.yoonit.camera.utils.*
 import android.annotation.SuppressLint
 import android.content.Context
@@ -118,8 +119,8 @@ class FaceAnalyzer(
                     faceBoundingBox = it.boundingBox
                 }
                 val faceBitmap = when (captureOptions.colorEncoding) {
-                    "YUV" -> cropFaceBitmap(mediaImage.toYUVBitmap(), cameraRotation.toFloat(), faceBoundingBox)
-                    else -> cropFaceBitmap(mediaImage.toRGBBitmap(context), cameraRotation.toFloat(), faceBoundingBox)
+                    ColorEncoding.YUV -> cropFaceBitmap(mediaImage.toYUVBitmap(), cameraRotation.toFloat(), faceBoundingBox)
+                    ColorEncoding.RGB -> cropFaceBitmap(mediaImage.toRGBBitmap(context), cameraRotation.toFloat(), faceBoundingBox)
                 }
 
                 // Draw or clean the bounding box based on the "faceDetectionBox".

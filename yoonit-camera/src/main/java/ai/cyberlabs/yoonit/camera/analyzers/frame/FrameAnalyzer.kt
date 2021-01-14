@@ -15,6 +15,7 @@ import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.models.ColorEncoding
 import ai.cyberlabs.yoonit.camera.utils.toRGBBitmap
 import ai.cyberlabs.yoonit.camera.utils.toYUVBitmap
 import android.annotation.SuppressLint
@@ -56,11 +57,11 @@ class FrameAnalyzer(
 
             mediaImage?.let {
                 val imagePath = when (captureOptions.colorEncoding) {
-                    "YUV" -> this.saveImage(
+                    ColorEncoding.YUV -> this.saveImage(
                             mediaImage.toYUVBitmap(),
                             imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
-                    else -> this.saveImage(
+                    ColorEncoding.RGB -> this.saveImage(
                             mediaImage.toRGBBitmap(context),
                             imageProxy.imageInfo.rotationDegrees.toFloat()
                     )

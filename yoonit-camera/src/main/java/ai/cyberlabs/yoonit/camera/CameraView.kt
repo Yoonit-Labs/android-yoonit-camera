@@ -13,9 +13,10 @@ package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
+import ai.cyberlabs.yoonit.camera.models.CaptureType
+import ai.cyberlabs.yoonit.camera.models.ColorEncoding
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
@@ -150,28 +151,28 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Set number of face/frame file images to create.
      *
-     * @param numberOfImages The number of images to create.
+     * @param amount The number of images to create.
      */
-    fun setNumberOfImages(numberOfImages: Int) {
-        if (numberOfImages < 0) {
+    fun setImageCaptureAmount(amount: Int) {
+        if (amount < 0) {
             throw IllegalArgumentException(KeyError.INVALID_NUMBER_OF_IMAGES)
         }
 
-        this.captureOptions.numberOfImages = numberOfImages
+        this.captureOptions.numberOfImages = amount
     }
 
     /**
      * Set saving face/frame images time interval in milli seconds.
      *
-     * @param timeBetweenImages The time in milli seconds.
+     * @param interval The time in milli seconds.
      * Default value is 1000.
      */
-    fun setTimeBetweenImages(timeBetweenImages: Long) {
-        if (timeBetweenImages < 0) {
+    fun setImageCaptureInterval(interval: Long) {
+        if (interval < 0) {
             throw IllegalArgumentException(KeyError.INVALID_TIME_BETWEEN_IMAGES)
         }
 
-        this.captureOptions.timeBetweenImages = timeBetweenImages
+        this.captureOptions.timeBetweenImages = interval
     }
 
     /**
@@ -180,7 +181,7 @@ open class CameraView @JvmOverloads constructor(
      * @param width The file image width in pixels.
      * Default value is 200.
      */
-    fun setOutputImageWidth(width: Int) {
+    fun setImageCaptureWidth(width: Int) {
         if (width <= 0) {
             throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_WIDTH)
         }
@@ -194,7 +195,7 @@ open class CameraView @JvmOverloads constructor(
      * @param height The file image height in pixels.
      * Default value is 200.
      */
-    fun setOutputImageHeight(height: Int) {
+    fun setImageCaptureHeight(height: Int) {
         if (height <= 0) {
             throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_HEIGHT)
         }
@@ -208,7 +209,7 @@ open class CameraView @JvmOverloads constructor(
      * @param enable The indicator to enable or disable the face/frame save images.
      * Default value is false.
      */
-    fun setSaveImageCaptured(enable: Boolean) {
+    fun setImageCapture(enable: Boolean) {
         this.captureOptions.saveImageCaptured = enable
     }
 
@@ -378,8 +379,12 @@ open class CameraView @JvmOverloads constructor(
      * @param setColorEncodingCapture The color encoding type: "RGB" | "YUV".
      * Default value is `RGB`.
      */
-    fun setColorEncodingCapture(colorEncoding: String) {
-        this.captureOptions.colorEncoding = colorEncoding
+    fun setImageCaptureColorEncoding(colorEncoding: String) {
+        when (colorEncoding) {
+            "RGB" -> this.captureOptions.colorEncoding = ColorEncoding.RGB
+            "YUV" -> this.captureOptions.colorEncoding = ColorEncoding.YUV
+            else -> throw IllegalArgumentException(KeyError.INVALID_COLOR_ENCODING)
+        }
     }
 
     companion object {

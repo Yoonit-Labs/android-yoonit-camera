@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "face" -> {
-                    this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                    this.cameraView.setImageCaptureAmount(Integer.valueOf(face_number_edittext.text.toString()))
                     this.cameraView.startCaptureType("face")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "frame" -> {
-                    this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+                    this.cameraView.setImageCaptureAmount(Integer.valueOf(face_number_edittext.text.toString()))
                     this.cameraView.startCaptureType("frame")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     fun onImageSaveSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setSaveImageCaptured(checked)
+            this.cameraView.setImageCapture(checked)
 
             if (checked) {
                 this.image_preview.visibility = View.VISIBLE
@@ -162,12 +162,12 @@ class MainActivity : AppCompatActivity() {
 
             when (view.getId()) {
                 R.id.rgb_radio_button -> {
-                    camera_view.setColorEncodingCapture("RGB")
+                    camera_view.setImageCaptureColorEncoding("RGB")
                     Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
                 }
 
                 R.id.yuv_radio_button -> {
-                    camera_view.setColorEncodingCapture("YUV")
+                    camera_view.setImageCaptureColorEncoding("YUV")
                     Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
                 }
             }

@@ -11,7 +11,6 @@
 
 package ai.cyberlabs.yoonit.camera.models
 
-import ai.cyberlabs.yoonit.camera.CaptureType
 import androidx.camera.core.CameraSelector
 
 /**
@@ -53,7 +52,7 @@ data class CaptureOptions(
     var blurFaceDetectionBox: Boolean = false,
 
     // Color encoding of the saved image
-    var colorEncoding: String = "RGB",
+    var colorEncoding: ColorEncoding = ColorEncoding.RGB,
 
     /**
      * Limit the minimum face capture size.

@@ -16,6 +16,9 @@ object KeyError {
     // Tried to start a non-existent capture type.
     const val INVALID_CAPTURE_TYPE = "INVALID_CAPTURE_TYPE"
 
+    // Tried to input invalid color encoding.
+    const val INVALID_COLOR_ENCODING = "INVALID_COLOR_ENCODING"
+
     // Tried to input invalid camera lens.
     const val INVALID_CAMERA_LENS = "INVALID_CAMERA_LENS"
 
