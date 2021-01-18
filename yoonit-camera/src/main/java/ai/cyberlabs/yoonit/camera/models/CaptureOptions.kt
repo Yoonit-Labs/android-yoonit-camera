@@ -23,7 +23,7 @@ data class CaptureOptions(
     var faceROI: FaceROI = FaceROI(),
 
     // Image classifier.
-    var classifier: Classifier = Classifier(),
+    var computerVision: ComputerVision = ComputerVision(),
 
     // Camera image capture type: NONE, FACE, QRCODE and FRAME.
     var type: CaptureType = CaptureType.NONE,

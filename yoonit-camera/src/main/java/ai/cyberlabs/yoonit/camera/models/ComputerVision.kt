@@ -14,34 +14,37 @@ package ai.cyberlabs.yoonit.camera.models
 import org.pytorch.Module
 
 /**
- * Model to structure the classifier paths by name.
+ * Model to structure the computer vision module paths by name.
  */
-class Classifier {
+class ComputerVision {
 
-    //  Enable or disable the use of the classifier.
+    //  Enable or disable computer vision modules usage when capture images.
     var enable: Boolean = false
 
-    // Classifier map. Key is the name of the file and the value is the module loaded.
-    var classifierMap: MutableMap<String, Module> = mutableMapOf()
+    // Computer vision modules map.
+    // Key is the name of the file and the value is the module loaded.
+    var moduleMap: MutableMap<String, Module> = mutableMapOf()
 
-    // Classifier file absolute paths. When set, build the classifierMap.
+    // Computer vision module file absolute paths.
+    // When set, build the moduleMap.
     var paths: ArrayList<String> = arrayListOf()
         set(value) {
-            for (modelPath in value) {
-                val name: String = modelPath.substringAfterLast('/')
-                val model: Module = Module.load(modelPath)
+            for (modulePath in value) {
+                val name: String = modulePath.substringAfterLast('/')
+                val model: Module = Module.load(modulePath)
 
-                this.classifierMap[name] = model
+                this.moduleMap[name] = model
             }
 
             field = value
         }
 
     /**
-     * Clear the paths and classifierMap.
+     * Disable computer vision, clear the paths and moduleMap.
      */
     fun clear() {
+        this.enable = false
         this.paths.clear()
-        this.classifierMap.clear()
+        this.moduleMap.clear()
     }
 }

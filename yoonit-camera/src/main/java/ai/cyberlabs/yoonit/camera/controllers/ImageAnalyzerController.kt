@@ -9,8 +9,9 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera
+package ai.cyberlabs.yoonit.camera.controllers
 
+import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import androidx.camera.core.ImageAnalysis
 import java.util.concurrent.Executors
 

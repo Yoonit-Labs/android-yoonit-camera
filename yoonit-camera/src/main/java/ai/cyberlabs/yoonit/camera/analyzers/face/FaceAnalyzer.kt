@@ -91,10 +91,11 @@ class FaceAnalyzer(
                     image
                 )
 
-                // Get status if exist.
-                val error = this
-                    .faceBoundingBoxController
-                    .getError(closestFace, detectionBox)
+                // Get error if exist.
+                val error = this.faceBoundingBoxController.getError(
+                    closestFace,
+                    detectionBox
+                )
 
                 // Emit once if has error.
                 if (error != null) {

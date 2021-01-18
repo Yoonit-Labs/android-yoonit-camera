@@ -11,6 +11,7 @@
 
 package ai.cyberlabs.yoonit.camera
 
+import ai.cyberlabs.yoonit.camera.controllers.CameraController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
@@ -366,36 +367,36 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Enable/disable classifier usage.
+     * Enable/disable computer vision usage.
      *
-     * @param enable The indicator to enable/disable classifier usage.
+     * @param enable The indicator to enable/disable computer vision usage.
      * Default value is `false`.
      */
-    fun setClassifier(enable: Boolean) {
-        this.captureOptions.classifier.enable = enable
+    fun setComputerVision(enable: Boolean) {
+        this.captureOptions.computerVision.enable = enable
     }
 
     /**
-     * Set the classifier paths.
+     * Set the computer vision load modules by path.
      *
-     * @param classifierPaths The classifier absolute file path array list.
-     * Default value is empty array.
+     * @param modules The computer vision absolute module file path array list.
+     * Default value is an empty array.
      */
-    fun setClassifierPaths(classifierPaths: ArrayList<String>) {
-        for (classifierPath in classifierPaths) {
-            if (!File(classifierPath).exists()) {
-                throw IllegalArgumentException("${KeyError.INVALID_MODEL_PATH} $classifierPath")
+    fun setComputerVisionLoadModules(modules: ArrayList<String>) {
+        for (module in modules) {
+            if (!File(module).exists()) {
+                throw IllegalArgumentException("${KeyError.INVALID_MODEL_PATH}: $module")
             }
         }
 
-        this.captureOptions.classifier.paths = classifierPaths
+        this.captureOptions.computerVision.paths = modules
     }
 
     /**
-     * Clear classifier.
+     * Clear loaded computer vision modules.
      */
-    fun setClassifierClear() {
-        this.captureOptions.classifier.clear()
+    fun computerVisionClearModules() {
+        this.captureOptions.computerVision.clear()
     }
 
     fun flipScreen() {

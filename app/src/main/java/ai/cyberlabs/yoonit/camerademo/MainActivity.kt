@@ -94,8 +94,9 @@ class MainActivity : AppCompatActivity() {
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
 
-            this.cameraView.setClassifier(true)
-            this.cameraView.setClassifierPaths(arrayListOf(
+            this.cameraView.setComputerVision(true)
+            this.cameraView.setComputerVisionLoadModules(arrayListOf(
+                this.getModelPath("mask_custom_model.pt"),
                 this.getModelPath("mask_custom_model.pt")
             ))
 
@@ -107,6 +108,12 @@ class MainActivity : AppCompatActivity() {
             REQUIRED_PERMISSIONS,
             PackageManager.PERMISSION_GRANTED
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        this.cameraView.computerVisionClearModules()
     }
 
     private fun getModelPath(assetName: String): String {
