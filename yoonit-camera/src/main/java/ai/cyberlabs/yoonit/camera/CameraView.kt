@@ -385,7 +385,7 @@ open class CameraView @JvmOverloads constructor(
     fun setComputerVisionLoadModules(modules: ArrayList<String>) {
         for (module in modules) {
             if (!File(module).exists()) {
-                throw IllegalArgumentException("${KeyError.INVALID_MODEL_PATH}: $module")
+                throw IllegalArgumentException("${KeyError.INVALID_COMPUTER_VISION_MODULE_PATH}: $module")
             }
         }
 
