@@ -16,5 +16,7 @@
     <string name="face_number">Number of face to capture:</string>
     <string name="face_save_image">Face Save</string>
     <string name="blur_face_detection">Blur face</string>
+    <string name="camera_state">Turn Camera ON/OFF</string>
     <string name="flip_screen">FLIP SCREEN</string>
+    <string name="start_label">START</string>
 </resources>

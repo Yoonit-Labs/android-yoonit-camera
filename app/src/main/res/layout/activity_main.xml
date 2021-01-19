@@ -106,6 +106,15 @@
             android:onClick="onBlurFaceSwitchClick"
             android:text="@string/blur_face_detection" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/turn_camera_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:checked="true"
+            android:onClick="cameraStateSwitchClick"
+            android:text="@string/camera_state" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

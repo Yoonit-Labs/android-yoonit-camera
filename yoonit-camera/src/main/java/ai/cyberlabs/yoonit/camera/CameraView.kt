@@ -104,6 +104,13 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Stop camera.
+     */
+    fun stopCamera() {
+        this.cameraController.destroyCamera()
+    }
+
+    /**
      * Set camera lens: "front" or "back".
      *
      * @param cameraLens "back" || "front"
