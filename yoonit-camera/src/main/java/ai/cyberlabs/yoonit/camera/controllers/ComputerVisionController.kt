@@ -16,14 +16,17 @@ import org.pytorch.IValue
 import org.pytorch.Module
 import org.pytorch.torchvision.TensorImageUtils
 
+/**
+ * Class responsible to manipulate the [ComputerVision] modules.
+ */
 class ComputerVisionController {
 
     companion object {
 
-        fun apply(
+        private fun getInference(
             module: Module,
             bitmap: Bitmap
-        ): DoubleArray? {
+        ): FloatArray? {
 
             val inputTensor = TensorImageUtils.bitmapToFloat32Tensor(
                 bitmap,
@@ -32,7 +35,35 @@ class ComputerVisionController {
 
             val outputTensor = module.forward(IValue.from(inputTensor)).toTensor()
 
-            return outputTensor.dataAsDoubleArray
+            return outputTensor.dataAsFloatArray
+        }
+
+        fun getInferences(
+            moduleMap: MutableMap<String, Module>,
+            bitmap: Bitmap
+        ): ArrayList<Pair<String, FloatArray>> {
+
+            val inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
+
+            val scaledBitmap: Bitmap = Bitmap.createScaledBitmap(
+                bitmap,
+                28,
+                28,
+                false
+            )
+
+            for (module in moduleMap) {
+                val results: FloatArray? = this.getInference(module.value, scaledBitmap)
+
+                val inference: Pair<String, FloatArray> = Pair(
+                    module.key,
+                    results ?: return arrayListOf()
+                )
+
+                inferences.add(inference)
+            }
+
+            return inferences
         }
     }
 }

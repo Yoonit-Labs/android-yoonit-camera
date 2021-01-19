@@ -11,6 +11,9 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import kotlin.math.max
 
+/**
+ * Responsible to manipulate everything related with the face bounding box.
+ */
 class FaceBoundingBoxController(
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions
