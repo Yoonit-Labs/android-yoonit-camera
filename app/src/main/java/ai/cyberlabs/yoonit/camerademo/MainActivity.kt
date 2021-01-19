@@ -162,6 +162,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun cameraStateSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            if (view.isChecked) {
+                this.cameraView.startPreview()
+                return
+            }
+            this.cameraView.stopCamera()
+        }
+    }
+
     fun onCameraLensRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             if (!view.isChecked) {
@@ -206,6 +216,12 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.stopCapture()
         this.image_preview.visibility = View.INVISIBLE
         this.qrcode_textview.visibility = View.INVISIBLE
+    }
+
+    fun onStartCaptureClick(view: View) {
+        this.cameraView.startPreview()
+        this.image_preview.visibility = View.VISIBLE
+        this.qrcode_textview.visibility = View.VISIBLE
     }
 
     fun onCaptureTypeRadioButtonClicked(view: View) {
