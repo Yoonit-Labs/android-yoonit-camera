@@ -149,7 +149,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Expose explicit set for [CameraEventListener] instance.
      */
-    fun setCameraEventListener(cameraEventListener: CameraEventListener) {
+    fun setCameraEventListener(cameraEventListener: CameraEventListener?) {
         this.cameraEventListener = cameraEventListener
         this.cameraController.cameraEventListener = cameraEventListener
     }

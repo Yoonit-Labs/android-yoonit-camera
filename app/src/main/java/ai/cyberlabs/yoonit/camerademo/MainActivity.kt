@@ -137,9 +137,11 @@ class MainActivity : AppCompatActivity() {
     fun cameraStateSwitchClick(view: View) {
         if (view is SwitchCompat) {
             if (view.isChecked) {
+                this.cameraView.setCameraEventListener(this.buildCameraEventListener())
                 this.cameraView.startPreview()
                 return
             }
+            this.image_preview.visibility = View.INVISIBLE
             this.cameraView.stopCamera()
         }
     }
