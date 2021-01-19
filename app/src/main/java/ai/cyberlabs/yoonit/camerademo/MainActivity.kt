@@ -94,9 +94,7 @@ class MainActivity : AppCompatActivity() {
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
 
-            this.cameraView.setComputerVision(true)
             this.cameraView.setComputerVisionLoadModules(arrayListOf(
-                this.getModelPath("mask_custom_model.pt"),
                 this.getModelPath("mask_custom_model.pt")
             ))
 
@@ -231,6 +229,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onComputerSwitchSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val checked = view.isChecked
+            this.cameraView.setComputerVision(checked)
+        }
+    }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             this.baseContext, it
@@ -257,18 +262,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 
-        override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {
-            val imageFile = File(imagePath)
+        override fun onImageCaptured(
+            type: String,
+            count: Int,
+            total: Int,
+            imagePath: String,
+            inferences: ArrayList<Pair<String, FloatArray>>
+        ) {
+            Log.d(TAG, "onImageCaptured . . . . . . . . . . . . . . . . . . . . . . . . .")
 
+            val imageFile = File(imagePath)
             if (imageFile.exists()) {
                 val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
-                Log.d(TAG, "onImageCaptured: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
-
+                Log.d(TAG, "$count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
                 image_preview.setImageBitmap(imageBitmap)
-                info_textview.text = "$count/$total"
-                image_preview.visibility = View.VISIBLE
             }
+
+            inferences.forEach {
+                var results = ""
+                for (result in it.second) {
+                    results += "$result "
+                }
+                Log.d(TAG, "${it.first}: $results")
+            }
+            Log.d(TAG, " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")
+
+            info_textview.text = "$count/$total"
+            image_preview.visibility = View.VISIBLE
         }
 
         override fun onFaceDetected(x: Int, y: Int, width: Int, height: Int) {

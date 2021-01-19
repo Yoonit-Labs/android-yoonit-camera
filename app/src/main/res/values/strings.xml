@@ -16,5 +16,6 @@
     <string name="face_number">Number of face to capture:</string>
     <string name="face_save_image">Face Save</string>
     <string name="blur_face_detection">Blur face</string>
-    <string name="flip_screen">FLIP SCREEN</string>
+    <string name="flip_screen">Flip Screen</string>
+    <string name="computer_vision">CV</string>
 </resources>
