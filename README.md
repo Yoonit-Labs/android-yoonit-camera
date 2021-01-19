@@ -110,7 +110,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 ## API
   
 ### Methods   
-  
+
 | Function                     | Parameters                       | Valid values                                                                    | Return Type | Description
 | -                            | -                                | -                                                                               | -           | -
 | startPreview                 | -                                | -                                                                               | void        | Start camera preview if has permission.

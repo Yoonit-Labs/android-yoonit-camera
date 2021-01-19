@@ -105,9 +105,13 @@ class CameraController(
     }
 
     fun destroyCamera() {
-        this.imageAnalyzerController.stop()
         this.cameraProviderProcess?.unbindAll()
+
+        this.captureOptions.type = CaptureType.NONE
+        this.cameraEventListener = null
         this.previewView.visibility = View.INVISIBLE
+
+        this.stopAnalyzer()
     }
 
     /**
