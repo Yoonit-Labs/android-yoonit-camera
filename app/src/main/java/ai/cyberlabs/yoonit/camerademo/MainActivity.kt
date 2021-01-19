@@ -169,8 +169,7 @@ class MainActivity : AppCompatActivity() {
                 this.cameraView.startPreview()
                 return
             }
-            this.image_preview.visibility = View.INVISIBLE
-            this.cameraView.stopCamera()
+            this.cameraView.destroy()
         }
     }
 

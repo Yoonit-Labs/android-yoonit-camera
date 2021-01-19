@@ -105,10 +105,11 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Stop camera.
+     * Destroy camera.
      */
-    fun stopCamera() {
-        this.cameraController.destroyCamera()
+    fun destroy() {
+        this.setCameraEventListener(null)
+        this.cameraController.destroy()
     }
 
     /**

@@ -104,14 +104,17 @@ class CameraController(
         this.imageAnalyzerController.stop()
     }
 
-    fun destroyCamera() {
+    /**
+     * - Camera provider process unbind all;
+     * - Stop analyzers;
+     * - Set capture type to NONE;
+     * - Hide previewView;
+     */
+    fun destroy() {
         this.cameraProviderProcess?.unbindAll()
 
-        this.captureOptions.type = CaptureType.NONE
-        this.cameraEventListener = null
-        this.previewView.visibility = View.INVISIBLE
-
         this.stopAnalyzer()
+        this.previewView.visibility = View.INVISIBLE
     }
 
     /**
@@ -153,7 +156,7 @@ class CameraController(
                     )
                 )
 
-                CaptureType.NONE -> stopAnalyzer()
+                CaptureType.NONE -> this.stopAnalyzer()
             }
         }
     }
