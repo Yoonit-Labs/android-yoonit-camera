@@ -289,7 +289,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest top offset.
      *
-     * @param percentage The "above" area of the face bounding box in percentage.
+     * @param topOffset The "above" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROITopOffset(topOffset: Float) {
@@ -303,7 +303,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest right offset.
      *
-     * @param percentage The "right" area of the face bounding box in percentage.
+     * @param rightOffset The "right" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROIRightOffset(rightOffset: Float) {
@@ -317,7 +317,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest bottom offset.
      *
-     * @param percentage The "bottom" area of the face bounding box in percentage.
+     * @param bottomOffset The "bottom" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROIBottomOffset(bottomOffset: Float) {
@@ -331,7 +331,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest left offset.
      *
-     * @param percentage The "left" area of the face bounding box in percentage.
+     * @param leftOffset The "left" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROILeftOffset(leftOffset: Float) {
@@ -367,6 +367,20 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Set the color encoding for the saved images.
+     *
+     * @param colorEncoding The color encoding type: "RGB" | "YUV".
+     * Default value is `RGB`.
+     */
+    fun setColorEncodingCapture(colorEncoding: String) {
+        if (colorEncoding != "RGB" && colorEncoding != "YUV") {
+            throw IllegalArgumentException(KeyError.INVALID_IMAGE_CAPTURE_COLOR_ENCODING)
+        }
+
+        this.captureOptions.colorEncoding = colorEncoding
+    }
+
+    /**
      * Enable/disable computer vision usage.
      *
      * @param enable The indicator to enable/disable computer vision usage.
@@ -383,7 +397,8 @@ open class CameraView @JvmOverloads constructor(
      * Default value is an empty array.
      */
     fun setComputerVisionLoadModules(modules: ArrayList<String>) {
-        for (module in modules) {
+        modules.forEach {
+            module ->
             if (!File(module).exists()) {
                 throw IllegalArgumentException("${KeyError.INVALID_COMPUTER_VISION_MODULE_PATH}: $module")
             }
@@ -405,16 +420,6 @@ open class CameraView @JvmOverloads constructor(
         this.rotation =
             if (this.captureOptions.isScreenFlipped) 180f
             else 0f
-    }
-
-    /**
-     * Set the color encoding for the saved images
-     *
-     * @param setColorEncodingCapture The color encoding type: "RGB" | "YUV".
-     * Default value is `RGB`.
-     */
-    fun setColorEncodingCapture(colorEncoding: String) {
-        this.captureOptions.colorEncoding = colorEncoding
     }
 
     companion object {
