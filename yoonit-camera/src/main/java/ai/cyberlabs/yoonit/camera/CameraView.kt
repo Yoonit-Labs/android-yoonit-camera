@@ -11,15 +11,16 @@
 
 package ai.cyberlabs.yoonit.camera
 
+import ai.cyberlabs.yoonit.camera.controllers.CameraController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
+import java.io.File
 
 /**
  * This class represents the camera layout and your functions.
@@ -118,8 +119,9 @@ open class CameraView @JvmOverloads constructor(
             else CameraSelector.LENS_FACING_BACK
 
 
-        if (this.captureOptions.cameraLens != cameraSelector)
+        if (this.captureOptions.cameraLens != cameraSelector) {
             this.cameraController.toggleCameraLens()
+        }
     }
 
     /**
@@ -287,7 +289,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest top offset.
      *
-     * @param percentage The "above" area of the face bounding box in percentage.
+     * @param topOffset The "above" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROITopOffset(topOffset: Float) {
@@ -301,7 +303,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest right offset.
      *
-     * @param percentage The "right" area of the face bounding box in percentage.
+     * @param rightOffset The "right" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROIRightOffset(rightOffset: Float) {
@@ -315,7 +317,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest bottom offset.
      *
-     * @param percentage The "bottom" area of the face bounding box in percentage.
+     * @param bottomOffset The "bottom" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROIBottomOffset(bottomOffset: Float) {
@@ -329,7 +331,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Tried to input invalid face region of interest left offset.
      *
-     * @param percentage The "left" area of the face bounding box in percentage.
+     * @param leftOffset The "left" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
     fun setFaceROILeftOffset(leftOffset: Float) {
@@ -364,22 +366,60 @@ open class CameraView @JvmOverloads constructor(
         this.captureOptions.blurFaceDetectionBox = enable
     }
 
+    /**
+     * Set the color encoding for the saved images.
+     *
+     * @param colorEncoding The color encoding type: "RGB" | "YUV".
+     * Default value is `RGB`.
+     */
+    fun setColorEncodingCapture(colorEncoding: String) {
+        if (colorEncoding != "RGB" && colorEncoding != "YUV") {
+            throw IllegalArgumentException(KeyError.INVALID_IMAGE_CAPTURE_COLOR_ENCODING)
+        }
+
+        this.captureOptions.colorEncoding = colorEncoding
+    }
+
+    /**
+     * Enable/disable computer vision usage.
+     *
+     * @param enable The indicator to enable/disable computer vision usage.
+     * Default value is `false`.
+     */
+    fun setComputerVision(enable: Boolean) {
+        this.captureOptions.computerVision.enable = enable
+    }
+
+    /**
+     * Set the computer vision model paths to load.
+     *
+     * @param modelPaths The computer vision absolute model file path array list.
+     * Default value is an empty array.
+     */
+    fun setComputerVisionLoadModels(modelPaths: ArrayList<String>) {
+        modelPaths.forEach {
+            modelPath ->
+            if (!File(modelPath).exists()) {
+                throw IllegalArgumentException("${KeyError.INVALID_COMPUTER_VISION_MODEL_PATHS}: $modelPath")
+            }
+        }
+
+        this.captureOptions.computerVision.paths = modelPaths
+    }
+
+    /**
+     * Clear loaded computer vision models.
+     */
+    fun computerVisionClearModels() {
+        this.captureOptions.computerVision.clear()
+    }
+
     fun flipScreen() {
         this.captureOptions.isScreenFlipped = !this.captureOptions.isScreenFlipped
 
         this.rotation =
             if (this.captureOptions.isScreenFlipped) 180f
             else 0f
-    }
-
-    /**
-     * Set the color encoding for the saved images
-     *
-     * @param setColorEncodingCapture The color encoding type: "RGB" | "YUV".
-     * Default value is `RGB`.
-     */
-    fun setColorEncodingCapture(colorEncoding: String) {
-        this.captureOptions.colorEncoding = colorEncoding
     }
 
     companion object {

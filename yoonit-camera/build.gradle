@@ -60,11 +60,15 @@ dependencies {
     implementation "androidx.camera:camera-view:1.0.0-alpha15"
 
     // MLKit
-    implementation 'com.google.mlkit:barcode-scanning:16.0.3'
-    implementation 'com.google.mlkit:face-detection:16.0.2'
+    implementation "com.google.mlkit:barcode-scanning:16.0.3"
+    implementation "com.google.mlkit:face-detection:16.0.2"
 
     // KTLint
     ktlint "com.pinterest:ktlint:0.39.0"
+
+    // PyTorch
+    implementation "org.pytorch:pytorch_android:$pytorch_version"
+    implementation "org.pytorch:pytorch_android_torchvision:$pytorch_version"
 
     // Test
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

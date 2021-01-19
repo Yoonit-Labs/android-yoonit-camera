@@ -12,6 +12,7 @@
 package ai.cyberlabs.yoonit.camera.analyzers.frame
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
+import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
@@ -55,19 +56,33 @@ class FrameAnalyzer(
             val mediaImage = imageProxy.image
 
             mediaImage?.let {
-                val imagePath = when (captureOptions.colorEncoding) {
-                    "YUV" -> this.saveImage(
-                            mediaImage.toYUVBitmap(),
-                            imageProxy.imageInfo.rotationDegrees.toFloat()
-                    )
-                    else -> this.saveImage(
-                            mediaImage.toRGBBitmap(context),
-                            imageProxy.imageInfo.rotationDegrees.toFloat()
+
+                val frameBitmap: Bitmap = when (this.captureOptions.colorEncoding) {
+                    "YUV" -> mediaImage.toYUVBitmap()
+                    else -> mediaImage.toRGBBitmap(context)
+                }
+
+                // Computer Vision Inference.
+                var inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
+                if (this.captureOptions.computerVision.enable) {
+                    inferences = ComputerVisionController.getInferences(
+                        this.captureOptions.computerVision.modelMap,
+                        frameBitmap
                     )
                 }
 
+                // Save image captured.
+                var imagePath = ""
+                if (this.captureOptions.saveImageCaptured) {
+                    imagePath = this.saveImage(
+                        frameBitmap,
+                        imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
+                }
+
+                // Handle to emit image path and the inference.
                 Handler(Looper.getMainLooper()).post {
-                    this.handleEmitFrameImageCreated(imagePath)
+                    this.handleEmitImageCaptured(imagePath, inferences)
                 }
             }
         }
@@ -83,7 +98,10 @@ class FrameAnalyzer(
     @SuppressLint("UnsafeExperimentalUsageError")
     private fun shouldAnalyze(imageProxy: ImageProxy): Boolean {
 
-        if (!this.captureOptions.saveImageCaptured) {
+        if (
+            !this.captureOptions.saveImageCaptured &&
+            !this.captureOptions.computerVision.enable
+        ) {
             return false
         }
 
@@ -109,8 +127,12 @@ class FrameAnalyzer(
      * Handle emit frame image file created.
      *
      * @param imagePath image file path.
+     * @param inferences The computer vision inferences based in the models.
      */
-    private fun handleEmitFrameImageCreated(imagePath: String) {
+    private fun handleEmitImageCaptured(
+        imagePath: String,
+        inferences: ArrayList<Pair<String, FloatArray>>
+    ) {
 
         // process face number of images.
         if (this.captureOptions.numberOfImages > 0) {
@@ -120,7 +142,8 @@ class FrameAnalyzer(
                     "frame",
                     this.numberOfImages,
                     this.captureOptions.numberOfImages,
-                    imagePath
+                    imagePath,
+                    inferences
                 )
                 return
             }
@@ -136,7 +159,8 @@ class FrameAnalyzer(
             "frame",
             this.numberOfImages,
             this.captureOptions.numberOfImages,
-            imagePath
+            imagePath,
+            inferences
         )
     }
 

@@ -9,8 +9,10 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
-package ai.cyberlabs.yoonit.camera
+package ai.cyberlabs.yoonit.camera.controllers
 
+import ai.cyberlabs.yoonit.camera.CameraGraphicView
+import ai.cyberlabs.yoonit.camera.CaptureType
 import ai.cyberlabs.yoonit.camera.analyzers.qrcode.QRCodeAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.face.FaceAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.frame.FrameAnalyzer

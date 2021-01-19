@@ -13,7 +13,13 @@ package ai.cyberlabs.yoonit.camera.interfaces
 
 interface CameraEventListener {
 
-    fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String)
+    fun onImageCaptured(
+        type: String,
+        count: Int,
+        total: Int,
+        imagePath: String,
+        inferences: ArrayList<Pair<String, FloatArray>>
+    )
 
     fun onFaceDetected(x: Int, y: Int, width: Int, height: Int)
 

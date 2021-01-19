@@ -27,6 +27,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
 
@@ -90,6 +91,11 @@ class MainActivity : AppCompatActivity() {
 
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
+
+            this.cameraView.setComputerVisionLoadModels(arrayListOf(
+                this.getModelPath("mask_custom_model.pt")
+            ))
+
             return
         }
 
@@ -98,6 +104,28 @@ class MainActivity : AppCompatActivity() {
             REQUIRED_PERMISSIONS,
             PackageManager.PERMISSION_GRANTED
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        this.cameraView.computerVisionClearModels()
+    }
+
+    private fun getModelPath(assetName: String): String {
+        val file = File(this.filesDir, assetName)
+
+        this.assets.open(assetName).use { `is` ->
+            FileOutputStream(file).use { os ->
+                val buffer = ByteArray(4 * 1024)
+                var read: Int
+                while (`is`.read(buffer).also { read = it } != -1) {
+                    os.write(buffer, 0, read)
+                }
+                os.flush()
+            }
+            return file.absolutePath
+        }
     }
 
 
@@ -199,6 +227,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onComputerSwitchSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val checked = view.isChecked
+            this.cameraView.setComputerVision(checked)
+        }
+    }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             this.baseContext, it
@@ -225,18 +260,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 
-        override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {
-            val imageFile = File(imagePath)
+        override fun onImageCaptured(
+            type: String,
+            count: Int,
+            total: Int,
+            imagePath: String,
+            inferences: ArrayList<Pair<String, FloatArray>>
+        ) {
+            Log.d(TAG, "onImageCaptured . . . . . . . . . . . . . . . . . . . . . . . . .")
 
+            val imageFile = File(imagePath)
             if (imageFile.exists()) {
                 val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
-                Log.d(TAG, "onImageCaptured: $count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
-
+                Log.d(TAG, "$count/$total - (w: ${imageBitmap.width}, h: ${imageBitmap.height})")
                 image_preview.setImageBitmap(imageBitmap)
-                info_textview.text = "$count/$total"
-                image_preview.visibility = View.VISIBLE
             }
+
+            inferences.forEach {
+                var results = ""
+                for (result in it.second) {
+                    results += "$result "
+                }
+                Log.d(TAG, "${it.first}: $results")
+            }
+            Log.d(TAG, " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")
+
+            info_textview.text = "$count/$total"
+            image_preview.visibility = View.VISIBLE
         }
 
         override fun onFaceDetected(x: Int, y: Int, width: Int, height: Int) {
