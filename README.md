@@ -110,12 +110,13 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 ## API
   
 ### Methods   
-  
+
 | Function                     | Parameters                       | Valid values                                                                    | Return Type | Description
 | -                            | -                                | -                                                                               | -           | -
 | startPreview                 | -                                | -                                                                               | void        | Start camera preview if has permission.
 | startCaptureType             | `captureType: String`            | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qcode"`</li><li>`"frame"`</li></ul> | void        | Set capture type none, face, QR Code or frame.
 | stopCapture                  | -                                | -                                                                               | void        | Stop any type of capture.
+| destroy                      | -                                | -                                                                               | void        | Remove camera preview and listeners.
 | toggleCameraLens             | -                                | -                                                                               | void        | Set camera lens facing front or back.
 | setCameraLens                | `cameraLens: String`             | <ul><li>`"front"`</li><li>`"back"`</li></ul>                                    | void        | Set camera to use "front" or "back" lens. Default value is "front".
 | getCameraLens                | -                                | -                                                                               | Int         | Return `Int` that represents lens face state: 0 for front 1 for back camera.

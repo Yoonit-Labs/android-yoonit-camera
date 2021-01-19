@@ -105,6 +105,14 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Destroy camera.
+     */
+    fun destroy() {
+        this.setCameraEventListener(null)
+        this.cameraController.destroy()
+    }
+
+    /**
      * Set camera lens: "front" or "back".
      *
      * @param cameraLens "back" || "front"
@@ -144,7 +152,7 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Expose explicit set for [CameraEventListener] instance.
      */
-    fun setCameraEventListener(cameraEventListener: CameraEventListener) {
+    fun setCameraEventListener(cameraEventListener: CameraEventListener?) {
         this.cameraEventListener = cameraEventListener
         this.cameraController.cameraEventListener = cameraEventListener
     }

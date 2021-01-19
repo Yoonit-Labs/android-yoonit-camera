@@ -22,6 +22,7 @@ import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -104,6 +105,19 @@ class CameraController(
     }
 
     /**
+     * - Camera provider process unbind all;
+     * - Stop analyzers;
+     * - Set capture type to NONE;
+     * - Hide previewView;
+     */
+    fun destroy() {
+        this.cameraProviderProcess?.unbindAll()
+
+        this.stopAnalyzer()
+        this.previewView.visibility = View.INVISIBLE
+    }
+
+    /**
      * Start image analyzer based on the capture type.
      */
     fun startCaptureType() {
@@ -141,6 +155,8 @@ class CameraController(
                         this as CameraCallback
                     )
                 )
+
+                CaptureType.NONE -> this.stopAnalyzer()
             }
         }
     }
@@ -165,6 +181,8 @@ class CameraController(
 
     private fun buildCameraPreview() {
         this.cameraProviderProcess?.unbindAll()
+
+        this.previewView.visibility = View.VISIBLE
 
         val cameraSelector = CameraSelector
             .Builder()
