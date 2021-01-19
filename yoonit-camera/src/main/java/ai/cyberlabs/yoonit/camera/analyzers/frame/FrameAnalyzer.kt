@@ -66,7 +66,7 @@ class FrameAnalyzer(
                 var inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
                 if (this.captureOptions.computerVision.enable) {
                     inferences = ComputerVisionController.getInferences(
-                        this.captureOptions.computerVision.moduleMap,
+                        this.captureOptions.computerVision.modelMap,
                         frameBitmap
                     )
                 }
@@ -127,7 +127,7 @@ class FrameAnalyzer(
      * Handle emit frame image file created.
      *
      * @param imagePath image file path.
-     * @param inferences The computer vision inferences based in the modules.
+     * @param inferences The computer vision inferences based in the models.
      */
     private fun handleEmitImageCaptured(
         imagePath: String,

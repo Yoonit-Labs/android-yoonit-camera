@@ -58,6 +58,6 @@ object KeyError {
     // Tried to input invalid image capture color encoding.
     const val INVALID_IMAGE_CAPTURE_COLOR_ENCODING = "INVALID_IMAGE_CAPTURE_COLOR_ENCODING"
 
-    // Tried to input a non existent computer vision module path.
-    const val INVALID_COMPUTER_VISION_MODULE_PATH = "INVALID_COMPUTER_VISION_MODULE_PATH"
+    // Tried to input a non existent computer vision model paths.
+    const val INVALID_COMPUTER_VISION_MODEL_PATHS = "INVALID_COMPUTER_VISION_MODEL_PATHS"
 }

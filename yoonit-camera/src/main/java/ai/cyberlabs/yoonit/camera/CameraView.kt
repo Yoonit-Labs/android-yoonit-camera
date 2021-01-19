@@ -391,26 +391,26 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set the computer vision load modules by path.
+     * Set the computer vision model paths to load.
      *
-     * @param modules The computer vision absolute module file path array list.
+     * @param modelPaths The computer vision absolute model file path array list.
      * Default value is an empty array.
      */
-    fun setComputerVisionLoadModules(modules: ArrayList<String>) {
-        modules.forEach {
-            module ->
-            if (!File(module).exists()) {
-                throw IllegalArgumentException("${KeyError.INVALID_COMPUTER_VISION_MODULE_PATH}: $module")
+    fun setComputerVisionLoadModels(modelPaths: ArrayList<String>) {
+        modelPaths.forEach {
+            modelPath ->
+            if (!File(modelPath).exists()) {
+                throw IllegalArgumentException("${KeyError.INVALID_COMPUTER_VISION_MODEL_PATHS}: $modelPath")
             }
         }
 
-        this.captureOptions.computerVision.paths = modules
+        this.captureOptions.computerVision.paths = modelPaths
     }
 
     /**
-     * Clear loaded computer vision modules.
+     * Clear loaded computer vision models.
      */
-    fun computerVisionClearModules() {
+    fun computerVisionClearModels() {
         this.captureOptions.computerVision.clear()
     }
 

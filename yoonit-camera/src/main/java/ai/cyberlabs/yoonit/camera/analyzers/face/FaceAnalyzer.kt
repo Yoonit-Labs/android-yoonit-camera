@@ -166,7 +166,7 @@ class FaceAnalyzer(
                 var inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
                 if (this.captureOptions.computerVision.enable) {
                     inferences = ComputerVisionController.getInferences(
-                        this.captureOptions.computerVision.moduleMap,
+                        this.captureOptions.computerVision.modelMap,
                         faceBitmap
                     )
                 }
@@ -195,7 +195,7 @@ class FaceAnalyzer(
      * Handle emit face image file created.
      *
      * @param imagePath The image file path.
-     * @param inferences The computer vision inferences based in the modules.
+     * @param inferences The computer vision inferences based in the models.
      */
     private fun handleEmitImageCaptured(
         imagePath: String,

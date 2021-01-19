@@ -17,7 +17,7 @@ import org.pytorch.Module
 import org.pytorch.torchvision.TensorImageUtils
 
 /**
- * Class responsible to manipulate the [ComputerVision] modules.
+ * Class responsible to manipulate the [ComputerVision] models.
  */
 class ComputerVisionController {
 

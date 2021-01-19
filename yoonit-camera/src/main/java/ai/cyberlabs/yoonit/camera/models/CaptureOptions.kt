@@ -22,7 +22,7 @@ data class CaptureOptions(
     // Face region of interesting. Default is all the screen area.
     var faceROI: FaceROI = FaceROI(),
 
-    // Computer vision modules.
+    // Computer vision models.
     var computerVision: ComputerVision = ComputerVision(),
 
     // Camera image capture type: NONE, FACE, QRCODE and FRAME.

@@ -26,10 +26,8 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
-import org.pytorch.Module
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -94,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         if (this.allPermissionsGranted()) {
             this.cameraView.startPreview()
 
-            this.cameraView.setComputerVisionLoadModules(arrayListOf(
+            this.cameraView.setComputerVisionLoadModels(arrayListOf(
                 this.getModelPath("mask_custom_model.pt")
             ))
 
@@ -111,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        this.cameraView.computerVisionClearModules()
+        this.cameraView.computerVisionClearModels()
     }
 
     private fun getModelPath(assetName: String): String {
