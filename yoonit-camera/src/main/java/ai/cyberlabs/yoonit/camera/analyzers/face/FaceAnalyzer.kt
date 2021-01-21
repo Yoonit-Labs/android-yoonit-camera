@@ -20,6 +20,7 @@ import ai.cyberlabs.yoonit.camera.utils.*
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.media.Image
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.android.gms.vision.face.FaceDetector
@@ -87,58 +88,30 @@ class FaceAnalyzer(
 
                 // Get closest face.
                 // Can be null if no face found.
+                // Used to crop the face image.
                 val closestFace: Face? = this.faceBoundingBoxController.getClosestFace(faces)
 
                 // Transform the camera face coordinates to UI graphic coordinates.
+                // Used to draw the face detection box.
                 val detectionBox = this.faceBoundingBoxController.getDetectionBox(
                     closestFace,
                     image
                 )
 
-                // Get error if exist.
-                val error = this.faceBoundingBoxController.getError(
-                    closestFace,
-                    detectionBox
-                )
-
-                // Emit once if has error.
-                if (error != null) {
-                    if (this.isValid) {
-                        this.isValid = false
-                        this.graphicView.clear()
-                        if (this.cameraEventListener != null) {
-                            if (error != "") {
-                                this.cameraEventListener.onMessage(error)
-                            }
-                            this.cameraEventListener.onFaceUndetected()
-                        }
-                    }
+                // Verify if has error on the closestFace and detectionBox.
+                if (this.hasError(closestFace, detectionBox)) {
                     return@addOnSuccessListener
                 }
-                this.isValid = true
 
-                //Transform media image in bitmap and crop bitmap in the face
-                var faceBoundingBox = Rect(0,0,0,0)
-                closestFace?.let {
-                    faceBoundingBox = it.boundingBox
-                }
+                // Get face bitmap.
+                val faceBitmap: Bitmap = this.getFaceBitmap(
+                    mediaImage,
+                    closestFace!!,
+                    cameraRotation.toFloat()
+                )
 
-                val faceBitmap = when (captureOptions.colorEncoding) {
-                    "YUV" -> cropFaceBitmap(mediaImage.toYUVBitmap(), cameraRotation.toFloat(), faceBoundingBox)
-                    else -> cropFaceBitmap(mediaImage.toRGBBitmap(context), cameraRotation.toFloat(), faceBoundingBox)
-                }
-
-                // Draw or clean the bounding box based on the "faceDetectionBox".
-                if (this.captureOptions.faceDetectionBox) {
-                    detectionBox?.let {
-                        if (this.captureOptions.blurFaceDetectionBox)
-                            this.graphicView.drawFaceDetectionBox(it, faceBitmap)
-                        else
-                            this.graphicView.drawBoundingBox(it)
-                    }
-                } else {
-                    this.graphicView.clear()
-                }
+                // Draw or clean the face detection box and face blur.
+                this.handleDrawFaceDetection(faceBitmap, detectionBox!!)
 
                 // Stop here if camera event listener is not set.
                 if (this.cameraEventListener == null) {
@@ -146,14 +119,12 @@ class FaceAnalyzer(
                 }
 
                 // Emit face bounding box.
-                if (detectionBox != null) {
-                    this.cameraEventListener.onFaceDetected(
-                        detectionBox.left.pxToDPI(this.context),
-                        detectionBox.top.pxToDPI(this.context),
-                        detectionBox.width().pxToDPI(this.context),
-                        detectionBox.height().pxToDPI(this.context)
-                    )
-                }
+                this.cameraEventListener.onFaceDetected(
+                    detectionBox.left.pxToDPI(this.context),
+                    detectionBox.top.pxToDPI(this.context),
+                    detectionBox.width().pxToDPI(this.context),
+                    detectionBox.height().pxToDPI(this.context)
+                )
 
                 // Continue only if current time stamp is within the interval.
                 val currentTimestamp = System.currentTimeMillis()
@@ -163,21 +134,17 @@ class FaceAnalyzer(
                 this.analyzerTimeStamp = currentTimestamp
 
                 // Computer Vision Inference.
-                var inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
-                if (this.captureOptions.computerVision.enable) {
-                    inferences = ComputerVisionController.getInferences(
-                        this.captureOptions.computerVision.modelMap,
-                        faceBitmap
-                    )
-                }
+                val inferences: ArrayList<Pair<String, FloatArray>> =
+                    if (this.captureOptions.computerVision.enable)
+                        ComputerVisionController.getInferences(this.captureOptions.computerVision.modelMap, faceBitmap)
+                    else arrayListOf()
 
                 // Save image captured.
-                var imagePath = ""
-                if (this.captureOptions.saveImageCaptured) {
-                    imagePath = this.saveImage(faceBitmap)
-                }
+                val imagePath =
+                    if (this.captureOptions.saveImageCaptured) this.handleSaveImage(faceBitmap)
+                    else ""
 
-                // Handle to emit image path and the inference.
+                // Handle to emit image path and the inferences.
                 this.handleEmitImageCaptured(imagePath, inferences)
             }
             .addOnFailureListener { e ->
@@ -189,6 +156,34 @@ class FaceAnalyzer(
                 imageProxy.close()
                 detector.close()
             }
+    }
+
+    private fun hasError(closestFace: Face?, detectionBox: RectF?): Boolean {
+
+        // Get error if exist in the closestFace or detectionBox.
+        val error = this.faceBoundingBoxController.getError(
+            closestFace,
+            detectionBox
+        )
+
+        // Emit once if exist error in the closestFace or detectionBox.
+        if (error != null) {
+            if (this.isValid) {
+                this.isValid = false
+                this.graphicView.clear()
+                if (this.cameraEventListener != null) {
+                    if (error != "") {
+                        this.cameraEventListener.onMessage(error)
+                    }
+                    this.cameraEventListener.onFaceUndetected()
+                }
+            }
+            return true
+        }
+
+        this.isValid = true
+
+        return false
     }
 
     /**
@@ -228,6 +223,38 @@ class FaceAnalyzer(
             false
         )
     }
+
+    /**
+     * Handle draw face detection box and/or the face blur;
+     *
+     * @param faceBitmap The face bitmap;
+     * @param faceDetectionBox The face bounding box within the camera frame image;
+     */
+    private fun handleDrawFaceDetection(
+        faceBitmap: Bitmap,
+        faceDetectionBox: RectF
+    ) {
+        if (
+            !this.captureOptions.faceDetectionBox &&
+            !this.captureOptions.blurFaceDetectionBox
+        ) {
+            this.graphicView.clear()
+        }
+
+        if (this.captureOptions.faceDetectionBox) {
+            this.graphicView.drawFaceDetectionBox(faceDetectionBox)
+        }
+
+        if (this.captureOptions.blurFaceDetectionBox) {
+            this.graphicView.drawFaceBlur(
+                faceDetectionBox,
+                faceBitmap
+            )
+        }
+
+        this.graphicView.postInvalidate()
+    }
+
     /**
      * Handle emit face image file created.
      *
@@ -270,41 +297,26 @@ class FaceAnalyzer(
     }
 
     /**
-     * Crop an image bitmap with a face based on the detected face rect coordinates.
+     * Handle save file image.
      *
-     * @param croppedBitmap the cropped face bitmap.
+     * @param faceBitmap the face bitmap.
      *
      * @return the image file path created.
      */
-    private fun saveImage(croppedBitmap: Bitmap): String {
+    private fun handleSaveImage(faceBitmap: Bitmap): String {
         val path = this.context.externalCacheDir.toString()
         val file = File(path, "yoonit-face-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
-        val  scaledBitmap = Bitmap.createScaledBitmap(
-            croppedBitmap,
-            this.captureOptions.imageOutputWidth,
-            this.captureOptions.imageOutputHeight,
-            false
+        faceBitmap.compress(
+            Bitmap.CompressFormat.JPEG,
+            100,
+            fileOutputStream
         )
-
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
 
         fileOutputStream.close()
 
         return file.absolutePath
-    }
-
-    private fun cropFaceBitmap(
-        imageBitmap: Bitmap,
-        rotationDegrees: Float,
-        faceRect: Rect
-    ): Bitmap {
-
-        val rotateBitmap = imageBitmap.rotate(rotationDegrees)
-        val mirroredBitmap = rotateBitmap.mirror(rotationDegrees)
-
-        return mirroredBitmap.crop(faceRect)
     }
 
     companion object {
