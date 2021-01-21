@@ -192,6 +192,43 @@ class FaceAnalyzer(
     }
 
     /**
+     * Get face bitmap:
+     *
+     * 1. Color encoding if necessary;
+     * 2. Rotate image if necessary;
+     * 3. Crop image if necessary;
+     * 4. Mirror image if necessary;
+     * 5. Scale image if necessary;
+     *
+     * @param mediaImage The camera frame image;
+     * @param closestFace The face detected bounding box;
+     * @param cameraRotation The camera rotation;
+     *
+     * @return the face bitmap.
+     */
+    private fun getFaceBitmap(
+        mediaImage: Image,
+        closestFace: Face,
+        cameraRotation: Float
+    ): Bitmap {
+
+        val colorEncodedBitmap: Bitmap =
+            if (this.captureOptions.colorEncoding == "YUV") mediaImage.toYUVBitmap()
+            else mediaImage.toRGBBitmap(context)
+
+        val faceBitmap: Bitmap = colorEncodedBitmap
+            .rotate(cameraRotation)
+            .crop(closestFace.boundingBox)
+            .mirror(cameraRotation)
+
+        return Bitmap.createScaledBitmap(
+            faceBitmap,
+            this.captureOptions.imageOutputWidth,
+            this.captureOptions.imageOutputHeight,
+            false
+        )
+    }
+    /**
      * Handle emit face image file created.
      *
      * @param imagePath The image file path.
