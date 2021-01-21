@@ -12,45 +12,63 @@
 package ai.cyberlabs.yoonit.camera
 
 import ai.cyberlabs.yoonit.camera.utils.BlurBuilder
-import ai.cyberlabs.yoonit.camera.utils.crop
-import ai.cyberlabs.yoonit.camera.utils.mirror
-import ai.cyberlabs.yoonit.camera.utils.rotate
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
 /**
- * Custom view to bind face bounding box to the preview view.
+ * Custom view to draw face detection box and face blurred.
  */
 class CameraGraphicView constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private var boundingBox: RectF? = null
+    // The face detection box within the graphic view.
+    private var faceDetectionBox: RectF? = null
+        set(value) {
+            this.drawFaceDetectionBox = value != null
+            field = value
+        }
+    private var drawFaceDetectionBox: Boolean = false
 
-    private var imageBitmap: Bitmap? = null
+    // The face bitmap.
+    private var faceBlurBitmap: Bitmap? = null
+        set(value) {
+            this.drawFaceBlurBitmap = value != null
+            field = value
+        }
+    private var drawFaceBlurBitmap: Boolean = false
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
-        boundingBox?.let {
+        if (this.faceBlurBitmap != null && this.drawFaceBlurBitmap) {
+            val faceBlurredBitmap: Bitmap = BlurBuilder.blur(
+                this.context,
+                this.faceBlurBitmap!!
+            )
 
-            imageBitmap?.let {bitmap ->
-                canvas.drawBitmap(BlurBuilder.blur(context, bitmap), null, it, null)
-            }
+            canvas.drawBitmap(
+                faceBlurredBitmap,
+                null,
+                this.faceDetectionBox!!,
+                null
+            )
+        }
 
-            canvas.drawRect(it, FACE_BOUNDING_BOX_PAINT)
+        if (this.faceDetectionBox != null && this.drawFaceDetectionBox) {
+            canvas.drawRect(this.faceDetectionBox!!, FACE_BOUNDING_BOX_PAINT)
 
-            val left: Float = it.left
-            val top: Float = it.top
-            val right: Float = left + it.width()
-            val bottom: Float = top + it.height()
-            val toBottom = top + (it.height() * 0.3).toFloat()
-            val toTop = top + (it.height() * 0.7).toFloat()
-            val toRight = left + (it.width() * 0.3).toFloat()
-            val toLeft = left + (it.width() * 0.7).toFloat()
+            val left: Float = this.faceDetectionBox!!.left
+            val top: Float = this.faceDetectionBox!!.top
+            val right: Float = left + this.faceDetectionBox!!.width()
+            val bottom: Float = top + this.faceDetectionBox!!.height()
+            val toBottom = top + (this.faceDetectionBox!!.height() * 0.3).toFloat()
+            val toTop = top + (this.faceDetectionBox!!.height() * 0.7).toFloat()
+            val toRight = left + (this.faceDetectionBox!!.width() * 0.3).toFloat()
+            val toLeft = left + (this.faceDetectionBox!!.width() * 0.7).toFloat()
 
             // edge - top-left > bottom-left
             canvas.drawLine(left, top, left, toBottom, FACE_BOUNDING_BOX_LINE_PAINT)
@@ -69,35 +87,34 @@ class CameraGraphicView constructor(
             // edge - bottom-right > right-left
             canvas.drawLine(right, bottom, toLeft, bottom, FACE_BOUNDING_BOX_LINE_PAINT)
         }
-
     }
 
     /**
-     * Draw white face bounding box.
+     * Draw white face detection box.
      *
-     * @param boundingBox the face coordinates detected.
+     * @param faceDetectionBox the face coordinates within the graphic view.
      */
-    fun drawBoundingBox(boundingBox: RectF) {
-        this.boundingBox = boundingBox
-
-        this.imageBitmap = null
-
-        this.postInvalidate()
+    fun drawFaceDetectionBox(faceDetectionBox: RectF) {
+        this.faceDetectionBox = faceDetectionBox
     }
 
-    fun drawFaceDetectionBox(boundingBox: RectF, imageBitmap: Bitmap) {
-        this.boundingBox = boundingBox
-
-        this.imageBitmap = imageBitmap
-
-        this.postInvalidate()
+    /**
+     * Draw face bitmap blurred above the face detection box.
+     *
+     * @param faceDetectionBox The face coordinates within the graphic view.
+     * @param faceBlurBitmap The face bitmap.
+     */
+    fun drawFaceBlur(faceDetectionBox: RectF, faceBlurBitmap: Bitmap) {
+        this.faceDetectionBox = faceDetectionBox
+        this.faceBlurBitmap = faceBlurBitmap
     }
 
     /**
      * Erase anything draw.
      */
     fun clear() {
-        this.boundingBox = null
+        this.faceDetectionBox = null
+        this.faceBlurBitmap = null
 
         this.postInvalidate()
     }
