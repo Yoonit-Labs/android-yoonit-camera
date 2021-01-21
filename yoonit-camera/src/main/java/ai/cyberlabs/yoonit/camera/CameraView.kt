@@ -51,6 +51,8 @@ open class CameraView @JvmOverloads constructor(
             true
         )
 
+        graphicView.captureOptions = this.captureOptions
+
         this.cameraController = CameraController(
             context,
             previewView,

@@ -207,9 +207,10 @@ class FaceAnalyzer(
         cameraRotation: Float
     ): Bitmap {
 
-        val colorEncodedBitmap: Bitmap =
-            if (this.captureOptions.colorEncoding == "YUV") mediaImage.toYUVBitmap()
-            else mediaImage.toRGBBitmap(context)
+        val colorEncodedBitmap: Bitmap = when(this.captureOptions.colorEncoding) {
+            "YUV" -> mediaImage.toYUVBitmap()
+            else -> mediaImage.toRGBBitmap(context)
+        }
 
         val faceBitmap: Bitmap = colorEncodedBitmap
             .rotate(cameraRotation)
