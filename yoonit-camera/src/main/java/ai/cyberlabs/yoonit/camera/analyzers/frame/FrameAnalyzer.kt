@@ -16,6 +16,8 @@ import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.mirror
+import ai.cyberlabs.yoonit.camera.utils.rotate
 import ai.cyberlabs.yoonit.camera.utils.toRGBBitmap
 import ai.cyberlabs.yoonit.camera.utils.toYUVBitmap
 import android.annotation.SuppressLint
@@ -74,7 +76,7 @@ class FrameAnalyzer(
                 // Save image captured.
                 var imagePath = ""
                 if (this.captureOptions.saveImageCaptured) {
-                    imagePath = this.saveImage(
+                    imagePath = this.handleSaveImage(
                         frameBitmap,
                         imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
@@ -165,36 +167,29 @@ class FrameAnalyzer(
     }
 
     /**
-     *
+     * Handle save file image.
      *
      * @param mediaBitmap the original image bitmap.
      * @param rotationDegrees the rotation degrees to turn the image to portrait.
      * @return the image file path created.
      */
-    private fun saveImage(mediaBitmap: Bitmap, rotationDegrees: Float): String {
+    private fun handleSaveImage(
+        mediaBitmap: Bitmap,
+        rotationDegrees: Float
+    ): String {
+
         val path = this.context.externalCacheDir.toString()
         val file = File(path, "yoonit-frame-".plus(this.numberOfImages).plus(".jpg"))
         val fileOutputStream = FileOutputStream(file)
 
-        val matrix = Matrix()
-        matrix.postRotate(rotationDegrees)
-
-        if (rotationDegrees == 270.0f) {
-            matrix.preScale(1.0f, -1.0f)
-        }
-
-        val rotateBitmap =
-            Bitmap.createBitmap(
-                mediaBitmap,
-                0,
-                0,
-                mediaBitmap.width,
-                mediaBitmap.height,
-                matrix,
-                false
+        mediaBitmap
+            .rotate(rotationDegrees)
+            .mirror(rotationDegrees)
+            .compress(
+                Bitmap.CompressFormat.JPEG,
+                100,
+                fileOutputStream
             )
-
-        rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
 
         fileOutputStream.close()
 
