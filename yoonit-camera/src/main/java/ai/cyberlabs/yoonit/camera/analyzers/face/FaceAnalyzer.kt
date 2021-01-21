@@ -134,7 +134,7 @@ class FaceAnalyzer(
                 this.analyzerTimeStamp = currentTimestamp
 
                 // Computer Vision Inference.
-                val inferences: ArrayList<Pair<String, FloatArray>> =
+                val inferences: ArrayList<android.util.Pair<String, FloatArray>> =
                     if (this.captureOptions.computerVision.enable)
                         ComputerVisionController.getInferences(this.captureOptions.computerVision.modelMap, faceBitmap)
                     else arrayListOf()
@@ -264,7 +264,7 @@ class FaceAnalyzer(
      */
     private fun handleEmitImageCaptured(
         imagePath: String,
-        inferences: ArrayList<Pair<String, FloatArray>>
+        inferences: ArrayList<android.util.Pair<String, FloatArray>>
     ) {
 
         // process face number of images.

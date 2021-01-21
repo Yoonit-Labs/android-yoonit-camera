@@ -282,7 +282,7 @@ class MainActivity : AppCompatActivity() {
             count: Int,
             total: Int,
             imagePath: String,
-            inferences: ArrayList<Pair<String, FloatArray>>
+            inferences: ArrayList<android.util.Pair<String, FloatArray>>
         ) {
             Log.d(TAG, "onImageCaptured . . . . . . . . . . . . . . . . . . . . . . . . .")
 

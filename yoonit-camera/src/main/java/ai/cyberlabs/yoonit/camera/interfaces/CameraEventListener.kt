@@ -18,7 +18,7 @@ interface CameraEventListener {
         count: Int,
         total: Int,
         imagePath: String,
-        inferences: ArrayList<Pair<String, FloatArray>>
+        inferences: ArrayList<android.util.Pair<String, FloatArray>>
     )
 
     fun onFaceDetected(x: Int, y: Int, width: Int, height: Int)

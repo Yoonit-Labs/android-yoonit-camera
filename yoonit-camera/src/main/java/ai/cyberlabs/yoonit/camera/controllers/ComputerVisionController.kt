@@ -41,9 +41,9 @@ class ComputerVisionController {
         fun getInferences(
             moduleMap: MutableMap<String, Module>,
             bitmap: Bitmap
-        ): ArrayList<Pair<String, FloatArray>> {
+        ): ArrayList<android.util.Pair<String, FloatArray>> {
 
-            val inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
+            val inferences: ArrayList<android.util.Pair<String, FloatArray>> = arrayListOf()
 
             val scaledBitmap: Bitmap = Bitmap.createScaledBitmap(
                 bitmap,
@@ -55,7 +55,7 @@ class ComputerVisionController {
             for (module in moduleMap) {
                 val results: FloatArray? = this.getInference(module.value, scaledBitmap)
 
-                val inference: Pair<String, FloatArray> = Pair(
+                val inference: android.util.Pair<String, FloatArray> = android.util.Pair(
                     module.key,
                     results ?: return arrayListOf()
                 )

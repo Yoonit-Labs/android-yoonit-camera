@@ -23,7 +23,6 @@ import ai.cyberlabs.yoonit.camera.utils.toYUVBitmap
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.os.Handler
 import android.os.Looper
 import androidx.camera.core.ImageAnalysis
@@ -65,7 +64,7 @@ class FrameAnalyzer(
                 }
 
                 // Computer Vision Inference.
-                var inferences: ArrayList<Pair<String, FloatArray>> = arrayListOf()
+                var inferences: ArrayList<android.util.Pair<String, FloatArray>> = arrayListOf()
                 if (this.captureOptions.computerVision.enable) {
                     inferences = ComputerVisionController.getInferences(
                         this.captureOptions.computerVision.modelMap,
@@ -133,7 +132,7 @@ class FrameAnalyzer(
      */
     private fun handleEmitImageCaptured(
         imagePath: String,
-        inferences: ArrayList<Pair<String, FloatArray>>
+        inferences: ArrayList<android.util.Pair<String, FloatArray>>
     ) {
 
         // process face number of images.
