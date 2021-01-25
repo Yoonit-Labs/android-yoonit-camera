@@ -15,6 +15,7 @@ import ai.cyberlabs.yoonit.camera.controllers.CameraController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -232,6 +233,28 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceDetectionBox(enable: Boolean) {
         this.captureOptions.faceDetectionBox = enable
+    }
+
+    /**
+     * Set to show/hide face landmarks when face detected.
+     *
+     * @param enable The indicator to show or hide the face landmarks.
+     * Default value is true.
+     */
+    fun setLandmarksDetection(enable: Boolean) {
+        this.captureOptions.faceLandmarks = enable
+    }
+
+    /**
+     * Set face landmarks color.
+     *
+     * @param red Integer that represent red color.
+     * @param green Integer that represent green color.
+     * @param blue Integer that represent blue color.
+     * Default value is 255, 255, 255 (white color).
+     */
+    fun setFaceLandmarksColor(red: Int, green: Int, blue: Int) {
+        this.captureOptions.faceLandmarksColor = Color.argb(100, red, green, blue)
     }
 
     /**

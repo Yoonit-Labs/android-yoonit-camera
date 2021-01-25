@@ -98,6 +98,8 @@ class FaceAnalyzer(
                     image
                 )
 
+                val facePoints = this.faceBoundingBoxController.getDetectionPoints(closestFace, image)
+
                 // Verify if has error on the closestFace and detectionBox.
                 if (this.hasError(closestFace, detectionBox)) {
                     return@addOnSuccessListener
@@ -111,7 +113,7 @@ class FaceAnalyzer(
                 )
 
                 // Draw or clean the face detection box and face blur.
-                this.handleDrawFaceDetection(faceBitmap, detectionBox!!)
+                this.handleDrawFaceDetection(faceBitmap, detectionBox!!, facePoints!!)
 
                 // Stop here if camera event listener is not set.
                 if (this.cameraEventListener == null) {
@@ -233,7 +235,8 @@ class FaceAnalyzer(
      */
     private fun handleDrawFaceDetection(
         faceBitmap: Bitmap,
-        faceDetectionBox: RectF
+        faceDetectionBox: RectF,
+        facePoints: MutableList<PointF>
     ) {
         if (
             !this.captureOptions.faceDetectionBox &&
@@ -251,6 +254,10 @@ class FaceAnalyzer(
                 faceDetectionBox,
                 faceBitmap
             )
+        }
+
+        if (this.captureOptions.faceLandmarks) {
+            this.graphicView.drawFaceLandmarks(facePoints)
         }
 
         this.graphicView.postInvalidate()

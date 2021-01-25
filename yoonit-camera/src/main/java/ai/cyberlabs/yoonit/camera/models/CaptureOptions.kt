@@ -12,6 +12,7 @@
 package ai.cyberlabs.yoonit.camera.models
 
 import ai.cyberlabs.yoonit.camera.CaptureType
+import android.graphics.Color
 import androidx.camera.core.CameraSelector
 
 /**
@@ -49,6 +50,9 @@ data class CaptureOptions(
     // Draw the face detection box.
     var faceDetectionBox: Boolean = false,
 
+    // Draw the face detection box.
+    var faceLandmarks: Boolean = false,
+
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f,
 
@@ -57,6 +61,9 @@ data class CaptureOptions(
 
     // Color encoding of the saved image
     var colorEncoding: String = "RGB",
+
+    // Face landmarks color
+    var faceLandmarksColor: Int = Color.WHITE,
 
     /**
      * Limit the minimum face capture size.

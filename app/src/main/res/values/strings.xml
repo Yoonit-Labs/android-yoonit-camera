@@ -3,6 +3,7 @@
     <string name="start_label">START</string>
     <string name="stop">STOP</string>
     <string name="face_box">Face Box</string>
+    <string name="face_points">Face Points</string>
     <string name="camera_lens">CAMERA LENS:</string>
     <string name="color_encoding">COLOR ENCODING:</string>
     <string name="rgb_encoding">RGB</string>

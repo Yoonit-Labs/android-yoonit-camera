@@ -5,6 +5,7 @@ import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.utils.resize
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
+import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import com.google.mlkit.vision.common.InputImage
@@ -130,6 +131,57 @@ class FaceBoundingBoxController(
         val bottom = y + this.scale(boundingBox.height() / 2.0f, scaleFactor)
 
         return RectF(left, top, right, bottom)
+    }
+
+    fun getDetectionPoints(face: Face?, cameraInputImage: InputImage): MutableList<PointF>? {
+        if (face == null) {
+            return null
+        }
+
+        val imageHeight = cameraInputImage.height.toFloat()
+        val imageWidth = cameraInputImage.width.toFloat()
+
+        if (imageHeight <= 0 || imageWidth <= 0) {
+            return null
+        }
+
+        val viewAspectRatio: Float =
+                this.graphicView.width.toFloat() / this.graphicView.height.toFloat()
+        val imageAspectRatio: Float = imageHeight / imageWidth
+
+        var postScaleWidthOffset = 0f
+        var postScaleHeightOffset = 0f
+        val scaleFactor: Float
+
+        if (viewAspectRatio > imageAspectRatio) {
+            // The image needs to be vertically cropped to be displayed in this view.
+            scaleFactor = this.graphicView.width.toFloat() / imageHeight
+            postScaleHeightOffset =
+                    (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
+        } else {
+            // The image needs to be horizontally cropped to be displayed in this view.
+            scaleFactor = this.graphicView.height.toFloat() / imageWidth
+            postScaleWidthOffset =
+                    ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
+        }
+
+        val facePoints = mutableListOf<PointF>()
+
+        face.allContours.forEach {
+            it.points.forEach {point ->
+                val x = if (cameraInputImage.rotationDegrees == 90) {
+                    this.scale(point.x, scaleFactor) - postScaleWidthOffset
+                } else {
+                    this.graphicView.width - (this.scale(point.x, scaleFactor) - postScaleWidthOffset)
+                }
+
+                val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
+
+                facePoints.add(PointF(x,y))
+            }
+        }
+
+        return facePoints
     }
 
     /**
