@@ -142,6 +142,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onFacePointSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val checked = view.isChecked
+            this.cameraView.setFaceContours(checked)
+        }
+    }
+
     fun onImageSaveSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked

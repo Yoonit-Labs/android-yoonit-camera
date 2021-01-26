@@ -34,6 +34,9 @@ class CameraGraphicView constructor(
     // The face bitmap.
     private var faceBlurBitmap: Bitmap? = null
 
+    // The face contours within the graphic view.
+    private var faceContours: MutableList<PointF>? = null
+
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
@@ -48,6 +51,21 @@ class CameraGraphicView constructor(
                     this.faceDetectionBox!!,
                     null
                 )
+            }
+        }
+
+        // Draw face contours.
+        this.faceContours?.let {
+            faceContours ->
+
+            faceContours.forEach {
+                point ->
+
+                canvas.drawPoint(point.x, point.y, Paint().apply {
+                    this.color = captureOptions.faceContoursColor
+                    this.style = Paint.Style.STROKE
+                    this.strokeWidth = 5.0f
+                })
             }
         }
 
@@ -94,6 +112,15 @@ class CameraGraphicView constructor(
      */
     fun drawFaceDetectionBox(faceDetectionBox: RectF) {
         this.faceDetectionBox = faceDetectionBox
+    }
+
+    /**
+     * Draw white face detection points.
+     *
+     * @param faceContours the face coordinates within the graphic view.
+     */
+    fun drawFaceContours(faceContours: MutableList<PointF>) {
+        this.faceContours = faceContours
     }
 
     /**

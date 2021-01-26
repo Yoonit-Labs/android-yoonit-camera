@@ -49,7 +49,7 @@ class FaceAnalyzer(
     /**
      * Responsible to manipulate everything related with the face bounding box.
      */
-    private val faceBoundingBoxController = FaceBoundingBoxController(
+    private val faceCoordinatesController = FaceCoordinatesController(
         this.graphicView,
         this.captureOptions
     )
@@ -89,11 +89,11 @@ class FaceAnalyzer(
                 // Get closest face.
                 // Can be null if no face found.
                 // Used to crop the face image.
-                val closestFace: Face? = this.faceBoundingBoxController.getClosestFace(faces)
+                val closestFace: Face? = this.faceCoordinatesController.getClosestFace(faces)
 
                 // Transform the camera face coordinates to UI graphic coordinates.
                 // Used to draw the face detection box.
-                val detectionBox = this.faceBoundingBoxController.getDetectionBox(
+                val detectionBox = this.faceCoordinatesController.getDetectionBox(
                     closestFace,
                     image
                 )
@@ -103,6 +103,10 @@ class FaceAnalyzer(
                     return@addOnSuccessListener
                 }
 
+                // Transform the camera face contour points to UI graphic coordinates.
+                // Used to draw the face contours.
+                val faceContours = this.faceCoordinatesController.getFaceContours(closestFace, image)
+
                 // Get face bitmap.
                 val faceBitmap: Bitmap = this.getFaceBitmap(
                     mediaImage,
@@ -111,7 +115,7 @@ class FaceAnalyzer(
                 )
 
                 // Draw or clean the face detection box and face blur.
-                this.handleDrawFaceDetection(faceBitmap, detectionBox!!)
+                this.handleDraw(faceBitmap, detectionBox!!, faceContours!!)
 
                 // Stop here if camera event listener is not set.
                 if (this.cameraEventListener == null) {
@@ -161,7 +165,7 @@ class FaceAnalyzer(
     private fun hasError(closestFace: Face?, detectionBox: RectF?): Boolean {
 
         // Get error if exist in the closestFace or detectionBox.
-        val error = this.faceBoundingBoxController.getError(
+        val error = this.faceCoordinatesController.getError(
             closestFace,
             detectionBox
         )
@@ -231,13 +235,15 @@ class FaceAnalyzer(
      * @param faceBitmap The face bitmap;
      * @param faceDetectionBox The face bounding box within the camera frame image;
      */
-    private fun handleDrawFaceDetection(
-        faceBitmap: Bitmap,
-        faceDetectionBox: RectF
+    private fun handleDraw(
+            faceBitmap: Bitmap,
+            faceDetectionBox: RectF,
+            faceContours: MutableList<PointF>
     ) {
         if (
             !this.captureOptions.faceDetectionBox &&
-            !this.captureOptions.blurFaceDetectionBox
+            !this.captureOptions.blurFaceDetectionBox &&
+            !this.captureOptions.faceContours
         ) {
             this.graphicView.clear()
         }
@@ -251,6 +257,10 @@ class FaceAnalyzer(
                 faceDetectionBox,
                 faceBitmap
             )
+        }
+
+        if (this.captureOptions.faceContours) {
+            this.graphicView.drawFaceContours(faceContours)
         }
 
         this.graphicView.postInvalidate()

@@ -15,6 +15,7 @@ import ai.cyberlabs.yoonit.camera.controllers.CameraController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -231,6 +232,37 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceDetectionBox(enable: Boolean) {
         this.captureOptions.faceDetectionBox = enable
+    }
+
+    /**
+     * Set to show/hide face contours when face detected.
+     *
+     * @param enable The indicator to show or hide the face landmarks.
+     * Default value is true.
+     */
+    fun setFaceContours(enable: Boolean) {
+        this.captureOptions.faceContours = enable
+    }
+
+    /**
+     * Set face contours color.
+     *
+     * @param red Integer that represent red color.
+     * @param green Integer that represent green color.
+     * @param blue Integer that represent blue color.
+     * Default value is 255, 255, 255 (white color).
+     */
+    fun setFaceContoursColor(alpha: Int, red: Int, green: Int, blue: Int) {
+        if (
+                alpha < 0 || alpha > 255 ||
+                red < 0 || red > 255 ||
+                green < 0 || green > 255 ||
+                blue < 0 || blue > 255
+        ) {
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_CONTOURS_COLOR)
+        }
+
+        this.captureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
     }
 
     /**
