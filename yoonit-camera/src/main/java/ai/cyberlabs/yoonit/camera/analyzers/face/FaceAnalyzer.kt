@@ -49,7 +49,7 @@ class FaceAnalyzer(
     /**
      * Responsible to manipulate everything related with the face bounding box.
      */
-    private val faceBoundingBoxController = FaceCoordinatesController(
+    private val faceCoordinatesController = FaceCoordinatesController(
         this.graphicView,
         this.captureOptions
     )
@@ -89,11 +89,11 @@ class FaceAnalyzer(
                 // Get closest face.
                 // Can be null if no face found.
                 // Used to crop the face image.
-                val closestFace: Face? = this.faceBoundingBoxController.getClosestFace(faces)
+                val closestFace: Face? = this.faceCoordinatesController.getClosestFace(faces)
 
                 // Transform the camera face coordinates to UI graphic coordinates.
                 // Used to draw the face detection box.
-                val detectionBox = this.faceBoundingBoxController.getDetectionBox(
+                val detectionBox = this.faceCoordinatesController.getDetectionBox(
                     closestFace,
                     image
                 )
@@ -104,8 +104,8 @@ class FaceAnalyzer(
                 }
 
                 // Transform the camera face contour points to UI graphic coordinates.
-                // Used to draw the face countours.
-                val faceContours = this.faceBoundingBoxController.getFaceContours(closestFace, image)
+                // Used to draw the face contours.
+                val faceContours = this.faceCoordinatesController.getFaceContours(closestFace, image)
 
                 // Get face bitmap.
                 val faceBitmap: Bitmap = this.getFaceBitmap(
@@ -165,7 +165,7 @@ class FaceAnalyzer(
     private fun hasError(closestFace: Face?, detectionBox: RectF?): Boolean {
 
         // Get error if exist in the closestFace or detectionBox.
-        val error = this.faceBoundingBoxController.getError(
+        val error = this.faceCoordinatesController.getError(
             closestFace,
             detectionBox
         )
@@ -260,7 +260,7 @@ class FaceAnalyzer(
         }
 
         if (this.captureOptions.faceContours) {
-            this.graphicView.drawFaceLandmarks(faceContours)
+            this.graphicView.drawFaceContours(faceContours)
         }
 
         this.graphicView.postInvalidate()

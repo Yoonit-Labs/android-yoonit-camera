@@ -252,8 +252,17 @@ open class CameraView @JvmOverloads constructor(
      * @param blue Integer that represent blue color.
      * Default value is 255, 255, 255 (white color).
      */
-    fun setFaceContoursColor(red: Int, green: Int, blue: Int) {
-        this.captureOptions.faceContoursColor = Color.argb(100, red, green, blue)
+    fun setFaceContoursColor(alpha: Int, red: Int, green: Int, blue: Int) {
+        if (
+                alpha < 0 || alpha > 255 ||
+                red < 0 || red > 255 ||
+                green < 0 || green > 255 ||
+                blue < 0 || blue > 255
+        ) {
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_CONTOURS_COLOR)
+        }
+
+        this.captureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
     }
 
     /**
