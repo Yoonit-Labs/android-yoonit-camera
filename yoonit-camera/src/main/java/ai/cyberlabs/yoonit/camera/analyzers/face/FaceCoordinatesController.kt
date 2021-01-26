@@ -15,7 +15,7 @@ import kotlin.math.max
 /**
  * Responsible to manipulate everything related with the face bounding box.
  */
-class FaceBoundingBoxController(
+class FaceCoordinatesController(
     private val graphicView: CameraGraphicView,
     private val captureOptions: CaptureOptions
 ) {
@@ -133,7 +133,7 @@ class FaceBoundingBoxController(
         return RectF(left, top, right, bottom)
     }
 
-    fun getDetectionPoints(face: Face?, cameraInputImage: InputImage): MutableList<PointF>? {
+    fun getFaceContours(face: Face?, cameraInputImage: InputImage): MutableList<PointF>? {
         if (face == null) {
             return null
         }
@@ -165,10 +165,10 @@ class FaceBoundingBoxController(
                     ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
         }
 
-        val facePoints = mutableListOf<PointF>()
+        val faceContours = mutableListOf<PointF>()
 
-        face.allContours.forEach {
-            it.points.forEach {point ->
+        face.allContours.forEach {faceContour ->
+            faceContour.points.forEach {point ->
                 val x = if (cameraInputImage.rotationDegrees == 90) {
                     this.scale(point.x, scaleFactor) - postScaleWidthOffset
                 } else {
@@ -177,11 +177,11 @@ class FaceBoundingBoxController(
 
                 val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
 
-                facePoints.add(PointF(x,y))
+                faceContours.add(PointF(x,y))
             }
         }
 
-        return facePoints
+        return faceContours
     }
 
     /**

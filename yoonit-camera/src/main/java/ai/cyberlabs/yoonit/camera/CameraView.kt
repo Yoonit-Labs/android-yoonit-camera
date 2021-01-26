@@ -235,25 +235,25 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set to show/hide face landmarks when face detected.
+     * Set to show/hide face contours when face detected.
      *
      * @param enable The indicator to show or hide the face landmarks.
      * Default value is true.
      */
-    fun setLandmarksDetection(enable: Boolean) {
-        this.captureOptions.faceLandmarks = enable
+    fun setFaceContours(enable: Boolean) {
+        this.captureOptions.faceContours = enable
     }
 
     /**
-     * Set face landmarks color.
+     * Set face contours color.
      *
      * @param red Integer that represent red color.
      * @param green Integer that represent green color.
      * @param blue Integer that represent blue color.
      * Default value is 255, 255, 255 (white color).
      */
-    fun setFaceLandmarksColor(red: Int, green: Int, blue: Int) {
-        this.captureOptions.faceLandmarksColor = Color.argb(100, red, green, blue)
+    fun setFaceContoursColor(red: Int, green: Int, blue: Int) {
+        this.captureOptions.faceContoursColor = Color.argb(100, red, green, blue)
     }
 
     /**

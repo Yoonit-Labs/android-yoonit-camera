@@ -16,14 +16,11 @@ import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
@@ -148,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     fun onFacePointSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setLandmarksDetection(checked)
+            this.cameraView.setFaceContours(checked)
         }
     }
 

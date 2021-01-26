@@ -60,7 +60,7 @@ class CameraGraphicView constructor(
                 point ->
 
                 canvas.drawPoint(point.x, point.y, Paint().apply {
-                    this.color = captureOptions.faceLandmarksColor
+                    this.color = captureOptions.faceContoursColor
                     this.style = Paint.Style.STROKE
                     this.strokeWidth = 5.0f
                 })

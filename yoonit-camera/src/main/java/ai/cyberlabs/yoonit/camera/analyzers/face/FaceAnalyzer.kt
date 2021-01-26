@@ -49,7 +49,7 @@ class FaceAnalyzer(
     /**
      * Responsible to manipulate everything related with the face bounding box.
      */
-    private val faceBoundingBoxController = FaceBoundingBoxController(
+    private val faceBoundingBoxController = FaceCoordinatesController(
         this.graphicView,
         this.captureOptions
     )
@@ -98,12 +98,14 @@ class FaceAnalyzer(
                     image
                 )
 
-                val facePoints = this.faceBoundingBoxController.getDetectionPoints(closestFace, image)
-
                 // Verify if has error on the closestFace and detectionBox.
                 if (this.hasError(closestFace, detectionBox)) {
                     return@addOnSuccessListener
                 }
+
+                // Transform the camera face contour points to UI graphic coordinates.
+                // Used to draw the face countours.
+                val faceContours = this.faceBoundingBoxController.getFaceContours(closestFace, image)
 
                 // Get face bitmap.
                 val faceBitmap: Bitmap = this.getFaceBitmap(
@@ -113,7 +115,7 @@ class FaceAnalyzer(
                 )
 
                 // Draw or clean the face detection box and face blur.
-                this.handleDrawFaceDetection(faceBitmap, detectionBox!!, facePoints!!)
+                this.handleDraw(faceBitmap, detectionBox!!, faceContours!!)
 
                 // Stop here if camera event listener is not set.
                 if (this.cameraEventListener == null) {
@@ -233,14 +235,15 @@ class FaceAnalyzer(
      * @param faceBitmap The face bitmap;
      * @param faceDetectionBox The face bounding box within the camera frame image;
      */
-    private fun handleDrawFaceDetection(
-        faceBitmap: Bitmap,
-        faceDetectionBox: RectF,
-        facePoints: MutableList<PointF>
+    private fun handleDraw(
+            faceBitmap: Bitmap,
+            faceDetectionBox: RectF,
+            faceContours: MutableList<PointF>
     ) {
         if (
             !this.captureOptions.faceDetectionBox &&
-            !this.captureOptions.blurFaceDetectionBox
+            !this.captureOptions.blurFaceDetectionBox &&
+            !this.captureOptions.faceContours
         ) {
             this.graphicView.clear()
         }
@@ -256,8 +259,8 @@ class FaceAnalyzer(
             )
         }
 
-        if (this.captureOptions.faceLandmarks) {
-            this.graphicView.drawFaceLandmarks(facePoints)
+        if (this.captureOptions.faceContours) {
+            this.graphicView.drawFaceLandmarks(faceContours)
         }
 
         this.graphicView.postInvalidate()
