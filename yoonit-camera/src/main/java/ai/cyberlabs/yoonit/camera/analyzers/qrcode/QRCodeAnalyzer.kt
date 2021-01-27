@@ -75,7 +75,7 @@ class QRCodeAnalyzer(
                 this.cameraEventListener.onQRCodeScanned(rawValue)
             }
             .addOnFailureListener { e ->
-                if (this.cameraEventListener != null) {
+                this.cameraEventListener?.let {
                     this.cameraEventListener.onError(e.toString())
                 }
             }

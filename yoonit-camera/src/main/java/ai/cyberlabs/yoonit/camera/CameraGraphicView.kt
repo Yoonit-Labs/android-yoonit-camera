@@ -26,8 +26,6 @@ class CameraGraphicView constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    lateinit var captureOptions: CaptureOptions
-
     // The face detection box within the graphic view.
     private var faceDetectionBox: RectF? = null
 
@@ -44,15 +42,20 @@ class CameraGraphicView constructor(
         this.faceBlurBitmap?.let {
             faceBlurBitmap ->
 
-            if (this.captureOptions.blurFaceDetectionBox) {
-                canvas.drawBitmap(
-                    faceBlurBitmap,
-                    null,
-                    this.faceDetectionBox!!,
-                    null
-                )
+            if (CaptureOptions.blurFaceDetectionBox) {
+                this.faceDetectionBox?.let { detectionBox->
+                    canvas.drawBitmap(
+                            faceBlurBitmap,
+                            null,
+                            detectionBox,
+                            null
+                    )
+                }
+
             }
         }
+
+        CaptureOptions.colorEncoding
 
         // Draw face contours.
         this.faceContours?.let {
@@ -62,7 +65,7 @@ class CameraGraphicView constructor(
                 point ->
 
                 canvas.drawPoint(point.x, point.y, Paint().apply {
-                    this.color = captureOptions.faceContoursColor
+                    this.color = CaptureOptions.faceContoursColor
                     this.style = Paint.Style.STROKE
                     this.strokeWidth = 5.0f
                 })
@@ -73,7 +76,7 @@ class CameraGraphicView constructor(
         this.faceDetectionBox?.let {
             faceDetectionBox ->
 
-            if (this.captureOptions.faceDetectionBox) {
+            if (CaptureOptions.faceDetectionBox) {
                 canvas.drawRect(this.faceDetectionBox!!, FACE_BOUNDING_BOX_PAINT)
 
                 val left: Float = faceDetectionBox.left

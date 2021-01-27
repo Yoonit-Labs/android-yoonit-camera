@@ -36,8 +36,7 @@ import androidx.lifecycle.LifecycleOwner
 class CameraController(
     private val context: Context,
     private val previewView: PreviewView,
-    private val graphicView: CameraGraphicView,
-    private val captureOptions: CaptureOptions
+    private val graphicView: CameraGraphicView
 ) : CameraCallback {
 
     // Camera interface event listeners object.
@@ -68,7 +67,7 @@ class CameraController(
 
         // Emit permission denied if do not has permission.
         if (!this.isAllPermissionsGranted()) {
-            if (this.cameraEventListener != null) {
+            this.cameraEventListener?.let {
                 this.cameraEventListener!!.onPermissionDenied()
             }
             return
@@ -86,7 +85,7 @@ class CameraController(
 
                     this.buildCameraPreview()
                 } catch (e: Exception) {
-                    if (this.cameraEventListener != null) {
+                    this.cameraEventListener?.let {
                         this.cameraEventListener!!.onError(e.toString())
                     }
                 }
@@ -99,7 +98,7 @@ class CameraController(
      * Stop camera image analyzer and clear drawings.
      */
     fun stopAnalyzer() {
-        this.captureOptions.type = CaptureType.NONE
+        CaptureOptions.type = CaptureType.NONE
 
         this.imageAnalyzerController.stop()
     }
@@ -122,38 +121,36 @@ class CameraController(
      */
     fun startCaptureType() {
         // If camera preview already is running, re-build camera preview.
-        if (this.cameraProviderProcess != null) {
+        this.cameraProviderProcess?.let {
             this.imageAnalyzerController.stop()
 
-            when(this.captureOptions.type) {
+            when(CaptureOptions.type) {
 
                 CaptureType.FACE -> {
                     this.imageAnalyzerController.start(
-                        FaceAnalyzer(
-                            this.context,
-                            this.cameraEventListener,
-                            this.graphicView,
-                            this.captureOptions,
-                            this as CameraCallback
-                        )
+                            FaceAnalyzer(
+                                    this.context,
+                                    this.cameraEventListener,
+                                    this.graphicView,
+                                    this as CameraCallback
+                            )
                     )
                 }
 
                 CaptureType.QRCODE -> this.imageAnalyzerController.start(
-                    QRCodeAnalyzer(
-                        this.cameraEventListener,
-                        this.graphicView
-                    )
+                        QRCodeAnalyzer(
+                                this.cameraEventListener,
+                                this.graphicView
+                        )
                 )
 
                 CaptureType.FRAME -> this.imageAnalyzerController.start(
-                    FrameAnalyzer(
-                        this.context,
-                        this.cameraEventListener,
-                        this.captureOptions,
-                        this.graphicView,
-                        this as CameraCallback
-                    )
+                        FrameAnalyzer(
+                                this.context,
+                                this.cameraEventListener,
+                                this.graphicView,
+                                this as CameraCallback
+                        )
                 )
 
                 CaptureType.NONE -> this.stopAnalyzer()
@@ -167,14 +164,14 @@ class CameraController(
     fun toggleCameraLens() {
 
         // Set camera lens.
-        this.captureOptions.cameraLens =
-            if (this.captureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT)
+        CaptureOptions.cameraLens =
+            if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT)
                 CameraSelector.LENS_FACING_BACK
             else
                 CameraSelector.LENS_FACING_FRONT
 
         // If camera preview already is running, re-build camera preview.
-        if (this.cameraProviderProcess != null) {
+        this.cameraProviderProcess?.let {
             this.buildCameraPreview()
         }
     }
@@ -186,7 +183,7 @@ class CameraController(
 
         val cameraSelector = CameraSelector
             .Builder()
-            .requireLensFacing(this.captureOptions.cameraLens)
+            .requireLensFacing(CaptureOptions.cameraLens)
             .build()
 
         this.cameraProviderProcess?.bindToLifecycle(
