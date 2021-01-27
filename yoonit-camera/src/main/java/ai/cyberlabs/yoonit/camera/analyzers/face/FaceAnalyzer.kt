@@ -273,6 +273,7 @@ class FaceAnalyzer(
         imagePath: String,
         inferences: ArrayList<android.util.Pair<String, FloatArray>>
     ) {
+        if (imagePath == "") return
 
         // process face number of images.
         if (CaptureOptions.numberOfImages > 0) {
