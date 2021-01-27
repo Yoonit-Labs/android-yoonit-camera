@@ -11,13 +11,24 @@
 
 package ai.cyberlabs.yoonit.camera.models
 
+import android.graphics.Color
+
 /**
  * Model to set face region of interest.
  */
 class FaceROI {
 
+    var layoutWidth: Int = 0
+    var layoutHeight: Int = 0
+
     // Enable or disable ROI.
     var enable: Boolean = false
+
+    // Enable or disable face region of interest area offset.
+    var areaOffsetEnable: Boolean = false
+
+    // Face region of interest area offset color.
+    var areaOffsetColor: Int = Color.argb(100, 255, 255, 255)
 
     // Region of interest in percentage.
     // Values valid [0, 1].
@@ -34,10 +45,10 @@ class FaceROI {
         get() {
             return (
                 this.topOffset != 0.0f ||
-                    this.rightOffset != 0.0f ||
-                    this.bottomOffset != 0.0f ||
-                    this.leftOffset != 0.0f
-                )
+                this.rightOffset != 0.0f ||
+                this.bottomOffset != 0.0f ||
+                this.leftOffset != 0.0f
+            )
         }
 
     /**
@@ -57,9 +68,9 @@ class FaceROI {
     ): Boolean {
         return (
             this.topOffset > topOffset ||
-                this.rightOffset > rightOffset ||
-                this.bottomOffset > bottomOffset ||
-                this.leftOffset > leftOffset
-            )
+            this.rightOffset > rightOffset ||
+            this.bottomOffset > bottomOffset ||
+            this.leftOffset > leftOffset
+        )
     }
 }
