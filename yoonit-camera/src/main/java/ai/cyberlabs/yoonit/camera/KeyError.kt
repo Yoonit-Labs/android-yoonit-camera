@@ -55,13 +55,13 @@ object KeyError {
     // Tried to input invalid face region of interest minimum size.
     const val INVALID_FACE_ROI_MIN_SIZE = "INVALID_FACE_ROI_MIN_SIZE"
 
-    // Tried to input invalid face region of interest area offset color.
+    // Tried to input invalid face region of interest area offset ARGB value color.
     const val INVALID_FACE_ROI_COLOR = "INVALID_FACE_ROI_COLOR"
 
     // Tried to input invalid image capture color encoding.
     const val INVALID_IMAGE_CAPTURE_COLOR_ENCODING = "INVALID_IMAGE_CAPTURE_COLOR_ENCODING"
 
-    // Tried to input invalid face contour ARGB value.
+    // Tried to input invalid face contour ARGB value color.
     const val INVALID_FACE_CONTOURS_COLOR = "INVALID_FACE_CONTOURS_COLOR"
 
     // Tried to input a non existent computer vision model paths.

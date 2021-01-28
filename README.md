@@ -179,9 +179,9 @@ Pre-define key error constants used by the `onError` event.
 | INVALID_FACE_ROI_BOTTOM_OFFSET       | Tried to input invalid face region of interest bottom offset.
 | INVALID_FACE_ROI_LEFT_OFFSET         | Tried to input invalid face region of interest left offset.
 | INVALID_FACE_ROI_MIN_SIZE            | Tried to input invalid face region of interest minimum size.
-| INVALID_FACE_ROI_COLOR               | Tried to input invalid face region of interest area offset color.
+| INVALID_FACE_ROI_COLOR               | Tried to input invalid face region of interest area offset ARGB value color.
 | INVALID_COMPUTER_VISION_MODEL_PATHS  | Tried to input a non existent computer vision model paths.
-| INVALID_FACE_CONTOURS_COLOR          | Tried to input invalid face contour ARGB value.
+| INVALID_FACE_CONTOURS_COLOR          | Tried to input invalid face contour ARGB value color.
 
 ### Message
 
