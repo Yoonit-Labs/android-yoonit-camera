@@ -55,8 +55,6 @@ class CameraGraphicView constructor(
             }
         }
 
-        CaptureOptions.colorEncoding
-
         // Draw face contours.
         this.faceContours?.let {
             faceContours ->

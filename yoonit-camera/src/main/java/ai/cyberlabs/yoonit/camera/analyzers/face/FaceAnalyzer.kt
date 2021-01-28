@@ -95,7 +95,7 @@ class FaceAnalyzer(
                             image
                     )
 
-                    // Verify if has error on the closestFace and detectionBox.
+                    // Verify if has error on detectionBox.
                     if (this.hasError(detectionBox)) {
                         return@addOnSuccessListener
                     }
@@ -162,7 +162,7 @@ class FaceAnalyzer(
 
     private fun hasError(detectionBox: RectF): Boolean {
 
-        // Get error if exist in the closestFace or detectionBox.
+        // Get error if exist in the detectionBox.
         val error = this.faceCoordinatesController.getError(
             detectionBox
         )

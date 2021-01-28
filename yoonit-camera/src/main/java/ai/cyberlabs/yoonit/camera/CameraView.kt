@@ -33,9 +33,6 @@ open class CameraView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyle, defStyleRes) {
 
-//    // Model to set CameraView features options.
-//    private var captureOptions: CaptureOptions = CaptureOptions()
-
     // Camera controller object.
     private var cameraController: CameraController
 

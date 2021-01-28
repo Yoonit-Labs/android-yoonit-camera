@@ -124,9 +124,6 @@ class FaceCoordinatesController(
     }
 
     fun getFaceContours(face: Face, cameraInputImage: InputImage): MutableList<PointF> {
-//        if (face == null) {
-//            return null
-//        }
 
         val imageHeight = cameraInputImage.height.toFloat()
         val imageWidth = cameraInputImage.width.toFloat()
@@ -176,7 +173,7 @@ class FaceCoordinatesController(
 
     /**
      *  Get the error message if exist based in the capture options rules,
-     *  closest face and detection box.
+     *  detection box.
      *
      *  @param detectionBox The closest face detected bounding box normalized coordinates.
      *
