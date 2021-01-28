@@ -33,9 +33,6 @@ open class CameraView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyle, defStyleRes) {
 
-    // Model to set CameraView features options.
-    private var captureOptions: CaptureOptions = CaptureOptions()
-
     // Camera controller object.
     private var cameraController: CameraController
 
@@ -52,13 +49,10 @@ open class CameraView @JvmOverloads constructor(
             true
         )
 
-        graphicView.captureOptions = this.captureOptions
-
         this.cameraController = CameraController(
             context,
             previewView,
-            graphicView,
-            this.captureOptions
+            graphicView
         )
     }
 
@@ -70,29 +64,29 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Start capture type: none, face or qrcode.
+     * Start capture type: none, face, qrcode or frame.
      *
      * @param captureType The capture type: "none" | "face" | "qrcode" | "frame".
      */
     fun startCaptureType(captureType: String) {
         when (captureType) {
             "none" -> {
-                this.captureOptions.type = CaptureType.NONE
+                CaptureOptions.type = CaptureType.NONE
                 this.cameraController.startCaptureType()
             }
 
             "face" -> {
-                this.captureOptions.type = CaptureType.FACE
+                CaptureOptions.type = CaptureType.FACE
                 this.cameraController.startCaptureType()
             }
 
             "qrcode" -> {
-                this.captureOptions.type = CaptureType.QRCODE
+                CaptureOptions.type = CaptureType.QRCODE
                 this.cameraController.startCaptureType()
             }
 
             "frame" -> {
-                this.captureOptions.type = CaptureType.FRAME
+                CaptureOptions.type = CaptureType.FRAME
                 this.cameraController.startCaptureType()
             }
 
@@ -129,7 +123,7 @@ open class CameraView @JvmOverloads constructor(
             else CameraSelector.LENS_FACING_BACK
 
 
-        if (this.captureOptions.cameraLens != cameraSelector) {
+        if (CaptureOptions.cameraLens != cameraSelector) {
             this.cameraController.toggleCameraLens()
         }
     }
@@ -148,7 +142,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is "front".
      */
     fun getCameraLens(): String {
-        return if (this.captureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT) "front" else "back"
+        return if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT) "front" else "back"
     }
 
     /**
@@ -169,7 +163,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_NUMBER_OF_IMAGES)
         }
 
-        this.captureOptions.numberOfImages = numberOfImages
+        CaptureOptions.numberOfImages = numberOfImages
     }
 
     /**
@@ -183,7 +177,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_TIME_BETWEEN_IMAGES)
         }
 
-        this.captureOptions.timeBetweenImages = timeBetweenImages
+        CaptureOptions.timeBetweenImages = timeBetweenImages
     }
 
     /**
@@ -197,7 +191,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_WIDTH)
         }
 
-        this.captureOptions.imageOutputWidth = width
+        CaptureOptions.imageOutputWidth = width
     }
 
     /**
@@ -211,7 +205,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_OUTPUT_IMAGE_HEIGHT)
         }
 
-        this.captureOptions.imageOutputHeight = height
+        CaptureOptions.imageOutputHeight = height
     }
 
     /**
@@ -221,7 +215,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is false.
      */
     fun setSaveImageCaptured(enable: Boolean) {
-        this.captureOptions.saveImageCaptured = enable
+        CaptureOptions.saveImageCaptured = enable
     }
 
     /**
@@ -231,7 +225,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is true.
      */
     fun setFaceDetectionBox(enable: Boolean) {
-        this.captureOptions.faceDetectionBox = enable
+        CaptureOptions.faceDetectionBox = enable
     }
 
     /**
@@ -241,11 +235,11 @@ open class CameraView @JvmOverloads constructor(
      * Default value is true.
      */
     fun setFaceContours(enable: Boolean) {
-        this.captureOptions.faceContours = enable
+        CaptureOptions.faceContours = enable
     }
 
     /**
-     * Set face contours color.
+     * Set face contours ARGB color.
      *
      * @param red Integer that represent red color.
      * @param green Integer that represent green color.
@@ -262,7 +256,7 @@ open class CameraView @JvmOverloads constructor(
             throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_CONTOURS_COLOR)
         }
 
-        this.captureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
+        CaptureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
     }
 
     /**
@@ -276,7 +270,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_PADDING_PERCENT)
         }
 
-        this.captureOptions.facePaddingPercent = facePaddingPercent
+        CaptureOptions.facePaddingPercent = facePaddingPercent
     }
 
     /**
@@ -295,7 +289,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
         }
 
-        this.captureOptions.faceCaptureMinSize = faceCaptureMinSize
+        CaptureOptions.faceCaptureMinSize = faceCaptureMinSize
     }
 
     /**
@@ -314,7 +308,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
         }
 
-        this.captureOptions.faceCaptureMaxSize = faceCaptureMaxSize
+        CaptureOptions.faceCaptureMaxSize = faceCaptureMaxSize
     }
 
     /**
@@ -324,7 +318,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is `false`.
      */
     fun setFaceROIEnable(enable: Boolean) {
-        this.captureOptions.faceROI.enable = enable
+        CaptureOptions.faceROI.enable = enable
     }
 
     /**
@@ -338,7 +332,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_TOP_OFFSET)
         }
 
-        this.captureOptions.faceROI.topOffset = topOffset
+        CaptureOptions.faceROI.topOffset = topOffset
     }
 
     /**
@@ -352,7 +346,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_RIGHT_OFFSET)
         }
 
-        this.captureOptions.faceROI.rightOffset = rightOffset
+        CaptureOptions.faceROI.rightOffset = rightOffset
     }
 
     /**
@@ -366,7 +360,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_BOTTOM_OFFSET)
         }
 
-        this.captureOptions.faceROI.bottomOffset = bottomOffset
+        CaptureOptions.faceROI.bottomOffset = bottomOffset
     }
 
     /**
@@ -380,7 +374,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_LEFT_OFFSET)
         }
 
-        this.captureOptions.faceROI.leftOffset = leftOffset
+        CaptureOptions.faceROI.leftOffset = leftOffset
     }
 
     /**
@@ -394,7 +388,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_MIN_SIZE)
         }
 
-        this.captureOptions.faceROI.minimumSize = minimumSize
+        CaptureOptions.faceROI.minimumSize = minimumSize
     }
 
     /**
@@ -404,7 +398,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is `false`.
      */
     fun setBlurFaceDetectionBox(enable: Boolean) {
-        this.captureOptions.blurFaceDetectionBox = enable
+        CaptureOptions.blurFaceDetectionBox = enable
     }
 
     /**
@@ -418,7 +412,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_IMAGE_CAPTURE_COLOR_ENCODING)
         }
 
-        this.captureOptions.colorEncoding = colorEncoding
+        CaptureOptions.colorEncoding = colorEncoding
     }
 
     /**
@@ -428,7 +422,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is `false`.
      */
     fun setComputerVision(enable: Boolean) {
-        this.captureOptions.computerVision.enable = enable
+        CaptureOptions.computerVision.enable = enable
     }
 
     /**
@@ -445,21 +439,21 @@ open class CameraView @JvmOverloads constructor(
             }
         }
 
-        this.captureOptions.computerVision.paths = modelPaths
+        CaptureOptions.computerVision.paths = modelPaths
     }
 
     /**
      * Clear loaded computer vision models.
      */
     fun computerVisionClearModels() {
-        this.captureOptions.computerVision.clear()
+        CaptureOptions.computerVision.clear()
     }
 
     fun flipScreen() {
-        this.captureOptions.isScreenFlipped = !this.captureOptions.isScreenFlipped
+        CaptureOptions.isScreenFlipped = !CaptureOptions.isScreenFlipped
 
         this.rotation =
-            if (this.captureOptions.isScreenFlipped) 180f
+            if (CaptureOptions.isScreenFlipped) 180f
             else 0f
     }
 

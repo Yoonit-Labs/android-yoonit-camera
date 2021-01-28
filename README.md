@@ -111,37 +111,37 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
   
 ### Methods   
 
-| Function                     | Parameters                          | Valid values                                                                    | Return Type | Description
-| -                            | -                                   | -                                                                               | -           | -
-| startPreview                 | -                                   | -                                                                               | void        | Start camera preview if has permission.
-| startCaptureType             | `captureType: String`               | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qcode"`</li><li>`"frame"`</li></ul> | void        | Set capture type none, face, QR Code or frame.
-| stopCapture                  | -                                   | -                                                                               | void        | Stop any type of capture.
-| destroy                      | -                                   | -                                                                               | void        | Remove camera preview.
-| toggleCameraLens             | -                                   | -                                                                               | void        | Set camera lens facing front or back.
-| setCameraLens                | `cameraLens: String`                | <ul><li>`"front"`</li><li>`"back"`</li></ul>                                    | void        | Set camera to use "front" or "back" lens. Default value is "front".
-| getCameraLens                | -                                   | -                                                                               | Int         | Return `Int` that represents lens face state: 0 for front 1 for back camera.
-| setNumberOfImages            | `numberOfImages: Int`               | Any positive `Int` value                                                        | void        | Default value is 0. For value 0 is saved infinity images. When saved images reached the "number os images", the `onEndCapture` is triggered.
-| setTimeBetweenImages         | `timeBetweenImages: Long`           | Any positive number that represent time in milli seconds                        | void        | Set saving face/frame images time interval in milli seconds.
-| setOutputImageWidth          | `width: Int`                        | Any positive `number` value that represents in pixels                           | void        | Set face image width to be created in pixels.
-| setOutputImageHeight         | `height: Int`                       | Any positive `number` value that represents in pixels                           | void        | Set face image height to be created in pixels.
-| setSaveImageCaptured         | `enable: Bool`                      | `true` or `false`                                                               | void        | Set to enable/disable save image when capturing face and frame.
-| setFaceDetectionBox          | `enable: Bool`                      | `true` or `false`                                                               | void        | Set to show a detection box when face detected.
-| setLandmarksDetection        | `red: Int, green: Int, blue: Int`   | Positive value between 0 and 255                                                | void        | Set to show/hide face landmarks when face detected.
-| setFaceLandmarksColor        | `enable: Bool`                      | `true` or `false`                                                               | void        | Set to show a detection box when face detected.
-| setFacePaddingPercent        | `facePaddingPercent: Float`         | Any positive `Float` value                                                      | void        | Set face image and bounding box padding in percent.
-| setFaceCaptureMinSize        | `faceCaptureMinSize: Float`         | Value between `0` and `1`. Represents the percentage.                           | void        | Set the minimum face capture based on the screen width.
-| setFaceCaptureMaxSize        | `faceCaptureMaxSize: Float`         | Value between `0` and `1`. Represents the percentage.                           | void        | Set the maximum face capture based on the screen width.
-| setFaceROIEnable             | `enable: Bool`                      | `true` or `false`                                                               | void        | Enable/disable face region of interest capture.
-| setFaceROITopOffset          | `topOffset: Float`                  | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the top face bounding box with the top of the camera preview.
-| setFaceROIRightOffset        | `rightOffset: Float`                | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the right face bounding box with the right of the camera preview.
-| setFaceROIBottomOffset       | `bottomOffset: Float`               | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the bottom face bounding box with the bottom of the camera preview.
-| setFaceROILeftOffset         | `leftOffset: Float`                 | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the left face bounding box with the left of the camera preview.
-| setFaceROIMinSize            | `minimumSize: Float`                | Values between `0` and `1`. Represents the percentage.                          | void        | Set the minimum face size related with the region of interest.
-| setBlurFaceDetectionBox      | `enable: Bool`                      | `true` or `false`                                                               | void        | Enable/disable blur in face detection box.
-| setColorEncodingCapture      | `colorEncoding: String`             | <ul><li>`"RGB"`</li><li>`"YUV"`</li>                                            | void        | Set the color encoding for the saved images.
-| setComputerVision            | `enable: Boolean`                   | `true` or `false`                                                               | void        | Enable/disable computer vision usage.
-| setComputerVisionLoadModels  | `modelPaths: ArrayList<String>`     | Must exist all model files paths.                                               | void        | Set the computer vision model files paths to load.
-| computerVisionClearModels    | -                                   | -                                                                               | void        | Clear loaded computer vision models.
+| Function                     | Parameters                                      | Valid values                                                                    | Return Type | Description
+| -                            | -                                               | -                                                                               | -           | -
+| startPreview                 | -                                               | -                                                                               | void        | Start camera preview if has permission.
+| startCaptureType             | `captureType: String`                           | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qcode"`</li><li>`"frame"`</li></ul> | void        | Set capture type none, face, QR Code or frame.
+| stopCapture                  | -                                               | -                                                                               | void        | Stop any type of capture.
+| destroy                      | -                                               | -                                                                               | void        | Remove camera preview.
+| toggleCameraLens             | -                                               | -                                                                               | void        | Set camera lens facing front or back.
+| setCameraLens                | `cameraLens: String`                            | <ul><li>`"front"`</li><li>`"back"`</li></ul>                                    | void        | Set camera to use "front" or "back" lens. Default value is "front".
+| getCameraLens                | -                                               | -                                                                               | Int         | Return `Int` that represents lens face state: 0 for front 1 for back camera.
+| setNumberOfImages            | `numberOfImages: Int`                           | Any positive `Int` value                                                        | void        | Default value is 0. For value 0 is saved infinity images. When saved images reached the "number os images", the `onEndCapture` is triggered.
+| setTimeBetweenImages         | `timeBetweenImages: Long`                       | Any positive number that represent time in milli seconds                        | void        | Set saving face/frame images time interval in milli seconds.
+| setOutputImageWidth          | `width: Int`                                    | Any positive `number` value that represents in pixels                           | void        | Set face image width to be created in pixels.
+| setOutputImageHeight         | `height: Int`                                   | Any positive `number` value that represents in pixels                           | void        | Set face image height to be created in pixels.
+| setSaveImageCaptured         | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to enable/disable save image when capturing face and frame.
+| setFaceDetectionBox          | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to show a detection box when face detected.
+| setFaceContours              | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to show/hide face contours when face detected.
+| setFaceContoursColor         | `alpha: Int, red: Int, green: Int, blue: Int`   | Positive value between 0 and 255                                                | void        | Set face contours ARGB color.
+| setFacePaddingPercent        | `facePaddingPercent: Float`                     | Any positive `Float` value                                                      | void        | Set face image and bounding box padding in percent.
+| setFaceCaptureMinSize        | `faceCaptureMinSize: Float`                     | Value between `0` and `1`. Represents the percentage.                           | void        | Set the minimum face capture based on the screen width.
+| setFaceCaptureMaxSize        | `faceCaptureMaxSize: Float`                     | Value between `0` and `1`. Represents the percentage.                           | void        | Set the maximum face capture based on the screen width.
+| setFaceROIEnable             | `enable: Bool`                                  | `true` or `false`                                                               | void        | Enable/disable face region of interest capture.
+| setFaceROITopOffset          | `topOffset: Float`                              | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the top face bounding box with the top of the camera preview.
+| setFaceROIRightOffset        | `rightOffset: Float`                            | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the right face bounding box with the right of the camera preview.
+| setFaceROIBottomOffset       | `bottomOffset: Float`                           | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the bottom face bounding box with the bottom of the camera preview.
+| setFaceROILeftOffset         | `leftOffset: Float`                             | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the left face bounding box with the left of the camera preview.
+| setFaceROIMinSize            | `minimumSize: Float`                            | Values between `0` and `1`. Represents the percentage.                          | void        | Set the minimum face size related with the region of interest.
+| setBlurFaceDetectionBox      | `enable: Bool`                                  | `true` or `false`                                                               | void        | Enable/disable blur in face detection box.
+| setColorEncodingCapture      | `colorEncoding: String`                         | <ul><li>`"RGB"`</li><li>`"YUV"`</li>                                            | void        | Set the color encoding for the saved images.
+| setComputerVision            | `enable: Boolean`                               | `true` or `false`                                                               | void        | Enable/disable computer vision usage.
+| setComputerVisionLoadModels  | `modelPaths: ArrayList<String>`                 | Must exist all model files paths.                                               | void        | Set the computer vision model files paths to load.
+| computerVisionClearModels    | -                                               | -                                                                               | void        | Clear loaded computer vision models.
 
 ### Events
 
@@ -178,6 +178,7 @@ Pre-define key error constants used by the `onError` event.
 | INVALID_FACE_ROI_LEFT_OFFSET         | Tried to input invalid face region of interest left offset.
 | INVALID_FACE_ROI_MIN_SIZE            | Tried to input invalid face region of interest minimum size.
 | INVALID_COMPUTER_VISION_MODEL_PATHS  | Tried to input a non existent computer vision model paths.
+| INVALID_FACE_CONTOURS_COLOR          | Tried to input invalid face contour ARGB value.
 
 ### Message
 

@@ -16,8 +16,7 @@ import kotlin.math.max
  * Responsible to manipulate everything related with the face bounding box.
  */
 class FaceCoordinatesController(
-    private val graphicView: CameraGraphicView,
-    private val captureOptions: CaptureOptions
+    private val graphicView: CameraGraphicView
 ) {
 
     /**
@@ -44,11 +43,6 @@ class FaceCoordinatesController(
             }
         }
 
-        // If no face found.
-        if (closestFace == null) {
-            return null
-        }
-
         // Transform bounding box rectangle in square.
         val size = max(
             closestFace!!.boundingBox.width(),
@@ -68,23 +62,19 @@ class FaceCoordinatesController(
      * @return the detection box rect of the detected face. null if face is null or detection box is
      * out of the screen.
      */
-    fun getDetectionBox(face: Face?, cameraInputImage: InputImage): RectF? {
-        if (face == null) {
-            return null
-        }
-
+    fun getDetectionBox(face: Face, cameraInputImage: InputImage): RectF {
         var boundingBox: Rect = face.boundingBox
 
         // Scale bounding box.
-        if (this.captureOptions.facePaddingPercent != 0f) {
-            boundingBox = boundingBox.scaledBy(this.captureOptions.facePaddingPercent)
+        if (CaptureOptions.facePaddingPercent != 0f) {
+            boundingBox = boundingBox.scaledBy(CaptureOptions.facePaddingPercent)
         }
 
         val imageHeight = cameraInputImage.height.toFloat()
         val imageWidth = cameraInputImage.width.toFloat()
 
         if (imageHeight <= 0 || imageWidth <= 0) {
-            return null
+            return RectF()
         }
 
         val viewAspectRatio: Float =
@@ -117,10 +107,10 @@ class FaceCoordinatesController(
 
         // Adjust the "x" and "y" coordinates when screen flipped. - - - - - - - - - - - - - - - -
         x =
-            if (this.captureOptions.isScreenFlipped) this.graphicView.width - x
+            if (CaptureOptions.isScreenFlipped) this.graphicView.width - x
             else x
         y =
-            if (this.captureOptions.isScreenFlipped) this.graphicView.height - y
+            if (CaptureOptions.isScreenFlipped) this.graphicView.height - y
             else y
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -133,16 +123,13 @@ class FaceCoordinatesController(
         return RectF(left, top, right, bottom)
     }
 
-    fun getFaceContours(face: Face?, cameraInputImage: InputImage): MutableList<PointF>? {
-        if (face == null) {
-            return null
-        }
+    fun getFaceContours(face: Face, cameraInputImage: InputImage): MutableList<PointF> {
 
         val imageHeight = cameraInputImage.height.toFloat()
         val imageWidth = cameraInputImage.width.toFloat()
 
         if (imageHeight <= 0 || imageWidth <= 0) {
-            return null
+            return mutableListOf()
         }
 
         val viewAspectRatio: Float =
@@ -186,9 +173,8 @@ class FaceCoordinatesController(
 
     /**
      *  Get the error message if exist based in the capture options rules,
-     *  closest face and detection box.
+     *  detection box.
      *
-     *  @param closestFace The closest face detected.
      *  @param detectionBox The closest face detected bounding box normalized coordinates.
      *
      *  @return null for no error:
@@ -197,14 +183,14 @@ class FaceCoordinatesController(
      *  - INVALID_CAPTURE_FACE_OUT_OF_ROI
      *  - INVALID_CAPTURE_FACE_ROI_MIN_SIZE
      */
-    fun getError(closestFace: Face?, detectionBox: RectF?): String? {
-
-        if (closestFace == null || detectionBox == null) {
-            return ""
-        }
-
+    fun getError(detectionBox: RectF): String? {
+        
         val screenWidth = this.graphicView.width
         val screenHeight = this.graphicView.height
+
+        if (detectionBox.isEmpty) {
+            return ""
+        }
 
         val isOutOfTheScreen =
             detectionBox.left < 0 ||
@@ -220,15 +206,15 @@ class FaceCoordinatesController(
         // UI graphic view. The value must be between 0 and 1.
         val detectionBoxRelatedWithScreen: Float = detectionBox.width() / screenWidth
 
-        if (detectionBoxRelatedWithScreen < this.captureOptions.faceCaptureMinSize) {
+        if (detectionBoxRelatedWithScreen < CaptureOptions.faceCaptureMinSize) {
             return Message.INVALID_CAPTURE_FACE_MIN_SIZE
         }
 
-        if (detectionBoxRelatedWithScreen > this.captureOptions.faceCaptureMaxSize) {
+        if (detectionBoxRelatedWithScreen > CaptureOptions.faceCaptureMaxSize) {
             return Message.INVALID_CAPTURE_FACE_MAX_SIZE
         }
 
-        if (this.captureOptions.faceROI.enable) {
+        if (CaptureOptions.faceROI.enable) {
 
             // Detection box offsets.
             val topOffset: Float = detectionBox.top / screenHeight
@@ -236,7 +222,7 @@ class FaceCoordinatesController(
             val bottomOffset: Float = (screenHeight - detectionBox.bottom) / screenHeight
             val leftOffset: Float = detectionBox.left / screenWidth
 
-            if (this.captureOptions.faceROI.isOutOf(
+            if (CaptureOptions.faceROI.isOutOf(
                     topOffset,
                     rightOffset,
                     bottomOffset,
@@ -246,16 +232,16 @@ class FaceCoordinatesController(
                 return Message.INVALID_CAPTURE_FACE_OUT_OF_ROI
             }
 
-            if (this.captureOptions.faceROI.hasChanges) {
+            if (CaptureOptions.faceROI.hasChanges) {
 
                 // Face is inside the region of interest and faceROI is setted.
                 // Face is smaller than the defined "minimumSize".
                 val roiWidth: Float =
                     screenWidth -
-                            ((this.captureOptions.faceROI.rightOffset + this.captureOptions.faceROI.leftOffset) * screenWidth)
+                            ((CaptureOptions.faceROI.rightOffset + CaptureOptions.faceROI.leftOffset) * screenWidth)
                 val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
 
-                if (this.captureOptions.faceROI.minimumSize > faceRelatedWithROI) {
+                if (CaptureOptions.faceROI.minimumSize > faceRelatedWithROI) {
                     return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
                 }
             }

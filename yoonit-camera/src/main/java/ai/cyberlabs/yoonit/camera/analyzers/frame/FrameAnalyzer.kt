@@ -36,7 +36,6 @@ import java.io.FileOutputStream
 class FrameAnalyzer(
     private val context: Context,
     private val cameraEventListener: CameraEventListener?,
-    private val captureOptions: CaptureOptions,
     private val graphicView: CameraGraphicView,
     private val cameraCallback: CameraCallback
 ) : ImageAnalysis.Analyzer {
@@ -58,23 +57,23 @@ class FrameAnalyzer(
 
             mediaImage?.let {
 
-                val frameBitmap: Bitmap = when (this.captureOptions.colorEncoding) {
+                val frameBitmap: Bitmap = when (CaptureOptions.colorEncoding) {
                     "YUV" -> mediaImage.toYUVBitmap()
                     else -> mediaImage.toRGBBitmap(context)
                 }
 
                 // Computer Vision Inference.
                 var inferences: ArrayList<android.util.Pair<String, FloatArray>> = arrayListOf()
-                if (this.captureOptions.computerVision.enable) {
+                if (CaptureOptions.computerVision.enable) {
                     inferences = ComputerVisionController.getInferences(
-                        this.captureOptions.computerVision.modelMap,
+                        CaptureOptions.computerVision.modelMap,
                         frameBitmap
                     )
                 }
 
                 // Save image captured.
                 var imagePath = ""
-                if (this.captureOptions.saveImageCaptured) {
+                if (CaptureOptions.saveImageCaptured) {
                     imagePath = this.handleSaveImage(
                         frameBitmap,
                         imageProxy.imageInfo.rotationDegrees.toFloat()
@@ -100,8 +99,8 @@ class FrameAnalyzer(
     private fun shouldAnalyze(imageProxy: ImageProxy): Boolean {
 
         if (
-            !this.captureOptions.saveImageCaptured &&
-            !this.captureOptions.computerVision.enable
+            !CaptureOptions.saveImageCaptured &&
+            !CaptureOptions.computerVision.enable
         ) {
             return false
         }
@@ -116,7 +115,7 @@ class FrameAnalyzer(
 
         // Process image only within interval equal ANALYZE_TIMER.
         val currentTimestamp = System.currentTimeMillis()
-        if (currentTimestamp - this.analyzerTimeStamp < this.captureOptions.timeBetweenImages) {
+        if (currentTimestamp - this.analyzerTimeStamp < CaptureOptions.timeBetweenImages) {
             return false
         }
         this.analyzerTimeStamp = currentTimestamp
@@ -136,13 +135,13 @@ class FrameAnalyzer(
     ) {
 
         // process face number of images.
-        if (this.captureOptions.numberOfImages > 0) {
-            if (this.numberOfImages < captureOptions.numberOfImages) {
+        if (CaptureOptions.numberOfImages > 0) {
+            if (this.numberOfImages < CaptureOptions.numberOfImages) {
                 this.numberOfImages++
                 this.cameraEventListener?.onImageCaptured(
                     "frame",
                     this.numberOfImages,
-                    this.captureOptions.numberOfImages,
+                    CaptureOptions.numberOfImages,
                     imagePath,
                     inferences
                 )
@@ -159,7 +158,7 @@ class FrameAnalyzer(
         this.cameraEventListener?.onImageCaptured(
             "frame",
             this.numberOfImages,
-            this.captureOptions.numberOfImages,
+            CaptureOptions.numberOfImages,
             imagePath,
             inferences
         )
