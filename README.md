@@ -9,7 +9,7 @@ A Android plugin to provide:
 - [Standart Google ML Kit](https://developers.google.com/ml-kit)
 - Camera preview (Front & Back)
 - Face detection (With Min & Max size)
-- Landmark detection (Soon)
+- Landmark detection
 - Face crop
 - Face capture
 - Frame capture
@@ -137,6 +137,8 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setFaceROIBottomOffset       | `bottomOffset: Float`                           | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the bottom face bounding box with the bottom of the camera preview.
 | setFaceROILeftOffset         | `leftOffset: Float`                             | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the left face bounding box with the left of the camera preview.
 | setFaceROIMinSize            | `minimumSize: Float`                            | Values between `0` and `1`. Represents the percentage.                          | void        | Set the minimum face size related with the region of interest.
+| setFaceROIAreaOffset         | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set face region of interest offset color visibility.
+| setFaceROIAreaOffsetColor    | `alpha: Int, red: Int, green: Int, blue: Int`   | Any positive integer between 0 and 255                                          | void        | Set face region of interest area offset color. Default value is (100, 255, 255, 255).
 | setBlurFaceDetectionBox      | `enable: Bool`                                  | `true` or `false`                                                               | void        | Enable/disable blur in face detection box.
 | setColorEncodingCapture      | `colorEncoding: String`                         | <ul><li>`"RGB"`</li><li>`"YUV"`</li>                                            | void        | Set the color encoding for the saved images.
 | setComputerVision            | `enable: Boolean`                               | `true` or `false`                                                               | void        | Enable/disable computer vision usage.
@@ -177,8 +179,9 @@ Pre-define key error constants used by the `onError` event.
 | INVALID_FACE_ROI_BOTTOM_OFFSET       | Tried to input invalid face region of interest bottom offset.
 | INVALID_FACE_ROI_LEFT_OFFSET         | Tried to input invalid face region of interest left offset.
 | INVALID_FACE_ROI_MIN_SIZE            | Tried to input invalid face region of interest minimum size.
+| INVALID_FACE_ROI_COLOR               | Tried to input invalid face region of interest area offset ARGB value color.
 | INVALID_COMPUTER_VISION_MODEL_PATHS  | Tried to input a non existent computer vision model paths.
-| INVALID_FACE_CONTOURS_COLOR          | Tried to input invalid face contour ARGB value.
+| INVALID_FACE_CONTOURS_COLOR          | Tried to input invalid face contour ARGB value color.
 
 ### Message
 

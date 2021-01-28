@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.cameraview_layout.view.*
 import java.io.File
 
 /**
- * This class represents the camera layout and your functions.
+ * This class represents the camera layout.
  */
 open class CameraView @JvmOverloads constructor(
     context: Context,
@@ -69,6 +69,7 @@ open class CameraView @JvmOverloads constructor(
      * @param captureType The capture type: "none" | "face" | "qrcode" | "frame".
      */
     fun startCaptureType(captureType: String) {
+
         when (captureType) {
             "none" -> {
                 CaptureOptions.type = CaptureType.NONE
@@ -109,6 +110,13 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Toggle between Front and Back Camera.
+     */
+    fun toggleCameraLens() {
+        this.cameraController.toggleCameraLens()
+    }
+
+    /**
      * Set camera lens: "front" or "back".
      *
      * @param cameraLens "back" || "front"
@@ -126,13 +134,6 @@ open class CameraView @JvmOverloads constructor(
         if (CaptureOptions.cameraLens != cameraSelector) {
             this.cameraController.toggleCameraLens()
         }
-    }
-
-    /**
-     * Toggle between Front and Back Camera.
-     */
-    fun toggleCameraLens() {
-        this.cameraController.toggleCameraLens()
     }
 
     /**
@@ -248,10 +249,10 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setFaceContoursColor(alpha: Int, red: Int, green: Int, blue: Int) {
         if (
-                alpha < 0 || alpha > 255 ||
-                red < 0 || red > 255 ||
-                green < 0 || green > 255 ||
-                blue < 0 || blue > 255
+            alpha < 0 || alpha > 255 ||
+            red < 0 || red > 255 ||
+            green < 0 || green > 255 ||
+            blue < 0 || blue > 255
         ) {
             throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_CONTOURS_COLOR)
         }
@@ -389,6 +390,39 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.faceROI.minimumSize = minimumSize
+    }
+
+    /**
+     * Set face region of interest offset color visibility.
+     *
+     * @param enable The indicator to show/hide the face region of interest area offset.
+     * Default value is `false`.
+     */
+    fun setFaceROIAreaOffset(enable: Boolean) {
+        CaptureOptions.faceROI.areaOffsetEnable = enable
+    }
+
+    /**
+     * Set face region of interest area offset color.
+     *
+     * @param alpha Integer that represents the alpha.
+     * @param red Integer that represent red color.
+     * @param green Integer that represent green color.
+     * @param blue Integer that represent blue color.
+     * Default value is 100, 255, 255, 255 (white color).
+     */
+    fun setFaceROIAreaOffsetColor(alpha: Int, red: Int, green: Int, blue: Int) {
+        if (
+            alpha < 0 || alpha > 255 ||
+            red < 0 || red > 255 ||
+            green < 0 || green > 255 ||
+            blue < 0 || blue > 255
+        ) {
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_ROI_COLOR)
+        }
+
+        CaptureOptions.faceROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
+
     }
 
     /**

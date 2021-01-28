@@ -111,8 +111,12 @@ class FaceAnalyzer(
                             cameraRotation.toFloat()
                     )
 
-                    // Draw or clean the face detection box and face blur.
-                    this.handleDraw(faceBitmap, detectionBox, faceContours)
+                    // Draw or clean the face detection box, face blur and face contours.
+                    this.graphicView.handleDraw(
+                        detectionBox,
+                        faceBitmap,
+                        faceContours
+                    )
 
                     // Stop here if camera event listener is not set.
                     if (this.cameraEventListener == null) {
@@ -224,43 +228,6 @@ class FaceAnalyzer(
             CaptureOptions.imageOutputHeight,
             false
         )
-    }
-
-    /**
-     * Handle draw face detection box and/or the face blur;
-     *
-     * @param faceBitmap The face bitmap;
-     * @param faceDetectionBox The face bounding box within the camera frame image;
-     */
-    private fun handleDraw(
-            faceBitmap: Bitmap,
-            faceDetectionBox: RectF,
-            faceContours: MutableList<PointF>
-    ) {
-        if (
-            !CaptureOptions.faceDetectionBox &&
-            !CaptureOptions.blurFaceDetectionBox &&
-            !CaptureOptions.faceContours
-        ) {
-            this.graphicView.clear()
-        }
-
-        if (CaptureOptions.faceDetectionBox) {
-            this.graphicView.drawFaceDetectionBox(faceDetectionBox)
-        }
-
-        if (CaptureOptions.blurFaceDetectionBox) {
-            this.graphicView.drawFaceBlur(
-                faceDetectionBox,
-                faceBitmap
-            )
-        }
-
-        if (CaptureOptions.faceContours) {
-            this.graphicView.drawFaceContours(faceContours)
-        }
-
-        this.graphicView.postInvalidate()
     }
 
     /**
