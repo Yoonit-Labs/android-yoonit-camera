@@ -399,7 +399,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is `false`.
      */
     fun setFaceROIAreaOffset(enable: Boolean) {
-        this.captureOptions.faceROI.areaOffsetEnable = enable
+        CaptureOptions.faceROI.areaOffsetEnable = enable
     }
 
     /**
@@ -421,7 +421,7 @@ open class CameraView @JvmOverloads constructor(
             throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_ROI_COLOR)
         }
 
-        this.captureOptions.faceROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
+        CaptureOptions.faceROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
 
     }
 
