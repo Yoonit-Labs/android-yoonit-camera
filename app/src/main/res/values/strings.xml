@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Yoonit Camera</string>
-    <string name="start_label">START</string>
     <string name="stop">STOP</string>
     <string name="face_box">Face Box</string>
-    <string name="face_points">Face Points</string>
+    <string name="face_contours">Face Contours</string>
     <string name="camera_lens">CAMERA LENS:</string>
     <string name="color_encoding">COLOR ENCODING:</string>
     <string name="rgb_encoding">RGB</string>
@@ -15,10 +14,13 @@
     <string name="capture_type_face">FACE</string>
     <string name="capture_type_qrcode">QRCODE</string>
     <string name="capture_type_frame">FRAME</string>
-    <string name="face_number">Number of face to capture:</string>
-    <string name="face_save_image">Face Save</string>
-    <string name="blur_face_detection">Blur face</string>
-    <string name="flip_screen">Flip Screen</string>
-    <string name="computer_vision">CV</string>
+    <string name="image_capture">Image Capture</string>
+    <string name="face_blur">Face Blur</string>
+    <string name="computer_vision">Computer Vision</string>
     <string name="camera_state">Turn Camera ON/OFF</string>
+    <string name="panel">Features Panel</string>
+    <string name="face_roi">Face ROI</string>
+    <string name="face_roi_min_size">Face ROI Min (70%)</string>
+    <string name="face_min">Face Min (70%)</string>
+    <string name="face_max">Face Max (90%)</string>
 </resources>

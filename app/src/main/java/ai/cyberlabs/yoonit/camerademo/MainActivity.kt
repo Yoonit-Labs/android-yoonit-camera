@@ -42,31 +42,22 @@ class MainActivity : AppCompatActivity() {
                     this.cameraView.startCaptureType("none")
                     this.image_preview.visibility = View.INVISIBLE
                     this.info_textview.visibility = View.INVISIBLE
-                    this.face_number_edittext.visibility = View.INVISIBLE
-                    this.face_numer_textview.visibility = View.INVISIBLE
-
                     this.qrcode_textview.visibility = View.INVISIBLE
                 }
 
                 "face" -> {
-                    this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+
                     this.cameraView.startCaptureType("face")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
-                    this.face_number_edittext.visibility = View.VISIBLE
-                    this.face_numer_textview.visibility = View.VISIBLE
-
                     this.qrcode_textview.visibility = View.INVISIBLE
                 }
 
                 "frame" -> {
-                    this.cameraView.setNumberOfImages(Integer.valueOf(face_number_edittext.text.toString()))
+
                     this.cameraView.startCaptureType("frame")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
-                    this.face_number_edittext.visibility = View.VISIBLE
-                    this.face_numer_textview.visibility = View.VISIBLE
-
                     this.qrcode_textview.visibility = View.INVISIBLE
                 }
 
@@ -74,9 +65,6 @@ class MainActivity : AppCompatActivity() {
                     this.cameraView.startCaptureType("qrcode")
                     this.image_preview.visibility = View.INVISIBLE
                     this.info_textview.visibility = View.INVISIBLE
-                    this.face_number_edittext.visibility = View.INVISIBLE
-                    this.face_numer_textview.visibility = View.INVISIBLE
-
                     this.qrcode_textview.visibility = View.VISIBLE
                 }
             }
@@ -90,6 +78,10 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 
         if (this.allPermissionsGranted()) {
+            this.cameraView.setFaceROILeftOffset(0.1f)
+            this.cameraView.setFaceROIRightOffset(0.1f)
+            this.cameraView.setFaceROITopOffset(0.1f)
+            this.cameraView.setFaceROIBottomOffset(0.1f)
             this.cameraView.startPreview()
 
             this.cameraView.setComputerVisionLoadModels(arrayListOf(
@@ -128,10 +120,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun onFlipScreenSwitchClick(view: View) {
+    fun onPanelSwitchClick(view: View) {
         if (view is SwitchCompat) {
-            this.cameraView.flipScreen()
+            val checked = view.isChecked
+            this.features_panel.visibility = if (checked) View.VISIBLE else View.INVISIBLE
         }
     }
 
@@ -142,14 +134,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onFacePointSwitchClick(view: View) {
+    fun onFaceContoursSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
             this.cameraView.setFaceContours(checked)
         }
     }
 
-    fun onImageSaveSwitchClick(view: View) {
+    fun onImageCaptureSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
             this.cameraView.setSaveImageCaptured(checked)
@@ -162,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onBlurFaceSwitchClick(view: View) {
+    fun onFaceBlurSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
             this.cameraView.setBlurFaceDetectionBox(checked)
@@ -176,6 +168,35 @@ class MainActivity : AppCompatActivity() {
                 return
             }
             this.cameraView.destroy()
+        }
+    }
+
+    fun onFaceMinSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val faceCaptureMinSize = if (view.isChecked) 0.7f else 0.0f
+            this.cameraView.setFaceCaptureMinSize(faceCaptureMinSize)
+        }
+    }
+
+    fun onFaceMaxSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val faceCaptureMaxSize = if (view.isChecked) 0.9f else 1.0f
+            this.cameraView.setFaceCaptureMaxSize(faceCaptureMaxSize)
+        }
+    }
+
+    fun onFaceROISwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val checked = view.isChecked
+            this.cameraView.setFaceROIEnable(checked)
+            this.cameraView.setFaceROIAreaOffset(checked)
+        }
+    }
+
+    fun onFaceROIMinSizeSwitchClick(view: View) {
+        if (view is SwitchCompat) {
+            val faceROIMinimumSize = if (view.isChecked) 0.7f else 0.0f
+            this.cameraView.setFaceROIMinSize(faceROIMinimumSize)
         }
     }
 
@@ -223,12 +244,6 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.stopCapture()
         this.image_preview.visibility = View.INVISIBLE
         this.qrcode_textview.visibility = View.INVISIBLE
-    }
-
-    fun onStartCaptureClick(view: View) {
-        this.cameraView.startPreview()
-        this.image_preview.visibility = View.VISIBLE
-        this.qrcode_textview.visibility = View.VISIBLE
     }
 
     fun onCaptureTypeRadioButtonClicked(view: View) {
