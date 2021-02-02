@@ -19,14 +19,18 @@ import android.util.AttributeSet
 import android.view.View
 
 /**
- * Custom view to draw face detection box and face blurred.
+ * This view is responsible to draw:
+ *
+ * - face detection box;
+ * - face blur;
+ * - face contours;
  */
 class CameraGraphicView constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    // The face detection box within the graphic view.
+    // The face detection box.
     private var faceDetectionBox: RectF? = null
 
     // The face bitmap.

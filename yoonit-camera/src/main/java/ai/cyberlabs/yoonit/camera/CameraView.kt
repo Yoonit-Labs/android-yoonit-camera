@@ -422,7 +422,6 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.faceROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
-
     }
 
     /**
