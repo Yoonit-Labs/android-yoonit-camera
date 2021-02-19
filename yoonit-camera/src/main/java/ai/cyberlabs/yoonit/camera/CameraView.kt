@@ -422,6 +422,7 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.faceROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
+        System.out.println(CaptureOptions.faceROI.areaOffsetColor)
     }
 
     /**
@@ -488,6 +489,10 @@ open class CameraView @JvmOverloads constructor(
         this.rotation =
             if (CaptureOptions.isScreenFlipped) 180f
             else 0f
+    }
+
+    fun setTest(testArray: ArrayList<String>) {
+        print("Array is $testArray")
     }
 
     companion object {
