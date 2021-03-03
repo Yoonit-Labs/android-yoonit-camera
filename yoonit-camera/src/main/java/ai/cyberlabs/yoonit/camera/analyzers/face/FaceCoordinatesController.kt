@@ -18,41 +18,6 @@ import kotlin.math.max
 class FaceCoordinatesController(
     private val graphicView: CameraGraphicView
 ) {
-
-    /**
-     * Get closest face.
-     * Can be null if no face found.
-     *
-     * @param faces the face list camera detected;
-     * @return the closest face. null if no face found.
-     */
-    fun getClosestFace(faces: List<Face>): Face? {
-
-        //  Check if found face.
-        if (faces.isEmpty()) {
-            return null
-        }
-
-        // Get closest face.
-        var closestFace: Face? = null
-        faces.forEach {
-            if (closestFace == null ||
-                it.boundingBox.width() > closestFace!!.boundingBox.width()
-            ) {
-                closestFace = it
-            }
-        }
-
-        // Transform bounding box rectangle in square.
-        val size = max(
-            closestFace!!.boundingBox.width(),
-            closestFace!!.boundingBox.height()
-        )
-        closestFace!!.boundingBox.set(closestFace!!.boundingBox.resize(size, size))
-
-        return closestFace
-    }
-
     /**
      * Transform the detected face bounding box coordinates in the UI graphic
      * coordinates, based in the [CameraGraphicView] and [InputImage] dimensions.
@@ -62,12 +27,12 @@ class FaceCoordinatesController(
      * @return the detection box rect of the detected face. null if face is null or detection box is
      * out of the screen.
      */
-    fun getDetectionBox(face: Face, cameraInputImage: InputImage): RectF {
-        var boundingBox: Rect = face.boundingBox
+    fun getDetectionBox(boundingBox: Rect, cameraInputImage: InputImage): RectF {
+        var detectionBox = boundingBox
 
         // Scale bounding box.
         if (CaptureOptions.facePaddingPercent != 0f) {
-            boundingBox = boundingBox.scaledBy(CaptureOptions.facePaddingPercent)
+            detectionBox = boundingBox.scaledBy(CaptureOptions.facePaddingPercent)
         }
 
         val imageHeight = cameraInputImage.height.toFloat()
@@ -98,12 +63,12 @@ class FaceCoordinatesController(
         }
 
         var x = if (cameraInputImage.rotationDegrees == 90) {
-            this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
+            this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
         } else {
-            this.graphicView.width - (this.scale(boundingBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
+            this.graphicView.width - (this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
         }
 
-        var y = this.scale(boundingBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
+        var y = this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
 
         // Adjust the "x" and "y" coordinates when screen flipped. - - - - - - - - - - - - - - - -
         x =
@@ -115,15 +80,15 @@ class FaceCoordinatesController(
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-        val left = x - this.scale(boundingBox.width() / 2.0f, scaleFactor)
-        val top = y - this.scale(boundingBox.height() / 2.0f, scaleFactor)
-        val right = x + this.scale(boundingBox.width() / 2.0f, scaleFactor)
-        val bottom = y + this.scale(boundingBox.height() / 2.0f, scaleFactor)
+        val left = x - this.scale(detectionBox.width() / 2.0f, scaleFactor)
+        val top = y - this.scale(detectionBox.height() / 2.0f, scaleFactor)
+        val right = x + this.scale(detectionBox.width() / 2.0f, scaleFactor)
+        val bottom = y + this.scale(detectionBox.height() / 2.0f, scaleFactor)
 
         return RectF(left, top, right, bottom)
     }
 
-    fun getFaceContours(face: Face, cameraInputImage: InputImage): MutableList<PointF> {
+    fun getFaceContours(contours: MutableList<PointF>, cameraInputImage: InputImage): MutableList<PointF> {
 
         val imageHeight = cameraInputImage.height.toFloat()
         val imageWidth = cameraInputImage.width.toFloat()
@@ -154,18 +119,16 @@ class FaceCoordinatesController(
 
         val faceContours = mutableListOf<PointF>()
 
-        face.allContours.forEach {faceContour ->
-            faceContour.points.forEach {point ->
-                val x = if (cameraInputImage.rotationDegrees == 90) {
-                    this.scale(point.x, scaleFactor) - postScaleWidthOffset
-                } else {
-                    this.graphicView.width - (this.scale(point.x, scaleFactor) - postScaleWidthOffset)
-                }
-
-                val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
-
-                faceContours.add(PointF(x,y))
+        contours.forEach {point ->
+            val x = if (cameraInputImage.rotationDegrees == 90) {
+                this.scale(point.x, scaleFactor) - postScaleWidthOffset
+            } else {
+                this.graphicView.width - (this.scale(point.x, scaleFactor) - postScaleWidthOffset)
             }
+
+            val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
+
+            faceContours.add(PointF(x,y))
         }
 
         return faceContours
