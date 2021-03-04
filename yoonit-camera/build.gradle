@@ -59,7 +59,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
     implementation "androidx.camera:camera-view:1.0.0-alpha15"
 
-    implementation 'com.github.Yoonit-Labs:android-yoonit-facefy:5c3c76d6943280430bd2ddf3f4051a0782f3d8e6'
+    implementation 'com.github.Yoonit-Labs:android-yoonit-facefy:1.0.1'
 
     // MLKit
     implementation "com.google.mlkit:barcode-scanning:16.0.3"
