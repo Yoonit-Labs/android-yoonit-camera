@@ -198,7 +198,13 @@ Pre-define message constants used by the `onMessage` event.
 
 Clone the repo, change what you want and send PR.
 
+For commit messages we use <a href="https://www.conventionalcommits.org/">Conventional Commits</a>.
+
 Contributions are always welcome!
+
+<a href="https://github.com/Yoonit-Labs/android-yoonit-camera/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Yoonit-Labs/android-yoonit-camera" />
+</a>
 
 ---
 
