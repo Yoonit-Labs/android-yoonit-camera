@@ -84,7 +84,7 @@ class FaceCoordinatesController(
         }
 
         val viewAspectRatio: Float =
-                this.graphicView.width.toFloat() / this.graphicView.height.toFloat()
+            this.graphicView.width.toFloat() / this.graphicView.height.toFloat()
         val imageAspectRatio: Float = imageHeight / imageWidth
 
         var postScaleWidthOffset = 0f
@@ -95,17 +95,17 @@ class FaceCoordinatesController(
             // The image needs to be vertically cropped to be displayed in this view.
             scaleFactor = this.graphicView.width.toFloat() / imageHeight
             postScaleHeightOffset =
-                    (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
+                (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
         } else {
             // The image needs to be horizontally cropped to be displayed in this view.
             scaleFactor = this.graphicView.height.toFloat() / imageWidth
             postScaleWidthOffset =
-                    ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
+                ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
         }
 
         val faceContours = mutableListOf<PointF>()
 
-        contours.forEach {point ->
+        contours.forEach { point ->
             val x = if (cameraInputImage.rotationDegrees == 90) {
                 this.scale(point.x, scaleFactor) - postScaleWidthOffset
             } else {
@@ -114,7 +114,7 @@ class FaceCoordinatesController(
 
             val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
 
-            faceContours.add(PointF(x,y))
+            faceContours.add(PointF(x, y))
         }
 
         return faceContours
@@ -133,7 +133,7 @@ class FaceCoordinatesController(
      *  - INVALID_CAPTURE_FACE_ROI_MIN_SIZE
      */
     fun getError(detectionBox: RectF): String? {
-        
+
         val screenWidth = this.graphicView.width
         val screenHeight = this.graphicView.height
 
@@ -143,9 +143,9 @@ class FaceCoordinatesController(
 
         val isOutOfTheScreen =
             detectionBox.left < 0 ||
-                    detectionBox.top < 0 ||
-                    detectionBox.right > screenWidth ||
-                    detectionBox.bottom > screenHeight
+                detectionBox.top < 0 ||
+                detectionBox.right > screenWidth ||
+                detectionBox.bottom > screenHeight
 
         if (isOutOfTheScreen) {
             return ""
@@ -187,7 +187,7 @@ class FaceCoordinatesController(
                 // Face is smaller than the defined "minimumSize".
                 val roiWidth: Float =
                     screenWidth -
-                            ((CaptureOptions.faceROI.rightOffset + CaptureOptions.faceROI.leftOffset) * screenWidth)
+                        ((CaptureOptions.faceROI.rightOffset + CaptureOptions.faceROI.leftOffset) * screenWidth)
                 val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
 
                 if (CaptureOptions.faceROI.minimumSize > faceRelatedWithROI) {

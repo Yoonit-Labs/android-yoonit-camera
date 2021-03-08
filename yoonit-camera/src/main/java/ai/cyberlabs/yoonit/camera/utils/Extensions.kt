@@ -33,13 +33,13 @@ fun Bitmap.rotate(rotationDegrees: Float): Bitmap {
     matrix.postRotate(rotationDegrees)
 
     return Bitmap.createBitmap(
-            this,
-            0,
-            0,
-            width,
-            height,
-            matrix,
-            false
+        this,
+        0,
+        0,
+        width,
+        height,
+        matrix,
+        false
     )
 }
 
@@ -50,24 +50,24 @@ fun Bitmap.mirror(rotationDegrees: Float): Bitmap {
     }
 
     return Bitmap.createBitmap(
-            this,
-            0,
-            0,
-            width,
-            height,
-            matrix,
-            false
+        this,
+        0,
+        0,
+        width,
+        height,
+        matrix,
+        false
     )
 }
 
 fun Bitmap.crop(rect: Rect): Bitmap {
     return Bitmap.createBitmap(
-                    this,
-                    rect.left,
-                    rect.top,
-                    rect.width(),
-                    rect.height()
-            )
+        this,
+        rect.left,
+        rect.top,
+        rect.width(),
+        rect.height()
+    )
 }
 
 fun Image.toRGBBitmap(context: Context): Bitmap {
@@ -92,7 +92,6 @@ fun Image.toRGBBitmap(context: Context): Bitmap {
 
     return bitmap
 }
-
 
 fun Image.toYUVBitmap(): Bitmap {
     val yBuffer = planes[0].buffer // Y

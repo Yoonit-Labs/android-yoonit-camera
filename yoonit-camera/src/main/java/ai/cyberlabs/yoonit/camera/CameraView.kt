@@ -130,7 +130,6 @@ open class CameraView @JvmOverloads constructor(
             if (cameraLens == "front") CameraSelector.LENS_FACING_FRONT
             else CameraSelector.LENS_FACING_BACK
 
-
         if (CaptureOptions.cameraLens != cameraSelector) {
             this.cameraController.toggleCameraLens()
         }

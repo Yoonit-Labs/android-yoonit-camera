@@ -13,9 +13,9 @@ package ai.cyberlabs.yoonit.camera.controllers
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.CaptureType
-import ai.cyberlabs.yoonit.camera.analyzers.qrcode.QRCodeAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.face.FaceAnalyzer
 import ai.cyberlabs.yoonit.camera.analyzers.frame.FrameAnalyzer
+import ai.cyberlabs.yoonit.camera.analyzers.qrcode.QRCodeAnalyzer
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
@@ -49,7 +49,6 @@ class CameraController(
     private lateinit var preview: Preview
     private var cameraProviderFuture = ProcessCameraProvider.getInstance(this.context)
     private var cameraProviderProcess: ProcessCameraProvider? = null
-
 
     // Called when number of images reached.
     override fun onStopAnalyzer() {
@@ -124,33 +123,33 @@ class CameraController(
         this.cameraProviderProcess?.let {
             this.imageAnalyzerController.stop()
 
-            when(CaptureOptions.type) {
+            when (CaptureOptions.type) {
 
                 CaptureType.FACE -> {
                     this.imageAnalyzerController.start(
-                            FaceAnalyzer(
-                                    this.context,
-                                    this.cameraEventListener,
-                                    this.graphicView,
-                                    this as CameraCallback
-                            )
+                        FaceAnalyzer(
+                            this.context,
+                            this.cameraEventListener,
+                            this.graphicView,
+                            this as CameraCallback
+                        )
                     )
                 }
 
                 CaptureType.QRCODE -> this.imageAnalyzerController.start(
-                        QRCodeAnalyzer(
-                                this.cameraEventListener,
-                                this.graphicView
-                        )
+                    QRCodeAnalyzer(
+                        this.cameraEventListener,
+                        this.graphicView
+                    )
                 )
 
                 CaptureType.FRAME -> this.imageAnalyzerController.start(
-                        FrameAnalyzer(
-                                this.context,
-                                this.cameraEventListener,
-                                this.graphicView,
-                                this as CameraCallback
-                        )
+                    FrameAnalyzer(
+                        this.context,
+                        this.cameraEventListener,
+                        this.graphicView,
+                        this as CameraCallback
+                    )
                 )
 
                 CaptureType.NONE -> this.stopAnalyzer()

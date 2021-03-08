@@ -136,11 +136,14 @@ class CameraGraphicView constructor(
     private fun drawFaceContours(canvas: Canvas) {
         this.faceContours?.let { faceContours ->
             faceContours.forEach { contour ->
-                canvas.drawPoint(contour.x, contour.y, Paint().apply {
-                    this.color = CaptureOptions.faceContoursColor
-                    this.style = Paint.Style.STROKE
-                    this.strokeWidth = 5.0f
-                })
+                canvas.drawPoint(
+                    contour.x, contour.y,
+                    Paint().apply {
+                        this.color = CaptureOptions.faceContoursColor
+                        this.style = Paint.Style.STROKE
+                        this.strokeWidth = 5.0f
+                    }
+                )
             }
         }
     }
@@ -188,12 +191,15 @@ class CameraGraphicView constructor(
 
         val offsetAreaPaint = Paint()
         offsetAreaPaint.color = CaptureOptions.faceROI.areaOffsetColor
-        areaCanvas.drawRect(Rect(
-            0,
-            0,
-            width,
-            height
-        ), offsetAreaPaint)
+        areaCanvas.drawRect(
+            Rect(
+                0,
+                0,
+                width,
+                height
+            ),
+            offsetAreaPaint
+        )
 
         offsetAreaPaint.color = Color.TRANSPARENT
         offsetAreaPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
