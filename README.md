@@ -5,15 +5,15 @@
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge)
 
 A Android plugin to provide:
-- Modern Android Camera API (Camera X)
-- [Standart Google ML Kit](https://developers.google.com/ml-kit)
+- Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
 - Camera preview (Front & Back)
-- Face detection (With Min & Max size)
-- Landmark detection
-- Face crop
-- Face capture
+- [Google MLKit](https://developers.google.com/ml-kit) integration
+- [PyTorch](https://pytorch.org/mobile/home/) integration
+- Computer vision pipeline
+- Face detection, capture and image crop
+- Understanding of the human face
 - Frame capture
-- Face ROI
+- Capture timed images
 - QR Code scanning
 
 ## Install
@@ -77,7 +77,13 @@ this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 ...
 fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 ...
-	override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {  
+	override fun onImageCaptured(
+	    type: String,
+	    count: Int,
+	    total: Int,
+	    imagePath: String,
+	    inferences: ArrayList<Pair<String, FloatArray>>
+    ) {
 		// YOUR CODE
 	}
 ...
