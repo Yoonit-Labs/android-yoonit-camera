@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "face" -> {
-
                     this.cameraView.startCaptureType("face")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
@@ -54,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "frame" -> {
-
                     this.cameraView.startCaptureType("frame")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE

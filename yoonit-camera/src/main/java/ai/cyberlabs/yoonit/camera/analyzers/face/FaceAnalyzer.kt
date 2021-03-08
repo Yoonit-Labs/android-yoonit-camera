@@ -102,7 +102,7 @@ class FaceAnalyzer(
                         return@detect
                     }
 
-                    // Emit face bounding box.
+                    // Emit face analysis.
                     this.cameraEventListener.onFaceDetected(
                         detectionBox.left.pxToDPI(this.context),
                         detectionBox.top.pxToDPI(this.context),
@@ -186,7 +186,7 @@ class FaceAnalyzer(
      * 5. Scale image if necessary;
      *
      * @param mediaImage The camera frame image;
-     * @param closestFace The face detected bounding box;
+     * @param boundingBox The face detected bounding box;
      * @param cameraRotation The camera rotation;
      *
      * @return the face bitmap.
