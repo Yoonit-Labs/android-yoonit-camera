@@ -56,14 +56,9 @@ class FaceAnalyzer(
     override fun analyze(imageProxy: ImageProxy) {
 
         val mediaImage = imageProxy.image ?: return
-
-        val cameraRotation: Int =
-            if (CaptureOptions.isScreenFlipped) 270
-            else imageProxy.imageInfo.rotationDegrees
-
         val image = InputImage.fromMediaImage(
             mediaImage,
-            cameraRotation
+            imageProxy.imageInfo.rotationDegrees
         )
 
         facefy.detect(
@@ -89,7 +84,7 @@ class FaceAnalyzer(
                     val faceBitmap: Bitmap = this.getFaceBitmap(
                         mediaImage,
                         boundingBox,
-                        cameraRotation.toFloat()
+                        imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
 
                     // Draw or clean the face detection box, face blur and face contours.

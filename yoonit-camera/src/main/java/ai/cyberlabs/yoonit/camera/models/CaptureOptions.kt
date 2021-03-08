@@ -78,6 +78,4 @@ object CaptureOptions {
      * The value must be between 0 and 1.
      */
     var faceCaptureMaxSize: Float = 1.0f
-
-    var isScreenFlipped: Boolean = false
 }

@@ -62,23 +62,12 @@ class FaceCoordinatesController(
                 ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
         }
 
-        var x = if (cameraInputImage.rotationDegrees == 90) {
+        val x = if (cameraInputImage.rotationDegrees == 90) {
             this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
         } else {
             this.graphicView.width - (this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
         }
-
-        var y = this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
-
-        // Adjust the "x" and "y" coordinates when screen flipped. - - - - - - - - - - - - - - - -
-        x =
-            if (CaptureOptions.isScreenFlipped) this.graphicView.width - x
-            else x
-        y =
-            if (CaptureOptions.isScreenFlipped) this.graphicView.height - y
-            else y
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+        val y = this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
 
         val left = x - this.scale(detectionBox.width() / 2.0f, scaleFactor)
         val top = y - this.scale(detectionBox.height() / 2.0f, scaleFactor)

@@ -482,14 +482,6 @@ open class CameraView @JvmOverloads constructor(
         CaptureOptions.computerVision.clear()
     }
 
-    fun flipScreen() {
-        CaptureOptions.isScreenFlipped = !CaptureOptions.isScreenFlipped
-
-        this.rotation =
-            if (CaptureOptions.isScreenFlipped) 180f
-            else 0f
-    }
-
     companion object {
         private const val TAG = "CameraView"
     }
