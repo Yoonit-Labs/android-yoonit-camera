@@ -3,14 +3,11 @@ package ai.cyberlabs.yoonit.camera.analyzers.face
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
-import ai.cyberlabs.yoonit.camera.utils.resize
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
-import kotlin.math.max
 
 /**
  * Responsible to manipulate everything related with the face bounding box.
@@ -22,7 +19,7 @@ class FaceCoordinatesController(
      * Transform the detected face bounding box coordinates in the UI graphic
      * coordinates, based in the [CameraGraphicView] and [InputImage] dimensions.
      *
-     * @param face the detected face bounding box.
+     * @param boundingBox the detected face bounding box.
      * @param cameraInputImage the camera image input with the face detected.
      * @return the detection box rect of the detected face. null if face is null or detection box is
      * out of the screen.

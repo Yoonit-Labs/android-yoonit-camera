@@ -78,7 +78,10 @@ class FaceAnalyzer(
 
                     // Transform the camera face contour points to UI graphic coordinates.
                     // Used to draw the face contours.
-                    val faceContours = this.faceCoordinatesController.getFaceContours(faceDetected.contours, image)
+                    val faceContours = this.faceCoordinatesController.getFaceContours(
+                        faceDetected.contours,
+                        image
+                    )
 
                     // Get face bitmap.
                     val faceBitmap: Bitmap = this.getFaceBitmap(
@@ -104,7 +107,13 @@ class FaceAnalyzer(
                         detectionBox.left.pxToDPI(this.context),
                         detectionBox.top.pxToDPI(this.context),
                         detectionBox.width().pxToDPI(this.context),
-                        detectionBox.height().pxToDPI(this.context)
+                        detectionBox.height().pxToDPI(this.context),
+                        faceDetected.leftEyeOpenProbability,
+                        faceDetected.rightEyeOpenProbability,
+                        faceDetected.smilingProbability,
+                        faceDetected.headEulerAngleX,
+                        faceDetected.headEulerAngleY,
+                        faceDetected.headEulerAngleZ
                     )
 
                     // Continue only if current time stamp is within the interval.
@@ -129,7 +138,12 @@ class FaceAnalyzer(
                     this.handleEmitImageCaptured(imagePath, inferences)
                 },
                 { message ->
-                    this.cameraEventListener?.let { this.cameraEventListener.onError(message) }
+                    this.cameraEventListener?.let {
+                        when (message) {
+                            "FACE_UNDETECTED" -> this.cameraEventListener.onFaceUndetected()
+                            else -> this.cameraEventListener.onError(message)
+                        }
+                    }
                 },
                 { imageProxy.close() }
         )
