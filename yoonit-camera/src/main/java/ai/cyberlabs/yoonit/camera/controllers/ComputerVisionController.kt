@@ -11,7 +11,7 @@
 
 package ai.cyberlabs.yoonit.camera.controllers
 
-import android.graphics.*
+import android.graphics.Bitmap
 import org.pytorch.IValue
 import org.pytorch.Module
 import org.pytorch.torchvision.TensorImageUtils
@@ -31,7 +31,8 @@ class ComputerVisionController {
             val inputTensor = TensorImageUtils.bitmapToFloat32Tensor(
                 bitmap,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
-                TensorImageUtils.TORCHVISION_NORM_STD_RGB)
+                TensorImageUtils.TORCHVISION_NORM_STD_RGB
+            )
 
             val outputTensor = module.forward(IValue.from(inputTensor)).toTensor()
 

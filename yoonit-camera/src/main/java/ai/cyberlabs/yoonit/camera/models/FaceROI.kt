@@ -45,10 +45,10 @@ class FaceROI {
         get() {
             return (
                 this.topOffset != 0.0f ||
-                this.rightOffset != 0.0f ||
-                this.bottomOffset != 0.0f ||
-                this.leftOffset != 0.0f
-            )
+                    this.rightOffset != 0.0f ||
+                    this.bottomOffset != 0.0f ||
+                    this.leftOffset != 0.0f
+                )
         }
 
     /**
@@ -68,9 +68,9 @@ class FaceROI {
     ): Boolean {
         return (
             this.topOffset > topOffset ||
-            this.rightOffset > rightOffset ||
-            this.bottomOffset > bottomOffset ||
-            this.leftOffset > leftOffset
-        )
+                this.rightOffset > rightOffset ||
+                this.bottomOffset > bottomOffset ||
+                this.leftOffset > leftOffset
+            )
     }
 }

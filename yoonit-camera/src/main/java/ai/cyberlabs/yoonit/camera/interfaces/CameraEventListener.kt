@@ -21,7 +21,18 @@ interface CameraEventListener {
         inferences: ArrayList<android.util.Pair<String, FloatArray>>
     )
 
-    fun onFaceDetected(x: Int, y: Int, width: Int, height: Int)
+    fun onFaceDetected(
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        leftEyeOpenProbability: Float?,
+        rightEyeOpenProbability: Float?,
+        smilingProbability: Float?,
+        headEulerAngleX: Float,
+        headEulerAngleY: Float,
+        headEulerAngleZ: Float
+    )
 
     fun onFaceUndetected()
 

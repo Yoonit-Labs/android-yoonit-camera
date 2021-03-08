@@ -130,7 +130,6 @@ open class CameraView @JvmOverloads constructor(
             if (cameraLens == "front") CameraSelector.LENS_FACING_FRONT
             else CameraSelector.LENS_FACING_BACK
 
-
         if (CaptureOptions.cameraLens != cameraSelector) {
             this.cameraController.toggleCameraLens()
         }
@@ -480,14 +479,6 @@ open class CameraView @JvmOverloads constructor(
      */
     fun computerVisionClearModels() {
         CaptureOptions.computerVision.clear()
-    }
-
-    fun flipScreen() {
-        CaptureOptions.isScreenFlipped = !CaptureOptions.isScreenFlipped
-
-        this.rotation =
-            if (CaptureOptions.isScreenFlipped) 180f
-            else 0f
     }
 
     companion object {

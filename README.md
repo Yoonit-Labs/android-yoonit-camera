@@ -5,41 +5,57 @@
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge)
 
 A Android plugin to provide:
-- Modern Android Camera API (Camera X)
-- [Standart Google ML Kit](https://developers.google.com/ml-kit)
+- Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
 - Camera preview (Front & Back)
-- Face detection (With Min & Max size)
-- Landmark detection
-- Face crop
-- Face capture
+- [Google MLKit](https://developers.google.com/ml-kit) integration
+- [PyTorch](https://pytorch.org/mobile/home/) integration
+- Computer vision pipeline
+- Face detection, capture and image crop
+- Understanding of the human face
 - Frame capture
-- Face ROI
+- Capture timed images
 - QR Code scanning
 
-## Install
-  
-Add the JitPack repository to your root `build.gradle` at the end of repositories  
+## Table of Contents
 
-```groovy  
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Camera Preview](#camera-preview)
+  * [Start capturing face images](#start-capturing-face-images)
+  * [Start scanning QR Codes](#start-capturing-face-images)
+* [API](#api)
+  * [Methods](#methods)
+  * [Events](#events)
+    * [Face Analysis](#face-analysis)
+    * [Head Movements](#head-movements)
+  * [KeyError](#keyerror)
+  * [Message](#message)
+* [To contribute and make it better](#to-contribute-and-make-it-better)
+
+## Installation
+
+Add the JitPack repository to your root `build.gradle` at the end of repositories
+
+```groovy
 allprojects {
-	repositories {  
-	... 
+	repositories {
+	...
 	maven { url 'https://jitpack.io' }
-	} 
-}  
-```  
+	}
+}
+```
 
-Add the dependency  
+Add the dependency
 
-```groovy  
+```groovy
 dependencies {
 	implementation 'com.github.Yoonit-Labs:android-yoonit-camera:master-SNAPSHOT'
 }
-```  
+```
 
 
-## Usage  
- 
+## Usage
+
 All the functionalities that the `android-yoonit-camera` provides is accessed through the `CameraView`, that includes the camera preview.  Below we have the basic usage code, for more details, see the [**Methods**](#methods).
 
 
@@ -48,9 +64,9 @@ All the functionalities that the `android-yoonit-camera` provides is accessed th
 Do not forget request camera permission. Use like this in the your layout XML:
 
 ```kotlin
-<ai.cyberlabs.yoonit.camera.CameraView  
-  android:id="@+id/camera_view"  
-  android:layout_width="match_parent"  
+<ai.cyberlabs.yoonit.camera.CameraView
+  android:id="@+id/camera_view"
+  android:layout_width="match_parent"
   android:layout_height="match_parent" />
 ```
 
@@ -77,9 +93,30 @@ this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 ...
 fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 ...
-	override fun onImageCaptured(type: String, count: Int, total: Int, imagePath: String) {  
+	override fun onImageCaptured(
+	    type: String,
+	    count: Int,
+	    total: Int,
+	    imagePath: String,
+	    inferences: ArrayList<Pair<String, FloatArray>>
+    ) {
 		// YOUR CODE
 	}
+
+    override fun onFaceDetected(
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        leftEyeOpenProbability: Float?,
+        rightEyeOpenProbability: Float?,
+        smilingProbability: Float?,
+        headEulerAngleX: Float,
+        headEulerAngleY: Float,
+        headEulerAngleZ: Float
+    ) {
+        // YOU CODE
+    }
 ...
 }
 ```
@@ -99,14 +136,13 @@ this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 ...
 fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
 ...
-	override fun onQRCodeScanned(content: String) {  
+	override fun onQRCodeScanned(content: String) {
 		// YOUR CODE
 	}
 ...
 }
-```  
-    
-    
+```
+
 ## API
   
 ### Methods   
@@ -147,16 +183,43 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 ### Events
 
-| Event              | Parameters                                                                                                 | Description
-| -                  | -                                                                                                          | -
-| onImageCaptured    | `type: String, count: Int, total: Int, imagePath: String, inferences: ArrayList<Pair<String, FloatArray>>` | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the image file is created: <ul><li>type: 'face' | 'frame'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><li>inferences: each array element is the image inference result.</li><ul>
-| onFaceDetected     | `x: Int, y: Int, width: Int, height: Int`                                                                  | Must have started capture type of face. Emit the detected face bounding box.
-| onFaceUndetected   | -                                                                                                          | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
-| onEndCapture       | -                                                                                                          | Must have started capture type of face/frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).
-| onQRCodeScanned    | `content: String`                                                                                          | Must have started capture type of qrcode (see `startCaptureType`). Emitted when the camera scan a QR Code.
-| onError            | `error: String`                                                                                            | Emit message error.
-| onMessage          | `message: String`                                                                                          | Emit message.
-| onPermissionDenied | -                                                                                                          | Emit when try to `startPreview` but there is not camera permission.
+| Event              | Parameters                                                                                                                                                                                                     | Description
+| -                  | -                                                                                                                                                                                                              | -
+| onImageCaptured    | `type: String, count: Int, total: Int, imagePath: String, inferences: ArrayList<Pair<String, FloatArray>>`                                                                                                     | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the image file is created: <ul><li>type: 'face' | 'frame'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><li>inferences: each array element is the image inference result.</li><ul>
+| onFaceDetected     | `x: Int, y: Int, width: Int, height: Int, leftEyeOpenProbability: Float?, rightEyeOpenProbability: Float?, smilingProbability: Float?, headEulerAngleX: Float, headEulerAngleY: Float, headEulerAngleZ: Float` | Must have started capture type of face. Emit the [face analysis](#face-analysis).
+| onFaceUndetected   | -                                                                                                                                                                                                              | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
+| onEndCapture       | -                                                                                                                                                                                                              | Must have started capture type of face/frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).
+| onQRCodeScanned    | `content: String`                                                                                                                                                                                              | Must have started capture type of qrcode (see `startCaptureType`). Emitted when the camera scan a QR Code.
+| onError            | `error: String`                                                                                                                                                                                                | Emit message error.
+| onMessage          | `message: String`                                                                                                                                                                                              | Emit message.
+| onPermissionDenied | -                                                                                                                                                                                                              | Emit when try to `startPreview` but there is not camera permission.
+
+#### Face Analysis
+
+The face analysis is the response send by the `onFaceDetected`. Here we specify all the parameters.
+
+| Attribute               | Type     | Description |
+| -                       | -        | -           |
+| x                       | `Int`    | The `x` position of the face in the screen. |
+| y                       | `Int`    | The `y` position of the face in the screen. |
+| width                   | `Int`    | The `width` position of the face in the screen. |
+| height                  | `Int`    | The `height` position of the face in the screen. |
+| leftEyeOpenProbability  | `Float?` | The left eye open probability. |
+| rightEyeOpenProbability | `Float?` | The right eye open probability. |
+| smilingProbability      | `Float?` | The smiling probability. |
+| headEulerAngleX         | `Float`  | The angle in degrees that indicate the vertical head direction. See [Head Movements](#headmovements) |
+| headEulerAngleY         | `Float`  | The angle in degrees that indicate the horizontal head direction. See [Head Movements](#headmovements) |
+| headEulerAngleZ         | `Float`  | The angle in degrees that indicate the tilt head direction. See [Head Movements](#headmovements) |
+
+#### Head Movements
+
+Here we explaining the above gif and how reached the "results". Each "movement" (vertical, horizontal and tilt) is a state, based in the angle in degrees that indicate head direction;
+
+| Head Direction | Attribute         |  _v_ < -36° | -36° < _v_ < -12° | -12° < _v_ < 12° | 12° < _v_ < 36° |  36° < _v_  |
+| -              | -                 | -           | -                 | -                | -               | -           |
+| Vertical       | `headEulerAngleX` | Super Down  | Down              | Frontal          | Up              | Super Up    |
+| Horizontal     | `headEulerAngleY` | Super Right | Right             | Frontal          | Left            | Super Left  |
+| Tilt           | `headEulerAngleZ` | Super Left  | Left              | Frontal          | Right           | Super Right |
 
 ### KeyError
 
@@ -198,7 +261,13 @@ Pre-define message constants used by the `onMessage` event.
 
 Clone the repo, change what you want and send PR.
 
+For commit messages we use <a href="https://www.conventionalcommits.org/">Conventional Commits</a>.
+
 Contributions are always welcome!
+
+<a href="https://github.com/Yoonit-Labs/android-yoonit-camera/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Yoonit-Labs/android-yoonit-camera" />
+</a>
 
 ---
 
