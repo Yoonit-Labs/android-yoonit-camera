@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "face" -> {
-
                     this.cameraView.startCaptureType("face")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
@@ -54,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "frame" -> {
-
                     this.cameraView.startCaptureType("frame")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
@@ -327,8 +325,29 @@ class MainActivity : AppCompatActivity() {
             image_preview.visibility = View.VISIBLE
         }
 
-        override fun onFaceDetected(x: Int, y: Int, width: Int, height: Int) {
-            Log.d(TAG, "onFaceDetected $x, $y, $width, $height.")
+        override fun onFaceDetected(
+            x: Int,
+            y: Int,
+            width: Int,
+            height: Int,
+            leftEyeOpenProbability: Float?,
+            rightEyeOpenProbability: Float?,
+            smilingProbability: Float?,
+            headEulerAngleX: Float,
+            headEulerAngleY: Float,
+            headEulerAngleZ: Float
+        ) {
+            Log.d(
+                TAG,
+                "onFaceDetected: \n" +
+                "x: $x, y: $y, w: $width, h: $height. \n" +
+                "leftEye: $leftEyeOpenProbability \n" +
+                "rightEye: $leftEyeOpenProbability \n" +
+                "smilling: $smilingProbability \n" +
+                "head X angle: $headEulerAngleX \n" +
+                "head Y angle: $headEulerAngleY \n" +
+                "head Z angle: $headEulerAngleZ"
+            )
         }
 
         override fun onFaceUndetected() {

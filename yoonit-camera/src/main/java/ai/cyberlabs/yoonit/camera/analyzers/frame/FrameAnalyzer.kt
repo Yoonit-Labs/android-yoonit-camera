@@ -13,9 +13,9 @@ package ai.cyberlabs.yoonit.camera.analyzers.frame
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
-import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.utils.mirror
 import ai.cyberlabs.yoonit.camera.utils.rotate
 import ai.cyberlabs.yoonit.camera.utils.toRGBBitmap
