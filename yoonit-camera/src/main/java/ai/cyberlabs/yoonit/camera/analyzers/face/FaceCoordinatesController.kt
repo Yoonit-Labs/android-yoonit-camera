@@ -24,16 +24,18 @@ class FaceCoordinatesController(
      * @return the detection box rect of the detected face. null if face is null or detection box is
      * out of the screen.
      */
-    fun getDetectionBox(boundingBox: Rect, cameraInputImage: InputImage): RectF {
+    fun getDetectionBox(
+        boundingBox: Rect,
+        imageHeight: Float,
+        imageWidth: Float,
+        rotationDegrees: Float
+    ): RectF {
         var detectionBox = boundingBox
 
         // Scale bounding box.
         if (CaptureOptions.facePaddingPercent != 0f) {
             detectionBox = boundingBox.scaledBy(CaptureOptions.facePaddingPercent)
         }
-
-        val imageHeight = cameraInputImage.height.toFloat()
-        val imageWidth = cameraInputImage.width.toFloat()
 
         if (imageHeight <= 0 || imageWidth <= 0) {
             return RectF()
@@ -59,7 +61,7 @@ class FaceCoordinatesController(
                 ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
         }
 
-        val x = if (cameraInputImage.rotationDegrees == 90) {
+        val x = if (rotationDegrees == 90f) {
             this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
         } else {
             this.graphicView.width - (this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
@@ -74,11 +76,12 @@ class FaceCoordinatesController(
         return RectF(left, top, right, bottom)
     }
 
-    fun getFaceContours(contours: MutableList<PointF>, cameraInputImage: InputImage): MutableList<PointF> {
-
-        val imageHeight = cameraInputImage.height.toFloat()
-        val imageWidth = cameraInputImage.width.toFloat()
-
+    fun getFaceContours(
+        contours: MutableList<PointF>,
+        imageHeight: Float,
+        imageWidth: Float,
+        rotationDegrees: Float
+    ): MutableList<PointF> {
         if (imageHeight <= 0 || imageWidth <= 0) {
             return mutableListOf()
         }
@@ -106,7 +109,7 @@ class FaceCoordinatesController(
         val faceContours = mutableListOf<PointF>()
 
         contours.forEach { point ->
-            val x = if (cameraInputImage.rotationDegrees == 90) {
+            val x = if (rotationDegrees == 90f) {
                 this.scale(point.x, scaleFactor) - postScaleWidthOffset
             } else {
                 this.graphicView.width - (this.scale(point.x, scaleFactor) - postScaleWidthOffset)

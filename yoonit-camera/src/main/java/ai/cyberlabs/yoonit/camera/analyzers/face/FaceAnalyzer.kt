@@ -12,6 +12,7 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
+import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
@@ -58,97 +59,102 @@ class FaceAnalyzer(
     override fun analyze(imageProxy: ImageProxy) {
 
         val mediaImage = imageProxy.image ?: return
-        val image = InputImage.fromMediaImage(
-            mediaImage,
-            imageProxy.imageInfo.rotationDegrees
-        )
+
+        val bitmap = mediaImage.toRGBBitmap(context).rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
 
         facefy.detect(
-            image,
+            bitmap,
             { faceDetected ->
-                val boundingBox = faceDetected.boundingBox
+                faceDetected?.let { faceDetected ->
+                    val boundingBox = faceDetected.boundingBox
 
-                val detectionBox = this.faceCoordinatesController.getDetectionBox(
-                    boundingBox,
-                    image
-                )
+                    val detectionBox = this.faceCoordinatesController.getDetectionBox(
+                        boundingBox,
+                        imageProxy.height.toFloat(),
+                        imageProxy.width.toFloat(),
+                        imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
 
-                // Verify if has error on detectionBox.
-                if (this.hasError(detectionBox)) {
-                    return@detect
-                }
-
-                // Transform the camera face contour points to UI graphic coordinates.
-                // Used to draw the face contours.
-                val faceContours = this.faceCoordinatesController.getFaceContours(
-                    faceDetected.contours,
-                    image
-                )
-
-                // Get face bitmap.
-                val faceBitmap: Bitmap = this.getFaceBitmap(
-                    mediaImage,
-                    boundingBox,
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
-                )
-
-                // Draw or clean the face detection box, face blur and face contours.
-                this.graphicView.handleDraw(
-                    detectionBox,
-                    faceBitmap,
-                    faceContours
-                )
-
-                // Stop here if camera event listener is not set.
-                if (this.cameraEventListener == null) {
-                    return@detect
-                }
-
-                // Emit face analysis.
-                this.cameraEventListener.onFaceDetected(
-                    detectionBox.left.pxToDPI(this.context),
-                    detectionBox.top.pxToDPI(this.context),
-                    detectionBox.width().pxToDPI(this.context),
-                    detectionBox.height().pxToDPI(this.context),
-                    faceDetected.leftEyeOpenProbability,
-                    faceDetected.rightEyeOpenProbability,
-                    faceDetected.smilingProbability,
-                    faceDetected.headEulerAngleX,
-                    faceDetected.headEulerAngleY,
-                    faceDetected.headEulerAngleZ
-                )
-
-                // Continue only if current time stamp is within the interval.
-                val currentTimestamp = System.currentTimeMillis()
-                if (currentTimestamp - this.analyzerTimeStamp < CaptureOptions.timeBetweenImages) {
-                    return@detect
-                }
-                this.analyzerTimeStamp = currentTimestamp
-
-                // Computer Vision Inference.
-                val inferences: ArrayList<android.util.Pair<String, FloatArray>> =
-                    if (CaptureOptions.computerVision.enable)
-                        ComputerVisionController.getInferences(
-                            CaptureOptions.computerVision.modelMap,
-                            faceBitmap
-                        )
-                    else arrayListOf()
-
-                // Save image captured.
-                val imagePath =
-                    if (CaptureOptions.saveImageCaptured) this.handleSaveImage(faceBitmap)
-                    else ""
-
-                // Handle to emit image path and the inferences.
-                this.handleEmitImageCaptured(imagePath, inferences)
-            },
-            { message ->
-                this.cameraEventListener?.let {
-                    when (message) {
-                        "FACE_UNDETECTED" -> this.cameraEventListener.onFaceUndetected()
-                        else -> this.cameraEventListener.onError(message)
+                    // Verify if has error on detectionBox.
+                    if (this.hasError(detectionBox)) {
+                        return@detect
                     }
+
+                    // Transform the camera face contour points to UI graphic coordinates.
+                    // Used to draw the face contours.
+                    val faceContours = this.faceCoordinatesController.getFaceContours(
+                        faceDetected.contours,
+                        imageProxy.height.toFloat(),
+                        imageProxy.width.toFloat(),
+                        imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
+
+                    // Get face bitmap.
+                    val faceBitmap: Bitmap = this.getFaceBitmap(
+                        mediaImage,
+                        boundingBox,
+                        imageProxy.imageInfo.rotationDegrees.toFloat()
+                    )
+
+                    // Draw or clean the face detection box, face blur and face contours.
+                    this.graphicView.handleDraw(
+                        detectionBox,
+                        faceBitmap,
+                        faceContours
+                    )
+
+                    // Stop here if camera event listener is not set.
+                    if (this.cameraEventListener == null) {
+                        return@detect
+                    }
+
+                    // Emit face analysis.
+                    this.cameraEventListener.onFaceDetected(
+                        detectionBox.left.pxToDPI(this.context),
+                        detectionBox.top.pxToDPI(this.context),
+                        detectionBox.width().pxToDPI(this.context),
+                        detectionBox.height().pxToDPI(this.context),
+                        faceDetected.leftEyeOpenProbability,
+                        faceDetected.rightEyeOpenProbability,
+                        faceDetected.smilingProbability,
+                        faceDetected.headEulerAngleX,
+                        faceDetected.headEulerAngleY,
+                        faceDetected.headEulerAngleZ
+                    )
+
+                    // Continue only if current time stamp is within the interval.
+                    val currentTimestamp = System.currentTimeMillis()
+                    if (currentTimestamp - this.analyzerTimeStamp < CaptureOptions.timeBetweenImages) {
+                        return@detect
+                    }
+                    this.analyzerTimeStamp = currentTimestamp
+
+                    // Computer Vision Inference.
+                    val inferences: ArrayList<android.util.Pair<String, FloatArray>> =
+                        if (CaptureOptions.computerVision.enable)
+                            ComputerVisionController.getInferences(
+                                CaptureOptions.computerVision.modelMap,
+                                faceBitmap
+                            )
+                        else arrayListOf()
+
+                    // Save image captured.
+                    val imagePath =
+                        if (CaptureOptions.saveImageCaptured) this.handleSaveImage(faceBitmap)
+                        else ""
+
+                    // Handle to emit image path and the inferences.
+                    this.handleEmitImageCaptured(imagePath, inferences)
+
+                    return@detect
                 }
+                cameraEventListener?.let {
+                    it.onFaceUndetected()
+                    this.handleError(Message.FACE_UNDETECTED)
+                }
+            },
+            { errorMessage ->
+                this.cameraEventListener?.let { this.cameraEventListener.onError(errorMessage) }
             },
             { imageProxy.close() }
         )
@@ -162,6 +168,10 @@ class FaceAnalyzer(
         )
 
         // Emit once if exist error in the closestFace or detectionBox.
+        return this.handleError(error)
+    }
+
+    private fun handleError(error: String?): Boolean {
         error?.let {
             if (this.isValid) {
                 this.isValid = false

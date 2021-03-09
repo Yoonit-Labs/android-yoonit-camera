@@ -60,11 +60,10 @@ dependencies {
     implementation "androidx.camera:camera-view:1.0.0-alpha15"
 
     // Facefy
-    implementation 'com.github.Yoonit-Labs:android-yoonit-facefy:1.0.2'
+    implementation 'com.github.Yoonit-Labs:android-yoonit-facefy:master-SNAPSHOT'
 
     // MLKit
     implementation "com.google.mlkit:barcode-scanning:16.0.3"
-    implementation "com.google.mlkit:face-detection:16.0.2"
 
     // KTLint
     ktlint "com.pinterest:ktlint:0.39.0"
