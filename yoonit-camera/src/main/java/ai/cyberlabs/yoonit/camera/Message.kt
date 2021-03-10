@@ -23,6 +23,4 @@ object Message {
 
     // Face width percentage in relation of the screen width is less than the CaptureOptions.FaceROI.minimumSize.
     const val INVALID_CAPTURE_FACE_ROI_MIN_SIZE = "INVALID_CAPTURE_FACE_ROI_MIN_SIZE"
-
-    const val FACE_UNDETECTED = "FACE_UNDETECTED"
 }
