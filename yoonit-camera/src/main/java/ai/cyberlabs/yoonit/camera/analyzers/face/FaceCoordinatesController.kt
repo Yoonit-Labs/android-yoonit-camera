@@ -1,11 +1,22 @@
+/**
+ * +-+-+-+-+-+-+
+ * |y|o|o|n|i|t|
+ * +-+-+-+-+-+-+
+ *
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Yoonit Camera lib for Android applications                      |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import ai.cyberlabs.yoonit.camera.utils.scaledBy
+import ai.cyberlabs.yoonit.facefy.model.FaceDetected
 import android.graphics.PointF
-import android.graphics.Rect
 import android.graphics.RectF
 import com.google.mlkit.vision.common.InputImage
 
@@ -19,67 +30,77 @@ class FaceCoordinatesController(
      * Transform the detected face bounding box coordinates in the UI graphic
      * coordinates, based in the [CameraGraphicView] and [InputImage] dimensions.
      *
-     * @param boundingBox the detected face bounding box.
-     * @param cameraInputImage the camera image input with the face detected.
-     * @return the detection box rect of the detected face. null if face is null or detection box is
+     * @param faceDetected the face detected object.
+     * @param imageWidth the camera image input width.
+     * @param imageHeight the camera image input height.
+     * @param rotationDegrees the camera rotation in degrees.
+     * @return the detection box rect of the face detected. Return empty rect if null or detection box is
      * out of the screen.
      */
     fun getDetectionBox(
-        boundingBox: Rect,
-        imageHeight: Float,
+        faceDetected: FaceDetected?,
         imageWidth: Float,
+        imageHeight: Float,
         rotationDegrees: Float
     ): RectF {
-        var detectionBox = boundingBox
+        faceDetected?.let { faceDetected ->
+            var detectionBox = faceDetected.boundingBox
 
-        // Scale bounding box.
-        if (CaptureOptions.facePaddingPercent != 0f) {
-            detectionBox = boundingBox.scaledBy(CaptureOptions.facePaddingPercent)
+            // Scale bounding box.
+            if (CaptureOptions.facePaddingPercent != 0f) {
+                detectionBox = faceDetected
+                    .boundingBox
+                    .scaledBy(CaptureOptions.facePaddingPercent)
+            }
+
+            if (imageHeight <= 0 || imageWidth <= 0) {
+                return RectF()
+            }
+
+            val viewAspectRatio: Float =
+                this.graphicView.width.toFloat() / this.graphicView.height.toFloat()
+            val imageAspectRatio: Float = imageHeight / imageWidth
+
+            var postScaleWidthOffset = 0f
+            var postScaleHeightOffset = 0f
+            val scaleFactor: Float
+
+            if (viewAspectRatio > imageAspectRatio) {
+                // The image needs to be vertically cropped to be displayed in this view.
+                scaleFactor = this.graphicView.width.toFloat() / imageHeight
+                postScaleHeightOffset =
+                    (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
+            } else {
+                // The image needs to be horizontally cropped to be displayed in this view.
+                scaleFactor = this.graphicView.height.toFloat() / imageWidth
+                postScaleWidthOffset =
+                    ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
+            }
+
+            val x = if (rotationDegrees == 90f) {
+                this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
+            } else {
+                this.graphicView.width - (this.scale(detectionBox.centerX().toFloat(),
+                    scaleFactor) - postScaleWidthOffset)
+            }
+            val y =
+                this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
+
+            val left = x - this.scale(detectionBox.width() / 2.0f, scaleFactor)
+            val top = y - this.scale(detectionBox.height() / 2.0f, scaleFactor)
+            val right = x + this.scale(detectionBox.width() / 2.0f, scaleFactor)
+            val bottom = y + this.scale(detectionBox.height() / 2.0f, scaleFactor)
+
+            return RectF(left, top, right, bottom)
         }
 
-        if (imageHeight <= 0 || imageWidth <= 0) {
-            return RectF()
-        }
-
-        val viewAspectRatio: Float =
-            this.graphicView.width.toFloat() / this.graphicView.height.toFloat()
-        val imageAspectRatio: Float = imageHeight / imageWidth
-
-        var postScaleWidthOffset = 0f
-        var postScaleHeightOffset = 0f
-        val scaleFactor: Float
-
-        if (viewAspectRatio > imageAspectRatio) {
-            // The image needs to be vertically cropped to be displayed in this view.
-            scaleFactor = this.graphicView.width.toFloat() / imageHeight
-            postScaleHeightOffset =
-                (this.graphicView.width.toFloat() / imageAspectRatio - this.graphicView.height.toFloat()) / 2
-        } else {
-            // The image needs to be horizontally cropped to be displayed in this view.
-            scaleFactor = this.graphicView.height.toFloat() / imageWidth
-            postScaleWidthOffset =
-                ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
-        }
-
-        val x = if (rotationDegrees == 90f) {
-            this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
-        } else {
-            this.graphicView.width - (this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset)
-        }
-        val y = this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
-
-        val left = x - this.scale(detectionBox.width() / 2.0f, scaleFactor)
-        val top = y - this.scale(detectionBox.height() / 2.0f, scaleFactor)
-        val right = x + this.scale(detectionBox.width() / 2.0f, scaleFactor)
-        val bottom = y + this.scale(detectionBox.height() / 2.0f, scaleFactor)
-
-        return RectF(left, top, right, bottom)
+        return RectF()
     }
 
     fun getFaceContours(
         contours: MutableList<PointF>,
-        imageHeight: Float,
         imageWidth: Float,
+        imageHeight: Float,
         rotationDegrees: Float
     ): MutableList<PointF> {
         if (imageHeight <= 0 || imageWidth <= 0) {

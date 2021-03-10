@@ -12,7 +12,6 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
-import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
@@ -27,7 +26,6 @@ import android.graphics.RectF
 import android.media.Image
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.google.mlkit.vision.common.InputImage
 import java.io.File
 import java.io.FileOutputStream
 
@@ -65,27 +63,27 @@ class FaceAnalyzer(
         facefy.detect(
             bitmap,
             { faceDetected ->
+                val detectionBox = this.faceCoordinatesController.getDetectionBox(
+                    faceDetected,
+                    imageProxy.width.toFloat(),
+                    imageProxy.height.toFloat(),
+                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                )
+
+                // Verify if has error on detectionBox.
+                if (this.hasError(detectionBox)) {
+                    return@detect
+                }
+
                 faceDetected?.let { faceDetected ->
                     val boundingBox = faceDetected.boundingBox
-
-                    val detectionBox = this.faceCoordinatesController.getDetectionBox(
-                        boundingBox,
-                        imageProxy.height.toFloat(),
-                        imageProxy.width.toFloat(),
-                        imageProxy.imageInfo.rotationDegrees.toFloat()
-                    )
-
-                    // Verify if has error on detectionBox.
-                    if (this.hasError(detectionBox)) {
-                        return@detect
-                    }
 
                     // Transform the camera face contour points to UI graphic coordinates.
                     // Used to draw the face contours.
                     val faceContours = this.faceCoordinatesController.getFaceContours(
                         faceDetected.contours,
-                        imageProxy.height.toFloat(),
                         imageProxy.width.toFloat(),
+                        imageProxy.height.toFloat(),
                         imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
 
@@ -145,12 +143,6 @@ class FaceAnalyzer(
 
                     // Handle to emit image path and the inferences.
                     this.handleEmitImageCaptured(imagePath, inferences)
-
-                    return@detect
-                }
-                cameraEventListener?.let {
-                    it.onFaceUndetected()
-                    this.handleError(Message.FACE_UNDETECTED)
                 }
             },
             { errorMessage ->
