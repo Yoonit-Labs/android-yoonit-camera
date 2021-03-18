@@ -63,6 +63,8 @@ class FaceAnalyzer(
         facefy.detect(
             bitmap,
             { faceDetected ->
+
+                // Get from faceDetected the graphic face bounding box.
                 val detectionBox = this.faceCoordinatesController.getDetectionBox(
                     faceDetected,
                     imageProxy.width.toFloat(),
@@ -76,7 +78,6 @@ class FaceAnalyzer(
                 }
 
                 faceDetected?.let { faceDetected ->
-                    val boundingBox = faceDetected.boundingBox
 
                     // Transform the camera face contour points to UI graphic coordinates.
                     // Used to draw the face contours.
@@ -90,7 +91,7 @@ class FaceAnalyzer(
                     // Get face bitmap.
                     val faceBitmap: Bitmap = this.getFaceBitmap(
                         mediaImage,
-                        boundingBox,
+                        faceDetected.boundingBox,
                         imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
 
