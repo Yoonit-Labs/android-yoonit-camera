@@ -50,20 +50,20 @@ object CaptureOptions {
     // Draw the face detection box.
     var faceDetectionBox: Boolean = false
 
+    // Face contours.
+    var faceContours: Boolean = false
+
+    // Face contours color.
+    var faceContoursColor: Int = Color.WHITE
+
     // Face capture padding percent.
     var facePaddingPercent: Float = 0f
 
     // Blur face detection box
     var blurFaceDetectionBox: Boolean = false
 
-    // Color encoding of the saved image
+    // Color encoding of the saved image.
     var colorEncoding: String = "RGB"
-
-    // Draw the face contours.
-    var faceContours: Boolean = false
-
-    // Face contours color
-    var faceContoursColor: Int = Color.WHITE
 
     /**
      * * Limit the minimum face capture size.

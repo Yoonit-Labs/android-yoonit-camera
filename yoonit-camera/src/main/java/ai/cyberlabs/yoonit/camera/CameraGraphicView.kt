@@ -84,7 +84,7 @@ class CameraGraphicView constructor(
      *
      * @param faceDetectionBox The face coordinates within the graphic view.
      * @param faceBitmap The face bitmap to be blurred.
-     * @param faceContours The face coordinates within the graphic view.
+     * @param faceContours List of points that represents the shape of the face detected .
      */
     fun handleDraw(
         faceDetectionBox: RectF?,
