@@ -5,16 +5,16 @@
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge)
 
 A Android plugin to provide:
-- Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
-- Camera preview (Front & Back)
-- [Google MLKit](https://developers.google.com/ml-kit) integration
-- [PyTorch](https://pytorch.org/mobile/home/) integration
-- Computer vision pipeline
-- Face detection, capture and image crop
-- Understanding of the human face
-- Frame capture
-- Capture timed images
-- QR Code scanning
+* Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
+* Camera preview (Front & Back)
+* [Google MLKit](https://developers.google.com/ml-kit)
+* [PyTorch](https://pytorch.org/mobile/home/) integration
+* Computer vision pipeline
+* Face detection, capture and image crop
+* Understanding of the human face
+* Frame capture
+* Capture timed images
+* QR Code scanning
 
 ## Table of Contents
 
@@ -56,7 +56,7 @@ dependencies {
 
 ## Usage
 
-All the functionalities that the `android-yoonit-camera` provides is accessed through the `CameraView`, that includes the camera preview.  Below we have the basic usage code, for more details, see the [**Methods**](#methods).
+All the functionalities that the `android-yoonit-camera` provides is accessed through the `CameraView`, that includes the camera preview.  Below we have the basic usage code, for more details, see the [**API**](#api) section.
 
 
 ### Camera Preview
@@ -150,7 +150,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | Function                     | Parameters                                      | Valid values                                                                    | Return Type | Description
 | -                            | -                                               | -                                                                               | -           | -
 | startPreview                 | -                                               | -                                                                               | void        | Start camera preview if has permission.
-| startCaptureType             | `captureType: String`                           | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qcode"`</li><li>`"frame"`</li></ul> | void        | Set capture type none, face, QR Code or frame.
+| startCaptureType             | `captureType: String`                           | <ul><li>`"none"`</li><li>`"face"`</li><li>`"qrcode"`</li><li>`"frame"`</li></ul> | void        | Set capture type none, face, QR Code or frame.
 | stopCapture                  | -                                               | -                                                                               | void        | Stop any type of capture.
 | destroy                      | -                                               | -                                                                               | void        | Remove camera preview.
 | toggleCameraLens             | -                                               | -                                                                               | void        | Set camera lens facing front or back.
@@ -161,8 +161,8 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setOutputImageWidth          | `width: Int`                                    | Any positive `number` value that represents in pixels                           | void        | Set face image width to be created in pixels.
 | setOutputImageHeight         | `height: Int`                                   | Any positive `number` value that represents in pixels                           | void        | Set face image height to be created in pixels.
 | setSaveImageCaptured         | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to enable/disable save image when capturing face and frame.
-| setFaceDetectionBox          | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to show a detection box when face detected.
-| setFaceContours              | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to show/hide face contours when face detected.
+| setFaceDetectionBox          | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to enable/disable detection box when face detected.
+| setFaceContours              | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set to enable/disable face contours when face detected.
 | setFaceContoursColor         | `alpha: Int, red: Int, green: Int, blue: Int`   | Positive value between 0 and 255                                                | void        | Set face contours ARGB color.
 | setFacePaddingPercent        | `facePaddingPercent: Float`                     | Any positive `Float` value                                                      | void        | Set face image and bounding box padding in percent.
 | setFaceCaptureMinSize        | `faceCaptureMinSize: Float`                     | Value between `0` and `1`. Represents the percentage.                           | void        | Set the minimum face capture based on the screen width.
@@ -174,7 +174,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setFaceROILeftOffset         | `leftOffset: Float`                             | Values between `0` and `1`. Represents the percentage.                          | void        | Distance in percentage of the left face bounding box with the left of the camera preview.
 | setFaceROIMinSize            | `minimumSize: Float`                            | Values between `0` and `1`. Represents the percentage.                          | void        | Set the minimum face size related with the region of interest.
 | setFaceROIAreaOffset         | `enable: Bool`                                  | `true` or `false`                                                               | void        | Set face region of interest offset color visibility.
-| setFaceROIAreaOffsetColor    | `alpha: Int, red: Int, green: Int, blue: Int`   | Any positive integer between 0 and 255                                          | void        | Set face region of interest area offset color. Default value is (100, 255, 255, 255).
+| setFaceROIAreaOffsetColor    | `alpha: Int, red: Int, green: Int, blue: Int`   | Any positive integer between 0 and 255                                          | void        | Set face region of interest area offset color. Default value is `(100, 255, 255, 255)`.
 | setBlurFaceDetectionBox      | `enable: Bool`                                  | `true` or `false`                                                               | void        | Enable/disable blur in face detection box.
 | setColorEncodingCapture      | `colorEncoding: String`                         | <ul><li>`"RGB"`</li><li>`"YUV"`</li>                                            | void        | Set the color encoding for the saved images.
 | setComputerVision            | `enable: Boolean`                               | `true` or `false`                                                               | void        | Enable/disable computer vision usage.
@@ -185,7 +185,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 | Event              | Parameters                                                                                                                                                                                                     | Description
 | -                  | -                                                                                                                                                                                                              | -
-| onImageCaptured    | `type: String, count: Int, total: Int, imagePath: String, inferences: ArrayList<Pair<String, FloatArray>>`                                                                                                     | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the image file is created: <ul><li>type: 'face' | 'frame'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><li>inferences: each array element is the image inference result.</li><ul>
+| onImageCaptured    | `type: String, count: Int, total: Int, imagePath: String, inferences: ArrayList<Pair<String, FloatArray>>`                                                                                                     | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the image file is created: <ul><li>type: '"face"' or '"frame"'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><li>inferences: each array element is the image inference result.</li><ul>
 | onFaceDetected     | `x: Int, y: Int, width: Int, height: Int, leftEyeOpenProbability: Float?, rightEyeOpenProbability: Float?, smilingProbability: Float?, headEulerAngleX: Float, headEulerAngleY: Float, headEulerAngleZ: Float` | Must have started capture type of face. Emit the [face analysis](#face-analysis).
 | onFaceUndetected   | -                                                                                                                                                                                                              | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
 | onEndCapture       | -                                                                                                                                                                                                              | Must have started capture type of face/frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).
