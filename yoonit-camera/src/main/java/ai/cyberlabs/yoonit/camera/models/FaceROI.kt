@@ -5,7 +5,7 @@
  *
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * | Yoonit Camera lib for Android applications                      |
- * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020-2021        |
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 

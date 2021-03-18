@@ -5,7 +5,7 @@
  *
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * | Yoonit Camera lib for Android applications                      |
- * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020-2021        |
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
@@ -84,7 +84,7 @@ class CameraGraphicView constructor(
      *
      * @param faceDetectionBox The face coordinates within the graphic view.
      * @param faceBitmap The face bitmap to be blurred.
-     * @param faceContours The face coordinates within the graphic view.
+     * @param faceContours List of points that represents the shape of the face detected .
      */
     fun handleDraw(
         faceDetectionBox: RectF?,
@@ -92,9 +92,7 @@ class CameraGraphicView constructor(
         faceContours: MutableList<PointF>?
     ) {
         this.faceDetectionBox = faceDetectionBox
-        faceBitmap?.let {
-            this.faceBlurBitmap = BlurBuilder.blur(this.context, it)
-        }
+        this.faceBlurBitmap = faceBitmap
         this.faceContours = faceContours
 
         this.postInvalidate()
@@ -120,7 +118,7 @@ class CameraGraphicView constructor(
     private fun drawFaceBlur(canvas: Canvas) {
         this.faceBlurBitmap?.let { faceBlurBitmap ->
             canvas.drawBitmap(
-                faceBlurBitmap,
+                BlurBuilder.blur(this.context, faceBlurBitmap),
                 null,
                 this.faceDetectionBox!!,
                 null

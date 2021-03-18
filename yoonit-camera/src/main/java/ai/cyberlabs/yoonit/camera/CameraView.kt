@@ -5,7 +5,7 @@
  *
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * | Yoonit Camera lib for Android applications                      |
- * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020             |
+ * | Haroldo Teruya & Victor Goulart @ Cyberlabs AI 2020-2021        |
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
@@ -219,7 +219,7 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set to show/hide face detection box when face detected.
+     * Set to enable/disable face detection box when face detected.
      *
      * @param enable The indicator to show or hide the face detection box.
      * Default value is true.
@@ -229,9 +229,9 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set to show/hide face contours when face detected.
+     * Set to enable/disable face contours when face detected.
      *
-     * @param enable The indicator to show or hide the face landmarks.
+     * @param enable The indicator to show or hide the face contours.
      * Default value is true.
      */
     fun setFaceContours(enable: Boolean) {
@@ -241,10 +241,11 @@ open class CameraView @JvmOverloads constructor(
     /**
      * Set face contours ARGB color.
      *
-     * @param red Integer that represent red color.
-     * @param green Integer that represent green color.
-     * @param blue Integer that represent blue color.
-     * Default value is 255, 255, 255 (white color).
+     * @param alpha The alpha value.
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
+     * Default value is `(100, 255, 255, 255)`.
      */
     fun setFaceContoursColor(alpha: Int, red: Int, green: Int, blue: Int) {
         if (
