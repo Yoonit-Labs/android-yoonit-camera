@@ -92,9 +92,7 @@ class CameraGraphicView constructor(
         faceContours: MutableList<PointF>?
     ) {
         this.faceDetectionBox = faceDetectionBox
-        faceBitmap?.let {
-            this.faceBlurBitmap = BlurBuilder.blur(this.context, it)
-        }
+        this.faceBlurBitmap = faceBitmap
         this.faceContours = faceContours
 
         this.postInvalidate()
@@ -120,7 +118,7 @@ class CameraGraphicView constructor(
     private fun drawFaceBlur(canvas: Canvas) {
         this.faceBlurBitmap?.let { faceBlurBitmap ->
             canvas.drawBitmap(
-                faceBlurBitmap,
+                BlurBuilder.blur(this.context, faceBlurBitmap),
                 null,
                 this.faceDetectionBox!!,
                 null
