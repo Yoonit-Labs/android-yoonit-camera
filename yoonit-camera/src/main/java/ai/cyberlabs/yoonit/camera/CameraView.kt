@@ -282,15 +282,15 @@ open class CameraView @JvmOverloads constructor(
      * For example, if set 0.5, will capture face with the detection box width occupying
      * at least 50% of the screen width.
      *
-     * @param faceCaptureMinSize The face capture min size value.
+     * @param minimumSize The face capture min size value.
      * Default value is 0.0f.
      */
-    fun setFaceCaptureMinSize(faceCaptureMinSize: Float) {
-        if (faceCaptureMinSize < 0.0f || faceCaptureMinSize > 1.0f) {
+    fun setMinimumSize(minimumSize: Float) {
+        if (minimumSize < 0.0f || minimumSize > 1.0f) {
             throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
         }
 
-        CaptureOptions.faceCaptureMinSize = faceCaptureMinSize
+        CaptureOptions.minimumSize = minimumSize
     }
 
     /**
@@ -301,15 +301,15 @@ open class CameraView @JvmOverloads constructor(
      * For example, if set 0.7, will capture face with the detection box width occupying
      * at least 70% of the screen width.
      *
-     * @param faceCaptureMaxSize The face capture max size value.
+     * @param maximumSize The face capture max size value.
      * Default value is 1.0f.
      */
-    fun setFaceCaptureMaxSize(faceCaptureMaxSize: Float) {
-        if (faceCaptureMaxSize < 0.0f || faceCaptureMaxSize > 1.0f) {
+    fun setMaximumSize(maximumSize: Float) {
+        if (maximumSize < 0.0f || maximumSize > 1.0f) {
             throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
         }
 
-        CaptureOptions.faceCaptureMaxSize = faceCaptureMaxSize
+        CaptureOptions.maximumSize = maximumSize
     }
 
     /**
@@ -318,8 +318,8 @@ open class CameraView @JvmOverloads constructor(
      * @param enable The indicator to enable/disable face region of interest.
      * Default value is `false`.
      */
-    fun setFaceROIEnable(enable: Boolean) {
-        CaptureOptions.faceROI.enable = enable
+    fun setROIEnable(enable: Boolean) {
+        CaptureOptions.ROI.enable = enable
     }
 
     /**
@@ -328,12 +328,12 @@ open class CameraView @JvmOverloads constructor(
      * @param topOffset The "above" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
-    fun setFaceROITopOffset(topOffset: Float) {
+    fun setROITopOffset(topOffset: Float) {
         if (topOffset < 0.0f || topOffset > 1.0f) {
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_TOP_OFFSET)
         }
 
-        CaptureOptions.faceROI.topOffset = topOffset
+        CaptureOptions.ROI.topOffset = topOffset
     }
 
     /**
@@ -342,12 +342,12 @@ open class CameraView @JvmOverloads constructor(
      * @param rightOffset The "right" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
-    fun setFaceROIRightOffset(rightOffset: Float) {
+    fun setROIRightOffset(rightOffset: Float) {
         if (rightOffset < 0.0f || rightOffset > 1.0f) {
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_RIGHT_OFFSET)
         }
 
-        CaptureOptions.faceROI.rightOffset = rightOffset
+        CaptureOptions.ROI.rightOffset = rightOffset
     }
 
     /**
@@ -356,12 +356,12 @@ open class CameraView @JvmOverloads constructor(
      * @param bottomOffset The "bottom" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
-    fun setFaceROIBottomOffset(bottomOffset: Float) {
+    fun setROIBottomOffset(bottomOffset: Float) {
         if (bottomOffset < 0.0f || bottomOffset > 1.0f) {
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_BOTTOM_OFFSET)
         }
 
-        CaptureOptions.faceROI.bottomOffset = bottomOffset
+        CaptureOptions.ROI.bottomOffset = bottomOffset
     }
 
     /**
@@ -370,26 +370,12 @@ open class CameraView @JvmOverloads constructor(
      * @param leftOffset The "left" area of the face bounding box in percentage.
      * Default value is 0.0f.
      */
-    fun setFaceROILeftOffset(leftOffset: Float) {
+    fun setROILeftOffset(leftOffset: Float) {
         if (leftOffset < 0.0f || leftOffset > 1.0f) {
             throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_LEFT_OFFSET)
         }
 
-        CaptureOptions.faceROI.leftOffset = leftOffset
-    }
-
-    /**
-     * Set face minimum size in relation of the region of interest.
-     *
-     * @param minimumSize: Represents in percentage [0, 1].
-     * Default value is `0`.
-     */
-    fun setFaceROIMinSize(minimumSize: Float) {
-        if (minimumSize < 0.0 || minimumSize > 1.0) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_MIN_SIZE)
-        }
-
-        CaptureOptions.faceROI.minimumSize = minimumSize
+        CaptureOptions.ROI.leftOffset = leftOffset
     }
 
     /**
@@ -398,8 +384,8 @@ open class CameraView @JvmOverloads constructor(
      * @param enable The indicator to show/hide the face region of interest area offset.
      * Default value is `false`.
      */
-    fun setFaceROIAreaOffset(enable: Boolean) {
-        CaptureOptions.faceROI.areaOffsetEnable = enable
+    fun setROIAreaOffset(enable: Boolean) {
+        CaptureOptions.ROI.areaOffsetEnable = enable
     }
 
     /**
@@ -411,7 +397,7 @@ open class CameraView @JvmOverloads constructor(
      * @param blue Integer that represent blue color.
      * Default value is 100, 255, 255, 255 (white color).
      */
-    fun setFaceROIAreaOffsetColor(alpha: Int, red: Int, green: Int, blue: Int) {
+    fun setROIAreaOffsetColor(alpha: Int, red: Int, green: Int, blue: Int) {
         if (
             alpha < 0 || alpha > 255 ||
             red < 0 || red > 255 ||
@@ -421,7 +407,7 @@ open class CameraView @JvmOverloads constructor(
             throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_ROI_COLOR)
         }
 
-        CaptureOptions.faceROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
+        CaptureOptions.ROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
     }
 
     /**

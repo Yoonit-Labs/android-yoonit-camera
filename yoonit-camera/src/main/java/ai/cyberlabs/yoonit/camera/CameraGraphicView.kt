@@ -47,8 +47,8 @@ class CameraGraphicView constructor(
             !CaptureOptions.faceDetectionBox &&
             !CaptureOptions.blurFaceDetectionBox &&
             !CaptureOptions.faceContours &&
-            !CaptureOptions.faceROI.enable &&
-            !CaptureOptions.faceROI.areaOffsetEnable
+            !CaptureOptions.ROI.enable &&
+            !CaptureOptions.ROI.areaOffsetEnable
         ) {
             return
         }
@@ -65,8 +65,8 @@ class CameraGraphicView constructor(
 
         // Draw face region of interest area offset bitmap.
         if (
-            CaptureOptions.faceROI.enable &&
-            CaptureOptions.faceROI.areaOffsetEnable
+            CaptureOptions.ROI.enable &&
+            CaptureOptions.ROI.areaOffsetEnable
         ) {
             this.drawFaceROIAreaOffset(canvas)
         }
@@ -161,22 +161,22 @@ class CameraGraphicView constructor(
 
         this.faceROIAreaOffsetBitmap?.let {
             if (
-                CaptureOptions.faceROI.layoutWidth == width &&
-                CaptureOptions.faceROI.layoutHeight == height
+                CaptureOptions.ROI.layoutWidth == width &&
+                CaptureOptions.ROI.layoutHeight == height
             ) {
                 canvas.drawBitmap(it, 0f, 0f, null)
                 return
             }
         }
 
-        CaptureOptions.faceROI.layoutWidth = width
-        CaptureOptions.faceROI.layoutHeight = height
+        CaptureOptions.ROI.layoutWidth = width
+        CaptureOptions.ROI.layoutHeight = height
 
         val roi = Rect(
-            (width * CaptureOptions.faceROI.leftOffset).toInt(),
-            (height * CaptureOptions.faceROI.topOffset).toInt(),
-            (width - (width * CaptureOptions.faceROI.rightOffset)).toInt(),
-            (height - (height * CaptureOptions.faceROI.bottomOffset)).toInt()
+            (width * CaptureOptions.ROI.leftOffset).toInt(),
+            (height * CaptureOptions.ROI.topOffset).toInt(),
+            (width - (width * CaptureOptions.ROI.rightOffset)).toInt(),
+            (height - (height * CaptureOptions.ROI.bottomOffset)).toInt()
         )
 
         val faceROIAreaOffsetBitmap: Bitmap = Bitmap.createBitmap(
@@ -188,7 +188,7 @@ class CameraGraphicView constructor(
         val areaCanvas = Canvas(faceROIAreaOffsetBitmap)
 
         val offsetAreaPaint = Paint()
-        offsetAreaPaint.color = CaptureOptions.faceROI.areaOffsetColor
+        offsetAreaPaint.color = CaptureOptions.ROI.areaOffsetColor
         areaCanvas.drawRect(
             Rect(
                 0,

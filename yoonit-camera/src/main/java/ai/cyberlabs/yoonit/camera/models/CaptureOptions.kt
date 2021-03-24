@@ -21,7 +21,7 @@ import androidx.camera.core.CameraSelector
 object CaptureOptions {
 
     // Face region of interesting. Default is all the screen area.
-    var faceROI: FaceROI = FaceROI()
+    var ROI: ROI = ROI()
 
     // Computer vision models.
     var computerVision: ComputerVision = ComputerVision()
@@ -66,16 +66,16 @@ object CaptureOptions {
     var colorEncoding: String = "RGB"
 
     /**
-     * * Limit the minimum face capture size.
+     * * Limit the minimum capture size.
      * This variable is the face detection box percentage in relation with the UI graphic view.
      * The value must be between 0 and 1.
      */
-    var faceCaptureMinSize: Float = 0.0f
+    var minimumSize: Float = 0.0f
 
     /**
-     * Limit the maximum face capture size.
+     * Limit the maximum capture size.
      * This variable is the face detection box percentage in relation with the UI graphic view.
      * The value must be between 0 and 1.
      */
-    var faceCaptureMaxSize: Float = 1.0f
+    var maximumSize: Float = 1.0f
 }

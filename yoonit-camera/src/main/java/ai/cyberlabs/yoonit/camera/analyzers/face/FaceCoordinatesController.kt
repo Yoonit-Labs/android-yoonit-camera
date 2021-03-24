@@ -179,15 +179,15 @@ class FaceCoordinatesController(
         // UI graphic view. The value must be between 0 and 1.
         val detectionBoxRelatedWithScreen: Float = detectionBox.width() / screenWidth
 
-        if (detectionBoxRelatedWithScreen < CaptureOptions.faceCaptureMinSize) {
+        if (detectionBoxRelatedWithScreen < CaptureOptions.minimumSize) {
             return Message.INVALID_CAPTURE_FACE_MIN_SIZE
         }
 
-        if (detectionBoxRelatedWithScreen > CaptureOptions.faceCaptureMaxSize) {
+        if (detectionBoxRelatedWithScreen > CaptureOptions.maximumSize) {
             return Message.INVALID_CAPTURE_FACE_MAX_SIZE
         }
 
-        if (CaptureOptions.faceROI.enable) {
+        if (CaptureOptions.ROI.enable) {
 
             // Detection box offsets.
             val topOffset: Float = detectionBox.top / screenHeight
@@ -195,7 +195,7 @@ class FaceCoordinatesController(
             val bottomOffset: Float = (screenHeight - detectionBox.bottom) / screenHeight
             val leftOffset: Float = detectionBox.left / screenWidth
 
-            if (CaptureOptions.faceROI.isOutOf(
+            if (CaptureOptions.ROI.isOutOf(
                     topOffset,
                     rightOffset,
                     bottomOffset,
@@ -205,16 +205,16 @@ class FaceCoordinatesController(
                 return Message.INVALID_CAPTURE_FACE_OUT_OF_ROI
             }
 
-            if (CaptureOptions.faceROI.hasChanges) {
+            if (CaptureOptions.ROI.hasChanges) {
 
                 // Face is inside the region of interest and faceROI is setted.
                 // Face is smaller than the defined "minimumSize".
                 val roiWidth: Float =
                     screenWidth -
-                        ((CaptureOptions.faceROI.rightOffset + CaptureOptions.faceROI.leftOffset) * screenWidth)
+                        ((CaptureOptions.ROI.rightOffset + CaptureOptions.ROI.leftOffset) * screenWidth)
                 val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
 
-                if (CaptureOptions.faceROI.minimumSize > faceRelatedWithROI) {
+                if (CaptureOptions.minimumSize > faceRelatedWithROI) {
                     return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
                 }
             }
