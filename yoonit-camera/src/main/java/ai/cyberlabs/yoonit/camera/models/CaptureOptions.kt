@@ -47,8 +47,11 @@ object CaptureOptions {
     // Face/Frame save images captured.
     var saveImageCaptured: Boolean = false
 
-    // Draw the face detection box.
-    var faceDetectionBox: Boolean = false
+    // Draw or not the face/qrcode detection box.
+    var detectionBox: Boolean = false
+
+    // Detection box color.
+    var detectionBoxColor: Int = Color.WHITE
 
     // Face contours.
     var faceContours: Boolean = false

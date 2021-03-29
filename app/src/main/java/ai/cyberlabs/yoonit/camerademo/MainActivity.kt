@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
     fun onFaceBoxSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setFaceDetectionBox(checked)
+            this.cameraView.setDetectionBox(checked)
         }
     }
 

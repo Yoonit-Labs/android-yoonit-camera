@@ -219,13 +219,41 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set to enable/disable face detection box when face detected.
+     * Set to enable/disable detection box when face/qrcode detected.
+     * The detection box is the the face/qrcode bounding box normalized to UI.
      *
-     * @param enable The indicator to show or hide the face detection box.
-     * Default value is true.
+     * @param enable: The indicator to enable/disable detection box.
+     * Default value is `false`.
      */
-    fun setFaceDetectionBox(enable: Boolean) {
-        CaptureOptions.faceDetectionBox = enable
+    fun setDetectionBox(enable: Boolean) {
+        CaptureOptions.detectionBox = enable
+    }
+
+    /**
+     * Set detection box ARGB color.
+     *
+     * @param alpha The alpha value.
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
+     * Default value is `(100, 255, 255, 255)`.
+     */
+    fun setDetectionBoxColor(
+        alpha: Int,
+        red: Int,
+        green: Int,
+        blue: Int
+    ) {
+        if (
+            alpha < 0 || alpha > 255 ||
+            red < 0 || red > 255 ||
+            green < 0 || green > 255 ||
+            blue < 0 || blue > 255
+        ) {
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_DETECTION_BOX_COLOR)
+        }
+
+        CaptureOptions.detectionBoxColor = Color.argb(alpha, red, green, blue)
     }
 
     /**
