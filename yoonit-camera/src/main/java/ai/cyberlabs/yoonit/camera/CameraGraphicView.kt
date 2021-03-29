@@ -63,10 +63,13 @@ class CameraGraphicView constructor(
             this.drawFaceContours(canvas)
         }
 
+        val validCaptureType = (CaptureOptions.type == CaptureType.FACE || CaptureOptions.type == CaptureType.QRCODE)
+
         // Draw face region of interest area offset bitmap.
         if (
             CaptureOptions.ROI.enable &&
-            CaptureOptions.ROI.areaOffsetEnable
+            CaptureOptions.ROI.areaOffsetEnable &&
+            validCaptureType
         ) {
             this.drawFaceROIAreaOffset(canvas)
         }
