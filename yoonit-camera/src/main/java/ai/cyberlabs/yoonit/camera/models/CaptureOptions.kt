@@ -21,7 +21,7 @@ import androidx.camera.core.CameraSelector
 object CaptureOptions {
 
     // Face region of interesting. Default is all the screen area.
-    var ROI: ROI = ROI()
+    var roi: ROI = ROI()
 
     // Computer vision models.
     var computerVision: ComputerVision = ComputerVision()

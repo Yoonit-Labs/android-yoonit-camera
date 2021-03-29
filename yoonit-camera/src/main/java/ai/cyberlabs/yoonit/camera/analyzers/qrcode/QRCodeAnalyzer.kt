@@ -38,7 +38,7 @@ class QRCodeAnalyzer(
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(imageProxy: ImageProxy) {
 
-        this.graphicView.clear()
+        graphicView.handleDraw(null, null, null)
 
         val mediaImage = imageProxy.image ?: return
 

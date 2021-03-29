@@ -175,6 +175,39 @@ class FaceCoordinatesController(
             return ""
         }
 
+        if (CaptureOptions.roi.enable) {
+
+            // Detection box offsets.
+            val topOffset: Float = detectionBox.top / screenHeight
+            val rightOffset: Float = (screenWidth - detectionBox.right) / screenWidth
+            val bottomOffset: Float = (screenHeight - detectionBox.bottom) / screenHeight
+            val leftOffset: Float = detectionBox.left / screenWidth
+
+            if (CaptureOptions.roi.isOutOf(
+                    topOffset,
+                    rightOffset,
+                    bottomOffset,
+                    leftOffset
+                )
+            ) {
+                return Message.INVALID_CAPTURE_FACE_OUT_OF_ROI
+            }
+
+            if (CaptureOptions.roi.hasChanges) {
+
+                // Face is inside the region of interest and faceROI is setted.
+                // Face is smaller than the defined "minimumSize".
+                val roiWidth: Float =
+                    screenWidth -
+                        ((CaptureOptions.roi.rightOffset + CaptureOptions.roi.leftOffset) * screenWidth)
+                val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
+
+                if (CaptureOptions.minimumSize > faceRelatedWithROI) {
+                    return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
+                }
+            }
+        }
+
         // This variable is the face detection box percentage in relation with the
         // UI graphic view. The value must be between 0 and 1.
         val detectionBoxRelatedWithScreen: Float = detectionBox.width() / screenWidth
@@ -185,39 +218,6 @@ class FaceCoordinatesController(
 
         if (detectionBoxRelatedWithScreen > CaptureOptions.maximumSize) {
             return Message.INVALID_CAPTURE_FACE_MAX_SIZE
-        }
-
-        if (CaptureOptions.ROI.enable) {
-
-            // Detection box offsets.
-            val topOffset: Float = detectionBox.top / screenHeight
-            val rightOffset: Float = (screenWidth - detectionBox.right) / screenWidth
-            val bottomOffset: Float = (screenHeight - detectionBox.bottom) / screenHeight
-            val leftOffset: Float = detectionBox.left / screenWidth
-
-            if (CaptureOptions.ROI.isOutOf(
-                    topOffset,
-                    rightOffset,
-                    bottomOffset,
-                    leftOffset
-                )
-            ) {
-                return Message.INVALID_CAPTURE_FACE_OUT_OF_ROI
-            }
-
-            if (CaptureOptions.ROI.hasChanges) {
-
-                // Face is inside the region of interest and faceROI is setted.
-                // Face is smaller than the defined "minimumSize".
-                val roiWidth: Float =
-                    screenWidth -
-                        ((CaptureOptions.ROI.rightOffset + CaptureOptions.ROI.leftOffset) * screenWidth)
-                val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
-
-                if (CaptureOptions.minimumSize > faceRelatedWithROI) {
-                    return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
-                }
-            }
         }
 
         return null

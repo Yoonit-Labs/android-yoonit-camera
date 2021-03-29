@@ -172,21 +172,21 @@ class MainActivity : AppCompatActivity() {
     fun onFaceMinSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceCaptureMinSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setMinimumSize(faceCaptureMinSize)
+            this.cameraView.setDetectionMinSize(faceCaptureMinSize)
         }
     }
 
     fun onFaceMaxSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceCaptureMaxSize = if (view.isChecked) 0.9f else 1.0f
-            this.cameraView.setMaximumSize(faceCaptureMaxSize)
+            this.cameraView.setDetectionMaxSize(faceCaptureMaxSize)
         }
     }
 
     fun onFaceROISwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setROIEnable(checked)
+            this.cameraView.setROI(checked)
             this.cameraView.setROIAreaOffset(checked)
         }
     }
@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
     fun onFaceROIMinSizeSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceROIMinimumSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setMinimumSize(faceROIMinimumSize)
+            this.cameraView.setDetectionMinSize(faceROIMinimumSize)
         }
     }
 

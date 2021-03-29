@@ -285,9 +285,9 @@ open class CameraView @JvmOverloads constructor(
      * @param minimumSize The face capture min size value.
      * Default value is 0.0f.
      */
-    fun setMinimumSize(minimumSize: Float) {
+    fun setDetectionMinSize(minimumSize: Float) {
         if (minimumSize < 0.0f || minimumSize > 1.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MIN_SIZE)
+            throw IllegalArgumentException(KeyError.INVALID_MINIMUM_SIZE)
         }
 
         CaptureOptions.minimumSize = minimumSize
@@ -304,88 +304,88 @@ open class CameraView @JvmOverloads constructor(
      * @param maximumSize The face capture max size value.
      * Default value is 1.0f.
      */
-    fun setMaximumSize(maximumSize: Float) {
+    fun setDetectionMaxSize(maximumSize: Float) {
         if (maximumSize < 0.0f || maximumSize > 1.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_CAPTURE_MAX_SIZE)
+            throw IllegalArgumentException(KeyError.INVALID_MAXIMUM_SIZE)
         }
 
         CaptureOptions.maximumSize = maximumSize
     }
 
     /**
-     * Set to apply enable/disable face region of interest.
-     *
-     * @param enable The indicator to enable/disable face region of interest.
-     * Default value is `false`.
+    Set to apply enable/disable region of interest.
+
+    * @param enable: The indicator to enable/disable region of interest.
+    Default value is `false`.
      */
-    fun setROIEnable(enable: Boolean) {
-        CaptureOptions.ROI.enable = enable
+    fun setROI(enable: Boolean) {
+        CaptureOptions.roi.enable = enable
     }
 
     /**
-     * Tried to input invalid face region of interest top offset.
-     *
-     * @param topOffset The "above" area of the face bounding box in percentage.
-     * Default value is 0.0f.
+    Camera preview top distance in percentage.
+
+    * @param percentage: Value between `0` and `1`. Represents the percentage.
+    Default value is `0.0`.
      */
     fun setROITopOffset(topOffset: Float) {
         if (topOffset < 0.0f || topOffset > 1.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_TOP_OFFSET)
+            throw IllegalArgumentException(KeyError.INVALID_ROI_TOP_OFFSET)
         }
 
-        CaptureOptions.ROI.topOffset = topOffset
+        CaptureOptions.roi.topOffset = topOffset
     }
 
     /**
-     * Tried to input invalid face region of interest right offset.
-     *
-     * @param rightOffset The "right" area of the face bounding box in percentage.
-     * Default value is 0.0f.
+    Camera preview right distance in percentage.
+
+    * @param percentage: Value between `0` and `1`. Represents the percentage.
+    Default value is `0.0`.
      */
     fun setROIRightOffset(rightOffset: Float) {
         if (rightOffset < 0.0f || rightOffset > 1.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_RIGHT_OFFSET)
+            throw IllegalArgumentException(KeyError.INVALID_ROI_RIGHT_OFFSET)
         }
 
-        CaptureOptions.ROI.rightOffset = rightOffset
+        CaptureOptions.roi.rightOffset = rightOffset
     }
 
     /**
-     * Tried to input invalid face region of interest bottom offset.
-     *
-     * @param bottomOffset The "bottom" area of the face bounding box in percentage.
-     * Default value is 0.0f.
+    Camera preview bottom distance in percentage.
+
+    * @param percentage: Value between `0` and `1`. Represents the percentage.
+    Default value is `0.0`.
      */
     fun setROIBottomOffset(bottomOffset: Float) {
         if (bottomOffset < 0.0f || bottomOffset > 1.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_BOTTOM_OFFSET)
+            throw IllegalArgumentException(KeyError.INVALID_ROI_BOTTOM_OFFSET)
         }
 
-        CaptureOptions.ROI.bottomOffset = bottomOffset
+        CaptureOptions.roi.bottomOffset = bottomOffset
     }
 
     /**
-     * Tried to input invalid face region of interest left offset.
-     *
-     * @param leftOffset The "left" area of the face bounding box in percentage.
-     * Default value is 0.0f.
+    Camera preview left distance in percentage.
+
+    * @param percentage: Value between `0` and `1`. Represents the percentage.
+    Default value is `0.0`.
      */
     fun setROILeftOffset(leftOffset: Float) {
         if (leftOffset < 0.0f || leftOffset > 1.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_ROI_LEFT_OFFSET)
+            throw IllegalArgumentException(KeyError.INVALID_ROI_LEFT_OFFSET)
         }
 
-        CaptureOptions.ROI.leftOffset = leftOffset
+        CaptureOptions.roi.leftOffset = leftOffset
     }
 
     /**
-     * Set face region of interest offset color visibility.
-     *
-     * @param enable The indicator to show/hide the face region of interest area offset.
-     * Default value is `false`.
+    Set to enable/disable region of interest offset visibility.
+
+    * @param enable: The indicator to enable/disable region of interest visibility.
+    Default value is `false`.
      */
     fun setROIAreaOffset(enable: Boolean) {
-        CaptureOptions.ROI.areaOffsetEnable = enable
+        CaptureOptions.roi.areaOffsetEnable = enable
     }
 
     /**
@@ -404,10 +404,10 @@ open class CameraView @JvmOverloads constructor(
             green < 0 || green > 255 ||
             blue < 0 || blue > 255
         ) {
-            throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_ROI_COLOR)
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_ROI_COLOR)
         }
 
-        CaptureOptions.ROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
+        CaptureOptions.roi.areaOffsetColor = Color.argb(alpha, red, green, blue)
     }
 
     /**
