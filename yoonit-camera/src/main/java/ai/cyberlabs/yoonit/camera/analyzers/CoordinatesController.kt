@@ -190,7 +190,7 @@ class FaceCoordinatesController(
                     leftOffset
                 )
             ) {
-                return Message.INVALID_CAPTURE_FACE_OUT_OF_ROI
+                return Message.INVALID_OUT_OF_ROI
             }
 
             if (CaptureOptions.roi.hasChanges) {
@@ -203,7 +203,7 @@ class FaceCoordinatesController(
                 val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
 
                 if (CaptureOptions.minimumSize > faceRelatedWithROI) {
-                    return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
+                    return Message.INVALID_MINIMUM_SIZE
                 }
             }
         }
@@ -213,11 +213,11 @@ class FaceCoordinatesController(
         val detectionBoxRelatedWithScreen: Float = detectionBox.width() / screenWidth
 
         if (detectionBoxRelatedWithScreen < CaptureOptions.minimumSize) {
-            return Message.INVALID_CAPTURE_FACE_MIN_SIZE
+            return Message.INVALID_MINIMUM_SIZE
         }
 
         if (detectionBoxRelatedWithScreen > CaptureOptions.maximumSize) {
-            return Message.INVALID_CAPTURE_FACE_MAX_SIZE
+            return Message.INVALID_MAXIMUM_SIZE
         }
 
         return null
