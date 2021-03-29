@@ -16,7 +16,7 @@ import android.graphics.Color
 /**
  * Model to set face region of interest.
  */
-class FaceROI {
+class ROI {
 
     var layoutWidth: Int = 0
     var layoutHeight: Int = 0
@@ -36,9 +36,6 @@ class FaceROI {
     var rightOffset: Float = 0.0f // "Right" of face detected.
     var bottomOffset: Float = 0.0f // "Bottom" face detected.
     var leftOffset: Float = 0.0f // "Left" face detected.
-
-    // Minimum face size in percentage in relation of the ROI.
-    var minimumSize: Float = 0.0f
 
     // Return if any attributes has modifications.
     var hasChanges: Boolean = false

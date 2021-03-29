@@ -35,28 +35,28 @@ object KeyError {
     const val INVALID_FACE_PADDING_PERCENT = "INVALID_FACE_PADDING_PERCENT"
 
     // Tried to input invalid face capture minimum size.
-    const val INVALID_FACE_CAPTURE_MIN_SIZE = "INVALID_FACE_CAPTURE_MIN_SIZE"
+    const val INVALID_MINIMUM_SIZE = "INVALID_MINIMUM_SIZE"
 
     // Tried to input invalid face capture maximum size.
-    const val INVALID_FACE_CAPTURE_MAX_SIZE = "INVALID_FACE_CAPTURE_MAX_SIZE"
+    const val INVALID_MAXIMUM_SIZE = "INVALID_MAXIMUM_SIZE"
 
     // Tried to input invalid face region of interest top offset.
-    const val INVALID_FACE_ROI_TOP_OFFSET = "INVALID_FACE_ROI_TOP_OFFSET"
+    const val INVALID_ROI_TOP_OFFSET = "INVALID_ROI_TOP_OFFSET"
 
     // Tried to input invalid face region of interest right offset.
-    const val INVALID_FACE_ROI_RIGHT_OFFSET = "INVALID_FACE_ROI_RIGHT_OFFSET"
+    const val INVALID_ROI_RIGHT_OFFSET = "INVALID_ROI_RIGHT_OFFSET"
 
     // Tried to input invalid face region of interest bottom offset.
-    const val INVALID_FACE_ROI_BOTTOM_OFFSET = "INVALID_FACE_ROI_BOTTOM_OFFSET"
+    const val INVALID_ROI_BOTTOM_OFFSET = "INVALID_ROI_BOTTOM_OFFSET"
 
     // Tried to input invalid face region of interest left offset.
-    const val INVALID_FACE_ROI_LEFT_OFFSET = "INVALID_FACE_ROI_LEFT_OFFSET"
+    const val INVALID_ROI_LEFT_OFFSET = "INVALID_ROI_LEFT_OFFSET"
 
     // Tried to input invalid face region of interest minimum size.
-    const val INVALID_FACE_ROI_MIN_SIZE = "INVALID_FACE_ROI_MIN_SIZE"
+    const val INVALID_ROI_MIN_SIZE = "INVALID_ROI_MIN_SIZE"
 
     // Tried to input invalid face region of interest area offset ARGB value color.
-    const val INVALID_FACE_ROI_COLOR = "INVALID_FACE_ROI_COLOR"
+    const val INVALID_ROI_COLOR = "INVALID_ROI_COLOR"
 
     // Tried to input invalid image capture color encoding.
     const val INVALID_IMAGE_CAPTURE_COLOR_ENCODING = "INVALID_IMAGE_CAPTURE_COLOR_ENCODING"

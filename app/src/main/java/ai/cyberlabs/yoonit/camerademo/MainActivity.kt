@@ -76,10 +76,10 @@ class MainActivity : AppCompatActivity() {
         this.cameraView.setCameraEventListener(this.buildCameraEventListener())
 
         if (this.allPermissionsGranted()) {
-            this.cameraView.setFaceROILeftOffset(0.1f)
-            this.cameraView.setFaceROIRightOffset(0.1f)
-            this.cameraView.setFaceROITopOffset(0.1f)
-            this.cameraView.setFaceROIBottomOffset(0.1f)
+            this.cameraView.setROILeftOffset(0.1f)
+            this.cameraView.setROIRightOffset(0.1f)
+            this.cameraView.setROITopOffset(0.1f)
+            this.cameraView.setROIBottomOffset(0.1f)
             this.cameraView.startPreview()
 
             this.cameraView.setComputerVisionLoadModels(arrayListOf(
@@ -172,29 +172,29 @@ class MainActivity : AppCompatActivity() {
     fun onFaceMinSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceCaptureMinSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setFaceCaptureMinSize(faceCaptureMinSize)
+            this.cameraView.setDetectionMinSize(faceCaptureMinSize)
         }
     }
 
     fun onFaceMaxSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceCaptureMaxSize = if (view.isChecked) 0.9f else 1.0f
-            this.cameraView.setFaceCaptureMaxSize(faceCaptureMaxSize)
+            this.cameraView.setDetectionMaxSize(faceCaptureMaxSize)
         }
     }
 
     fun onFaceROISwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setFaceROIEnable(checked)
-            this.cameraView.setFaceROIAreaOffset(checked)
+            this.cameraView.setROI(checked)
+            this.cameraView.setROIAreaOffset(checked)
         }
     }
 
     fun onFaceROIMinSizeSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceROIMinimumSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setFaceROIMinSize(faceROIMinimumSize)
+            this.cameraView.setDetectionMinSize(faceROIMinimumSize)
         }
     }
 
