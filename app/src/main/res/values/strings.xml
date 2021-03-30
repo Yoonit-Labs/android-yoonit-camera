@@ -18,6 +18,7 @@
     <string name="face_blur">Face Blur</string>
     <string name="computer_vision">Computer Vision</string>
     <string name="camera_state">Turn Camera ON/OFF</string>
+    <string name="torch_state">Turn Torch ON/OFF</string>
     <string name="panel">Features Panel</string>
     <string name="face_roi">Face ROI</string>
     <string name="face_roi_min_size">Face ROI Min (70%)</string>

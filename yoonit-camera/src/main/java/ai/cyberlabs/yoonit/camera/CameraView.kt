@@ -260,6 +260,11 @@ open class CameraView @JvmOverloads constructor(
         CaptureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
     }
 
+    fun setTorch(enabled: Boolean) {
+        CaptureOptions.torchEnabled = enabled
+        cameraController.toggleTorch()
+    }
+
     /**
      * Set saving face images time interval in milli seconds.
      *

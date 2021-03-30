@@ -188,6 +188,16 @@
                 android:onClick="cameraStateSwitchClick"
                 android:text="@string/camera_state" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/turn_torch_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:checked="false"
+                android:onClick="torchStateSwitchClick"
+                android:text="@string/torch_state" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
