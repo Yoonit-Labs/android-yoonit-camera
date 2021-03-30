@@ -260,9 +260,15 @@ open class CameraView @JvmOverloads constructor(
         CaptureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
     }
 
-    fun setTorch(enabled: Boolean) {
-        CaptureOptions.torchEnabled = enabled
-        cameraController.toggleTorch()
+    /**
+     * Set to enable/disable the device torch. Available only to camera lens "back".
+     *
+     * @param enable The indicator to set enable/disable the device torch.
+     * Default value is false.
+     */
+    fun setTorch(enable: Boolean) {
+        CaptureOptions.torchEnabled = enable
+        cameraController.setTorch()
     }
 
     /**
