@@ -90,9 +90,9 @@ class CameraGraphicView constructor(
      * @param faceContours List of points that represents the shape of the face detected .
      */
     fun handleDraw(
-        detectionBox: RectF?,
-        faceBitmap: Bitmap?,
-        faceContours: MutableList<PointF>?
+        detectionBox: RectF? = null,
+        faceBitmap: Bitmap? = null,
+        faceContours: MutableList<PointF>? = null
     ) {
         this.detectionBox = detectionBox
         this.faceBlurBitmap = faceBitmap
@@ -141,7 +141,11 @@ class CameraGraphicView constructor(
             faceContours.forEach { contour ->
                 canvas.drawPoint(
                     contour.x, contour.y,
-                    FACE_CONTOURS_PAINT
+                    Paint().apply {
+                        this.color = CaptureOptions.faceContoursColor
+                        this.style = Paint.Style.STROKE
+                        this.strokeWidth = 5.0f
+                    }
                 )
             }
         }
@@ -216,7 +220,13 @@ class CameraGraphicView constructor(
      */
     private fun drawDetectionBox(canvas: Canvas) {
         this.detectionBox?.let { detectionBox ->
-            canvas.drawRect(detectionBox, DETECTION_BOX_PAINT)
+            val detectionBoxPaint = Paint().apply {
+                this.color = CaptureOptions.detectionBoxColor
+                this.style = Paint.Style.STROKE
+                this.strokeWidth = 5.0f
+            }
+
+            canvas.drawRect(detectionBox, detectionBoxPaint)
 
             val left: Float = detectionBox.left
             val top: Float = detectionBox.top
@@ -226,49 +236,29 @@ class CameraGraphicView constructor(
             val toTop = top + (detectionBox.height() * 0.7).toFloat()
             val toRight = left + (detectionBox.width() * 0.3).toFloat()
             val toLeft = left + (detectionBox.width() * 0.7).toFloat()
+            val detectionBoxLinePaint = Paint().apply {
+                this.color = CaptureOptions.detectionBoxColor
+                this.style = Paint.Style.STROKE
+                this.strokeWidth = 16.0f
+                this.strokeCap = Paint.Cap.ROUND
+            }
 
             // edge - top-left > bottom-left
-            canvas.drawLine(left, top, left, toBottom, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(left, top, left, toBottom, detectionBoxLinePaint)
             // edge - top-right > bottom-right
-            canvas.drawLine(right, top, right, toBottom, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(right, top, right, toBottom, detectionBoxLinePaint)
             // edge - bottom-left > top-left
-            canvas.drawLine(left, bottom, left, toTop, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(left, bottom, left, toTop, detectionBoxLinePaint)
             // edge - bottom-right > top-right
-            canvas.drawLine(right, bottom, right, toTop, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(right, bottom, right, toTop, detectionBoxLinePaint)
             // edge - top-left > top-right
-            canvas.drawLine(left, top, toRight, top, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(left, top, toRight, top, detectionBoxLinePaint)
             // edge - top-right > left-right
-            canvas.drawLine(right, top, toLeft, top, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(right, top, toLeft, top, detectionBoxLinePaint)
             // edge - bottom-left > right-left
-            canvas.drawLine(left, bottom, toRight, bottom, DETECTION_BOX_LINE_PAINT)
+            canvas.drawLine(left, bottom, toRight, bottom, detectionBoxLinePaint)
             // edge - bottom-right > right-left
-            canvas.drawLine(right, bottom, toLeft, bottom, DETECTION_BOX_LINE_PAINT)
-        }
-    }
-
-    companion object {
-        const val TAG = "CameraGraphicView"
-
-        // Face detection box styles.
-        private var DETECTION_BOX_PAINT: Paint = Paint().apply {
-            this.color = CaptureOptions.detectionBoxColor
-            this.style = Paint.Style.STROKE
-            this.strokeWidth = 5.0f
-        }
-
-        // Face detection box styles.
-        private var DETECTION_BOX_LINE_PAINT = Paint().apply {
-            this.color = CaptureOptions.detectionBoxColor
-            this.style = Paint.Style.STROKE
-            this.strokeWidth = 16.0f
-            this.strokeCap = Paint.Cap.ROUND
-        }
-
-        // Face contours styles.
-        private var FACE_CONTOURS_PAINT: Paint = Paint().apply {
-            this.color = CaptureOptions.faceContoursColor
-            this.style = Paint.Style.STROKE
-            this.strokeWidth = 5.0f
+            canvas.drawLine(right, bottom, toLeft, bottom, detectionBoxLinePaint)
         }
     }
 }
