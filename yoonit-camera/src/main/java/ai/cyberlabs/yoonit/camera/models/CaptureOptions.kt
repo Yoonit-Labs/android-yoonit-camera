@@ -62,8 +62,6 @@ object CaptureOptions {
     // Blur face detection box
     var blurFaceDetectionBox: Boolean = false
 
-    var torchEnabled: Boolean = false
-
     // Color encoding of the saved image.
     var colorEncoding: String = "RGB"
 

@@ -180,7 +180,11 @@ class CameraController(
     /**
      * Set to enable/disable the device torch. Available only to camera lens "back".
      */
-    fun setTorch() = camera?.let { it.cameraControl.enableTorch(CaptureOptions.torchEnabled) }
+    fun setTorch(enable: Boolean) {
+        camera?.let {
+            it.cameraControl.enableTorch(enable)
+        }
+    }
 
     private fun buildCameraPreview() {
         this.cameraProviderProcess?.unbindAll()
