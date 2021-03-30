@@ -43,9 +43,6 @@ class CameraGraphicView constructor(
     // The face/qrcode region of interest area offset bitmap.
     private var roiAreaOffsetBitmap: Bitmap? = null
 
-    // Indicates if the ROI area offset is drawable.
-    private var isROIDrawable: Boolean = false
-
     override fun draw(canvas: Canvas) {
         if (
             !CaptureOptions.detectionBox &&
@@ -70,8 +67,7 @@ class CameraGraphicView constructor(
         // Draw face/qrcode region of interest area offset bitmap.
         if (
             CaptureOptions.roi.enable &&
-            CaptureOptions.roi.areaOffsetEnable &&
-            this.isROIDrawable
+            CaptureOptions.roi.areaOffsetEnable
         ) {
             this.drawROIAreaOffset(canvas)
         }
@@ -97,7 +93,6 @@ class CameraGraphicView constructor(
         this.detectionBox = detectionBox
         this.faceBlurBitmap = faceBitmap
         this.faceContours = faceContours
-        this.isROIDrawable = true
 
         this.postInvalidate()
     }
@@ -110,7 +105,6 @@ class CameraGraphicView constructor(
         this.faceBlurBitmap = null
         this.faceContours = null
         this.roiAreaOffsetBitmap = null
-        this.isROIDrawable = false
 
         this.postInvalidate()
     }
