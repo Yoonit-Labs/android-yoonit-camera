@@ -112,7 +112,7 @@
                         android:layout_marginBottom="16dp"
                         android:checked="false"
                         android:onClick="onFaceBoxSwitchClick"
-                        android:text="@string/face_box" />
+                        android:text="@string/detection_box" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/face_min_switch"
                         android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
                         android:layout_marginBottom="16dp"
                         android:checked="false"
                         android:onClick="onFaceMinSwitchClick"
-                        android:text="@string/face_min" />
+                        android:text="@string/detection_min" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/face_roi"
                         android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                         android:layout_marginBottom="16dp"
                         android:checked="false"
                         android:onClick="onFaceROISwitchClick"
-                        android:text="@string/face_roi" />
+                        android:text="@string/roi" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/computer_vision_switch"
                         android:layout_width="wrap_content"
@@ -167,15 +167,7 @@
                         android:layout_marginBottom="16dp"
                         android:checked="false"
                         android:onClick="onFaceMaxSwitchClick"
-                        android:text="@string/face_max" />
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/face_roi_min_size"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:checked="false"
-                        android:onClick="onFaceROIMinSizeSwitchClick"
-                        android:text="@string/face_roi_min_size" />
+                        android:text="@string/detection_max" />
                 </LinearLayout>
             </LinearLayout>
 

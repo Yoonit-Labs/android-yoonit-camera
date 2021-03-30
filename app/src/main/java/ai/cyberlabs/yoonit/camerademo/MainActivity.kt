@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
     fun onFaceBoxSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setFaceDetectionBox(checked)
+            this.cameraView.setDetectionBox(checked)
         }
     }
 
@@ -188,13 +188,6 @@ class MainActivity : AppCompatActivity() {
             val checked = view.isChecked
             this.cameraView.setROI(checked)
             this.cameraView.setROIAreaOffset(checked)
-        }
-    }
-
-    fun onFaceROIMinSizeSwitchClick(view: View) {
-        if (view is SwitchCompat) {
-            val faceROIMinimumSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setDetectionMinSize(faceROIMinimumSize)
         }
     }
 
