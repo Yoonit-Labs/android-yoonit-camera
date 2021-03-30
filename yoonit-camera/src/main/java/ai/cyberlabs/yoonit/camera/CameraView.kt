@@ -289,6 +289,16 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Set to enable/disable the device torch. Available only to camera lens "back".
+     *
+     * @param enable The indicator to set enable/disable the device torch.
+     * Default value is false.
+     */
+    fun setTorch(enable: Boolean) {
+        cameraController.setTorch(enable)
+    }
+
+    /**
      * Set saving face images time interval in milli seconds.
      *
      * @param facePaddingPercent The percent to enlarge the bounding box.

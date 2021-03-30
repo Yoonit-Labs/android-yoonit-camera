@@ -169,6 +169,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun torchStateSwitchClick(view: View) {
+        if (view is SwitchCompat) this.cameraView.setTorch(view.isChecked)
+    }
+
     fun onFaceMinSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val faceCaptureMinSize = if (view.isChecked) 0.7f else 0.0f
@@ -200,11 +204,14 @@ class MainActivity : AppCompatActivity() {
             when (view.getId()) {
                 R.id.back_radio_button -> {
                     camera_view.setCameraLens("back")
+                    turn_torch_state.visibility = View.VISIBLE
                     Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
                 }
 
                 R.id.front_radio_button -> {
                     camera_view.setCameraLens("front")
+                    turn_torch_state.isChecked = false
+                    turn_torch_state.visibility = View.GONE
                     Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
                 }
             }
