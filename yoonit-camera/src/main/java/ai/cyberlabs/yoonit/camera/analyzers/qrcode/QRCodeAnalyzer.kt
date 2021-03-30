@@ -68,12 +68,13 @@ class QRCodeAnalyzer(
     @SuppressLint("UnsafeExperimentalUsageError")
     private fun detect(
         imageProxy: ImageProxy,
-        onSuccess: (RectF, String) -> Unit,
+        onDetected: (RectF, String) -> Unit,
         onMessage: (String) -> Unit,
         onError: (String) -> Unit,
         onComplete: () -> Unit
     ) {
         if (imageProxy.image == null) {
+            this.graphicView.clear()
             onComplete()
             return
         }
@@ -88,6 +89,7 @@ class QRCodeAnalyzer(
             .addOnSuccessListener { barcodes ->
 
                 if (barcodes.isEmpty()) {
+                    this.graphicView.clear()
                     onComplete()
                     return@addOnSuccessListener
                 }
@@ -118,25 +120,25 @@ class QRCodeAnalyzer(
                     detectionBox
                 )
 
-
                 // Handle error.
                 error?.let {
                     if (this.isValid) {
                         this.isValid = false
-                        this.graphicView.clear()
                         if (error != "") {
                             onMessage(error)
                         }
                     }
+                    this.graphicView.clear()
                     onComplete()
                     return@addOnSuccessListener
                 }
                 this.isValid = true
 
-                onSuccess(detectionBox, value)
+                onDetected(detectionBox, value)
                 onComplete()
             }
             .addOnFailureListener { e ->
+                this.graphicView.clear()
                 onError(e.toString())
                 onComplete()
             }
