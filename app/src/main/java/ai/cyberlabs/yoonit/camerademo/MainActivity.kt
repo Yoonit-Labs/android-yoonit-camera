@@ -191,13 +191,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onFaceROIMinSizeSwitchClick(view: View) {
-        if (view is SwitchCompat) {
-            val faceROIMinimumSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setDetectionMinSize(faceROIMinimumSize)
-        }
-    }
-
     fun onCameraLensRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             if (!view.isChecked) {

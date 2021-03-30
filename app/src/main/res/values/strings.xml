@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Yoonit Camera</string>
     <string name="stop">STOP</string>
-    <string name="face_box">Face Box</string>
+    <string name="detection_box">Detection Box</string>
     <string name="face_contours">Face Contours</string>
     <string name="camera_lens">CAMERA LENS:</string>
     <string name="color_encoding">COLOR ENCODING:</string>
@@ -19,8 +19,7 @@
     <string name="computer_vision">Computer Vision</string>
     <string name="camera_state">Turn Camera ON/OFF</string>
     <string name="panel">Features Panel</string>
-    <string name="face_roi">Face ROI</string>
-    <string name="face_roi_min_size">Face ROI Min (70%)</string>
-    <string name="face_min">Face Min (70%)</string>
-    <string name="face_max">Face Max (90%)</string>
+    <string name="roi">ROI</string>
+    <string name="detection_min">Min (70%)</string>
+    <string name="detection_max">Max (90%)</string>
 </resources>
