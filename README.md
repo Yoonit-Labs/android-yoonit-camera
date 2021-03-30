@@ -39,7 +39,7 @@ Add the JitPack repository to your root `build.gradle` at the end of repositorie
 ```groovy
 allprojects {
 	repositories {
-	...
+	..
 	maven { url 'https://jitpack.io' }
 	}
 }
@@ -90,18 +90,18 @@ Set camera event listener to get the result:
 
 ```kotlin
 this.cameraView.setCameraEventListener(this.buildCameraEventListener())
-...
+..
 fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
-...
+..
 	override fun onImageCaptured(
-	    type: String,
-	    count: Int,
-	    total: Int,
-	    imagePath: String,
-	    inferences: ArrayList<Pair<String, FloatArray>>
+        type: String,
+        count: Int,
+        total: Int,
+        imagePath: String,
+        inferences: ArrayList<Pair<String, FloatArray>>
     ) {
-		// YOUR CODE
-	}
+        // YOU CODE
+    }
 
     override fun onFaceDetected(
         x: Int,
@@ -117,7 +117,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
     ) {
         // YOU CODE
     }
-...
+..
 }
 ```
 
@@ -133,13 +133,13 @@ Set camera event listener to get the result:
 
 ```kotlin
 this.cameraView.setCameraEventListener(this.buildCameraEventListener())
-...
+..
 fun buildCameraEventListener(): CameraEventListener = object : CameraEventListener {
-...
-	override fun onQRCodeScanned(content: String) {
-		// YOUR CODE
-	}
-...
+..
+    override fun onQRCodeScanned(content: String) {
+        // YOUR CODE
+    }
+..
 }
 ```
 

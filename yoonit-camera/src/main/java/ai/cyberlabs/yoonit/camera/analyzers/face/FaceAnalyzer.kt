@@ -55,7 +55,9 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
-        val bitmap = mediaImage.toRGBBitmap(context).rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
+        val bitmap = mediaImage
+            .toRGBBitmap(context)
+            .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
 
         facefy.detect(
             bitmap,
