@@ -69,7 +69,7 @@ class FaceAnalyzer(
                     imageProxy.imageInfo.rotationDegrees.toFloat()
                 )
 
-                // Verify if has error on detectionBox.
+                // Verify if has error on detection box.
                 if (this.hasError(detectionBox)) {
                     return@detect
                 }
