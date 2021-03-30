@@ -180,6 +180,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setComputerVision            | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Enable/disable computer vision usage.
 | setComputerVisionLoadModels  | `modelPaths: ArrayList<String>`                 | Must exist all model files paths.                                                | void        | Set the computer vision model files paths to load.
 | computerVisionClearModels    | -                                               | -                                                                                | void        | Clear loaded computer vision models.
+| setTorch                     | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Set to enable/disable the device torch. Available only to camera lens `"back"`.
 
 ### Events
 
