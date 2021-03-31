@@ -12,6 +12,7 @@
 package ai.cyberlabs.yoonit.camera.analyzers.face
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
+import ai.cyberlabs.yoonit.camera.analyzers.CoordinatesController
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
@@ -42,11 +43,7 @@ class FaceAnalyzer(
     private var analyzerTimeStamp: Long = 0
     private var isValid: Boolean = true
     private var numberOfImages = 0
-
-    /**
-     * Responsible to manipulate everything related with the face bounding box.
-     */
-    private val faceCoordinatesController = FaceCoordinatesController(this.graphicView)
+    private val coordinatesController = CoordinatesController(this.graphicView)
 
     /**
      * Receive image from CameraX API.
@@ -58,21 +55,23 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
-        val bitmap = mediaImage.toRGBBitmap(context).rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
+        val bitmap = mediaImage
+            .toRGBBitmap(context)
+            .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
 
-        facefy.detect(
+        this.facefy.detect(
             bitmap,
             { faceDetected ->
 
                 // Get from faceDetected the graphic face bounding box.
-                val detectionBox = this.faceCoordinatesController.getDetectionBox(
+                val detectionBox = this.coordinatesController.getDetectionBox(
                     faceDetected,
                     imageProxy.width.toFloat(),
                     imageProxy.height.toFloat(),
                     imageProxy.imageInfo.rotationDegrees.toFloat()
                 )
 
-                // Verify if has error on detectionBox.
+                // Verify if has error on detection box.
                 if (this.hasError(detectionBox)) {
                     return@detect
                 }
@@ -81,7 +80,7 @@ class FaceAnalyzer(
 
                     // Transform the camera face contour points to UI graphic coordinates.
                     // Used to draw the face contours.
-                    val faceContours = this.faceCoordinatesController.getFaceContours(
+                    val faceContours = this.coordinatesController.getFaceContours(
                         faceDetected.contours,
                         imageProxy.width.toFloat(),
                         imageProxy.height.toFloat(),
@@ -156,7 +155,7 @@ class FaceAnalyzer(
     private fun hasError(detectionBox: RectF): Boolean {
 
         // Get error if exist in the detectionBox.
-        val error = this.faceCoordinatesController.getError(
+        val error = this.coordinatesController.getError(
             detectionBox
         )
 

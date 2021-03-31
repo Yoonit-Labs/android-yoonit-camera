@@ -103,7 +103,7 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Destroy camera.
+     * Destroy camera preview.
      */
     fun destroy() {
         this.cameraController.destroy()
@@ -219,13 +219,41 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set to enable/disable face detection box when face detected.
+     * Set to enable/disable detection box when face/qrcode detected.
+     * The detection box is the the face/qrcode bounding box normalized to UI.
      *
-     * @param enable The indicator to show or hide the face detection box.
-     * Default value is true.
+     * @param enable: The indicator to enable/disable detection box.
+     * Default value is `false`.
      */
-    fun setFaceDetectionBox(enable: Boolean) {
-        CaptureOptions.faceDetectionBox = enable
+    fun setDetectionBox(enable: Boolean) {
+        CaptureOptions.detectionBox = enable
+    }
+
+    /**
+     * Set detection box ARGB color.
+     *
+     * @param alpha The alpha value.
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
+     * Default value is `(100, 255, 255, 255)`.
+     */
+    fun setDetectionBoxColor(
+        alpha: Int,
+        red: Int,
+        green: Int,
+        blue: Int
+    ) {
+        if (
+            alpha < 0 || alpha > 255 ||
+            red < 0 || red > 255 ||
+            green < 0 || green > 255 ||
+            blue < 0 || blue > 255
+        ) {
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_DETECTION_BOX_COLOR)
+        }
+
+        CaptureOptions.detectionBoxColor = Color.argb(alpha, red, green, blue)
     }
 
     /**
@@ -258,6 +286,16 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
+    }
+
+    /**
+     * Set to enable/disable the device torch. Available only to camera lens "back".
+     *
+     * @param enable The indicator to set enable/disable the device torch.
+     * Default value is false.
+     */
+    fun setTorch(enable: Boolean) {
+        this.cameraController.setTorch(enable)
     }
 
     /**
@@ -313,20 +351,20 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-    Set to apply enable/disable region of interest.
-
-    * @param enable: The indicator to enable/disable region of interest.
-    Default value is `false`.
+     * Set to apply enable/disable region of interest.
+     *
+     * @param enable The indicator to enable/disable region of interest.
+     * Default value is `false`.
      */
     fun setROI(enable: Boolean) {
         CaptureOptions.roi.enable = enable
     }
 
     /**
-    Camera preview top distance in percentage.
-
-    * @param percentage: Value between `0` and `1`. Represents the percentage.
-    Default value is `0.0`.
+     * Camera preview top distance in percentage.
+     *
+     * @param topOffset Value between `0` and `1`. Represents the percentage.
+     * Default value is `0.0`.
      */
     fun setROITopOffset(topOffset: Float) {
         if (topOffset < 0.0f || topOffset > 1.0f) {
@@ -337,10 +375,10 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-    Camera preview right distance in percentage.
-
-    * @param percentage: Value between `0` and `1`. Represents the percentage.
-    Default value is `0.0`.
+     * Camera preview right distance in percentage.
+     *
+     * @param rightOffset Value between `0` and `1`. Represents the percentage.
+     * Default value is `0.0`.
      */
     fun setROIRightOffset(rightOffset: Float) {
         if (rightOffset < 0.0f || rightOffset > 1.0f) {
@@ -351,10 +389,10 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-    Camera preview bottom distance in percentage.
-
-    * @param percentage: Value between `0` and `1`. Represents the percentage.
-    Default value is `0.0`.
+     * Camera preview bottom distance in percentage.
+     *
+     * @param bottomOffset Value between `0` and `1`. Represents the percentage.
+     * Default value is `0.0`.
      */
     fun setROIBottomOffset(bottomOffset: Float) {
         if (bottomOffset < 0.0f || bottomOffset > 1.0f) {
@@ -365,10 +403,10 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-    Camera preview left distance in percentage.
-
-    * @param percentage: Value between `0` and `1`. Represents the percentage.
-    Default value is `0.0`.
+     * Camera preview left distance in percentage.
+     *
+     * @param leftOffset Value between `0` and `1`. Represents the percentage.
+     * Default value is `0.0`.
      */
     fun setROILeftOffset(leftOffset: Float) {
         if (leftOffset < 0.0f || leftOffset > 1.0f) {
@@ -379,10 +417,10 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-    Set to enable/disable region of interest offset visibility.
-
-    * @param enable: The indicator to enable/disable region of interest visibility.
-    Default value is `false`.
+     * Set to enable/disable region of interest offset visibility.
+     *
+     * @param enable The indicator to enable/disable region of interest visibility.
+     * Default value is `false`.
      */
     fun setROIAreaOffset(enable: Boolean) {
         CaptureOptions.roi.areaOffsetEnable = enable
@@ -397,7 +435,12 @@ open class CameraView @JvmOverloads constructor(
      * @param blue Integer that represent blue color.
      * Default value is 100, 255, 255, 255 (white color).
      */
-    fun setROIAreaOffsetColor(alpha: Int, red: Int, green: Int, blue: Int) {
+    fun setROIAreaOffsetColor(
+        alpha: Int,
+        red: Int,
+        green: Int,
+        blue: Int
+    ) {
         if (
             alpha < 0 || alpha > 255 ||
             red < 0 || red > 255 ||

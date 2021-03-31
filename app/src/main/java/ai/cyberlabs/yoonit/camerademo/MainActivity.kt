@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private var captureType: String = ""
         set(value) {
             field = value
-
             when (field) {
                 "none" -> {
                     this.cameraView.startCaptureType("none")
@@ -44,21 +43,18 @@ class MainActivity : AppCompatActivity() {
                     this.info_textview.visibility = View.INVISIBLE
                     this.qrcode_textview.visibility = View.INVISIBLE
                 }
-
                 "face" -> {
                     this.cameraView.startCaptureType("face")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
                     this.qrcode_textview.visibility = View.INVISIBLE
                 }
-
                 "frame" -> {
                     this.cameraView.startCaptureType("frame")
                     this.image_preview.visibility = View.VISIBLE
                     this.info_textview.visibility = View.VISIBLE
                     this.qrcode_textview.visibility = View.INVISIBLE
                 }
-
                 "qrcode" -> {
                     this.cameraView.startCaptureType("qrcode")
                     this.image_preview.visibility = View.INVISIBLE
@@ -118,33 +114,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onPanelSwitchClick(view: View) {
+    fun onConfigurationSwitchClick(view: View) {
         if (view is SwitchCompat) {
-            val checked = view.isChecked
-            this.features_panel.visibility = if (checked) View.VISIBLE else View.INVISIBLE
+            this.features_panel.visibility =
+                if (view.isChecked) View.VISIBLE
+                else View.INVISIBLE
         }
     }
 
-    fun onFaceBoxSwitchClick(view: View) {
-        if (view is SwitchCompat) {
-            val checked = view.isChecked
-            this.cameraView.setFaceDetectionBox(checked)
-        }
+    fun onDetectionBoxSwitchClick(view: View) {
+        if (view is SwitchCompat) this.cameraView.setDetectionBox(view.isChecked)
     }
 
     fun onFaceContoursSwitchClick(view: View) {
-        if (view is SwitchCompat) {
-            val checked = view.isChecked
-            this.cameraView.setFaceContours(checked)
-        }
+        if (view is SwitchCompat) this.cameraView.setFaceContours(view.isChecked)
     }
 
     fun onImageCaptureSwitchClick(view: View) {
         if (view is SwitchCompat) {
-            val checked = view.isChecked
-            this.cameraView.setSaveImageCaptured(checked)
-
-            if (checked) {
+            this.cameraView.setSaveImageCaptured(view.isChecked)
+            if (view.isChecked) {
                 this.image_preview.visibility = View.VISIBLE
             } else {
                 this.image_preview.visibility = View.INVISIBLE
@@ -153,13 +142,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onFaceBlurSwitchClick(view: View) {
-        if (view is SwitchCompat) {
-            val checked = view.isChecked
-            this.cameraView.setBlurFaceDetectionBox(checked)
-        }
+        if (view is SwitchCompat) this.cameraView.setBlurFaceDetectionBox(view.isChecked)
     }
 
-    fun cameraStateSwitchClick(view: View) {
+    fun onCameraSwitchClick(view: View) {
         if (view is SwitchCompat) {
             if (view.isChecked) {
                 this.cameraView.startPreview()
@@ -169,32 +155,52 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onFaceMinSwitchClick(view: View) {
+    fun onTorchSwitchClick(view: View) {
+        if (view is SwitchCompat) this.cameraView.setTorch(view.isChecked)
+    }
+
+    fun onMinSwitchClick(view: View) {
+        if (view is SwitchCompat) this.cameraView.setDetectionMinSize(if (view.isChecked) 0.7f else 0.0f)
+    }
+
+    fun onMaxSwitchClick(view: View) {
+        if (view is SwitchCompat) this.cameraView.setDetectionMaxSize(if (view.isChecked) 0.9f else 1.0f)
+    }
+
+    fun onROISwitchClick(view: View) {
         if (view is SwitchCompat) {
-            val faceCaptureMinSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setDetectionMinSize(faceCaptureMinSize)
+            this.cameraView.setROI(view.isChecked)
+            this.cameraView.setROIAreaOffset(view.isChecked)
         }
     }
 
-    fun onFaceMaxSwitchClick(view: View) {
+    fun onDetectionBoxColorSwitchClick(view: View) {
         if (view is SwitchCompat) {
-            val faceCaptureMaxSize = if (view.isChecked) 0.9f else 1.0f
-            this.cameraView.setDetectionMaxSize(faceCaptureMaxSize)
+            if (view.isChecked) {
+                this.cameraView.setDetectionBoxColor(255, 255, 0, 0)
+            } else {
+                this.cameraView.setDetectionBoxColor(255, 255, 255, 255)
+            }
         }
     }
 
-    fun onFaceROISwitchClick(view: View) {
+    fun onFaceContoursColorSwitchClick(view: View) {
         if (view is SwitchCompat) {
-            val checked = view.isChecked
-            this.cameraView.setROI(checked)
-            this.cameraView.setROIAreaOffset(checked)
+            if (view.isChecked) {
+                this.cameraView.setFaceContoursColor(255, 255, 0, 0)
+            } else {
+                this.cameraView.setFaceContoursColor(255, 255, 255, 255)
+            }
         }
     }
 
-    fun onFaceROIMinSizeSwitchClick(view: View) {
+    fun onROIColorSwitchClick(view: View) {
         if (view is SwitchCompat) {
-            val faceROIMinimumSize = if (view.isChecked) 0.7f else 0.0f
-            this.cameraView.setDetectionMinSize(faceROIMinimumSize)
+            if (view.isChecked) {
+                this.cameraView.setROIAreaOffsetColor(255, 255, 0, 0)
+            } else {
+                this.cameraView.setROIAreaOffsetColor(255, 255, 255, 255)
+            }
         }
     }
 
@@ -207,11 +213,14 @@ class MainActivity : AppCompatActivity() {
             when (view.getId()) {
                 R.id.back_radio_button -> {
                     camera_view.setCameraLens("back")
+                    turn_torch_state.visibility = View.VISIBLE
                     Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
                 }
 
                 R.id.front_radio_button -> {
                     camera_view.setCameraLens("front")
+                    turn_torch_state.isChecked = false
+                    turn_torch_state.visibility = View.INVISIBLE
                     Log.d(TAG, "camera lens: ${camera_view.getCameraLens()}")
                 }
             }
@@ -253,11 +262,8 @@ class MainActivity : AppCompatActivity() {
 
             when (view.getId()) {
                 R.id.none_radio_button -> this.captureType = "none"
-
                 R.id.face_radio_button -> this.captureType = "face"
-
                 R.id.frame_radio_button -> this.captureType = "frame"
-
                 R.id.qrcode_radio_button -> this.captureType = "qrcode"
             }
         }

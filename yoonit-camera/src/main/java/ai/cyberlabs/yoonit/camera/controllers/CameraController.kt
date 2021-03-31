@@ -23,6 +23,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.view.View
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -49,6 +50,7 @@ class CameraController(
     private lateinit var preview: Preview
     private var cameraProviderFuture = ProcessCameraProvider.getInstance(this.context)
     private var cameraProviderProcess: ProcessCameraProvider? = null
+    private var camera: Camera? = null
 
     // Called when number of images reached.
     override fun onStopAnalyzer() {
@@ -175,6 +177,15 @@ class CameraController(
         }
     }
 
+    /**
+     * Set to enable/disable the device torch. Available only to camera lens "back".
+     */
+    fun setTorch(enable: Boolean) {
+        this.camera?.let {
+            it.cameraControl.enableTorch(enable)
+        }
+    }
+
     private fun buildCameraPreview() {
         this.cameraProviderProcess?.unbindAll()
 
@@ -185,7 +196,7 @@ class CameraController(
             .requireLensFacing(CaptureOptions.cameraLens)
             .build()
 
-        this.cameraProviderProcess?.bindToLifecycle(
+        this.camera = this.cameraProviderProcess?.bindToLifecycle(
             this.context as LifecycleOwner,
             cameraSelector,
             this.imageAnalyzerController.analysis,

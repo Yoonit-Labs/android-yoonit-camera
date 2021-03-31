@@ -14,28 +14,25 @@ package ai.cyberlabs.yoonit.camera.models
 import android.graphics.Color
 
 /**
- * Model to set face region of interest.
+ * Model to set region of interest.
  */
 class ROI {
-
-    var layoutWidth: Int = 0
-    var layoutHeight: Int = 0
 
     // Enable or disable ROI.
     var enable: Boolean = false
 
-    // Enable or disable face region of interest area offset.
+    // Enable/disable region of interest area offset.
     var areaOffsetEnable: Boolean = false
 
-    // Face region of interest area offset color.
+    // Region of interest area offset color.
     var areaOffsetColor: Int = Color.argb(100, 255, 255, 255)
 
     // Region of interest in percentage.
     // Values valid [0, 1].
-    var topOffset: Float = 0.0f // "Above" the face detected.
-    var rightOffset: Float = 0.0f // "Right" of face detected.
-    var bottomOffset: Float = 0.0f // "Bottom" face detected.
-    var leftOffset: Float = 0.0f // "Left" face detected.
+    var topOffset: Float = 0.0f
+    var rightOffset: Float = 0.0f
+    var bottomOffset: Float = 0.0f
+    var leftOffset: Float = 0.0f
 
     // Return if any attributes has modifications.
     var hasChanges: Boolean = false

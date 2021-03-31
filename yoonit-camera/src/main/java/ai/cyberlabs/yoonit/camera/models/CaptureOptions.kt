@@ -20,7 +20,7 @@ import androidx.camera.core.CameraSelector
  */
 object CaptureOptions {
 
-    // Face region of interesting. Default is all the screen area.
+    // Region of interesting.
     var roi: ROI = ROI()
 
     // Computer vision models.
@@ -47,8 +47,11 @@ object CaptureOptions {
     // Face/Frame save images captured.
     var saveImageCaptured: Boolean = false
 
-    // Draw the face detection box.
-    var faceDetectionBox: Boolean = false
+    // Draw or not the face/qrcode detection box.
+    var detectionBox: Boolean = false
+
+    // Detection box color.
+    var detectionBoxColor: Int = Color.WHITE
 
     // Face contours.
     var faceContours: Boolean = false
@@ -66,16 +69,16 @@ object CaptureOptions {
     var colorEncoding: String = "RGB"
 
     /**
-     * * Limit the minimum capture size.
-     * This variable is the face detection box percentage in relation with the UI graphic view.
-     * The value must be between 0 and 1.
+     * Face/qrcode minimum size to detect in percentage related with the camera preview.
+     * This variable is the detection box percentage in relation with the UI graphic view.
+     * The value must be between `0` and `1`.
      */
     var minimumSize: Float = 0.0f
 
     /**
-     * Limit the maximum capture size.
-     * This variable is the face detection box percentage in relation with the UI graphic view.
-     * The value must be between 0 and 1.
+     * Face/qrcode maximum size to detect in percentage related with the camera preview.
+     * This variable is the detection box percentage in relation with the UI graphic view.
+     * The value must be between `0` and `1`.
      */
     var maximumSize: Float = 1.0f
 }

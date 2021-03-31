@@ -31,14 +31,20 @@ object KeyError {
     // Tried to input invalid image height.
     const val INVALID_OUTPUT_IMAGE_HEIGHT = "INVALID_OUTPUT_IMAGE_HEIGHT"
 
+    // Tried to input invalid detection box ARGB value color.
+    const val INVALID_DETECTION_BOX_COLOR = "INVALID_DETECTION_BOX_COLOR"
+
+    // Tried to input invalid minimum size.
+    const val INVALID_MINIMUM_SIZE = "INVALID_MINIMUM_SIZE"
+
+    // Tried to input invalid maximum size.
+    const val INVALID_MAXIMUM_SIZE = "INVALID_MAXIMUM_SIZE"
+
     // Tried to input invalid face padding percent.
     const val INVALID_FACE_PADDING_PERCENT = "INVALID_FACE_PADDING_PERCENT"
 
-    // Tried to input invalid face capture minimum size.
-    const val INVALID_MINIMUM_SIZE = "INVALID_MINIMUM_SIZE"
-
-    // Tried to input invalid face capture maximum size.
-    const val INVALID_MAXIMUM_SIZE = "INVALID_MAXIMUM_SIZE"
+    // Tried to input invalid face contour ARGB value color.
+    const val INVALID_FACE_CONTOURS_COLOR = "INVALID_FACE_CONTOURS_COLOR"
 
     // Tried to input invalid face region of interest top offset.
     const val INVALID_ROI_TOP_OFFSET = "INVALID_ROI_TOP_OFFSET"
@@ -52,17 +58,11 @@ object KeyError {
     // Tried to input invalid face region of interest left offset.
     const val INVALID_ROI_LEFT_OFFSET = "INVALID_ROI_LEFT_OFFSET"
 
-    // Tried to input invalid face region of interest minimum size.
-    const val INVALID_ROI_MIN_SIZE = "INVALID_ROI_MIN_SIZE"
-
     // Tried to input invalid face region of interest area offset ARGB value color.
     const val INVALID_ROI_COLOR = "INVALID_ROI_COLOR"
 
     // Tried to input invalid image capture color encoding.
     const val INVALID_IMAGE_CAPTURE_COLOR_ENCODING = "INVALID_IMAGE_CAPTURE_COLOR_ENCODING"
-
-    // Tried to input invalid face contour ARGB value color.
-    const val INVALID_FACE_CONTOURS_COLOR = "INVALID_FACE_CONTOURS_COLOR"
 
     // Tried to input a non existent computer vision model paths.
     const val INVALID_COMPUTER_VISION_MODEL_PATHS = "INVALID_COMPUTER_VISION_MODEL_PATHS"
