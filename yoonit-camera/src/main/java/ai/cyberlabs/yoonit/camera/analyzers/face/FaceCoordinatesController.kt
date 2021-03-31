@@ -206,6 +206,7 @@ class FaceCoordinatesController(
                     return Message.INVALID_CAPTURE_FACE_ROI_MIN_SIZE
                 }
             }
+            return null
         }
 
         // This variable is the face detection box percentage in relation with the
