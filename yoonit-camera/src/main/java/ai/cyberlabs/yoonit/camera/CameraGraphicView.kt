@@ -40,9 +40,6 @@ class CameraGraphicView constructor(
     // The face contours within the graphic view.
     private var faceContours: MutableList<PointF>? = null
 
-    // The face/qrcode region of interest area offset bitmap.
-    private var roiAreaOffsetBitmap: Bitmap? = null
-
     override fun draw(canvas: Canvas) {
         if (
             !CaptureOptions.detectionBox &&
@@ -104,7 +101,6 @@ class CameraGraphicView constructor(
         this.detectionBox = null
         this.faceBlurBitmap = null
         this.faceContours = null
-        this.roiAreaOffsetBitmap = null
 
         this.postInvalidate()
     }
@@ -158,19 +154,6 @@ class CameraGraphicView constructor(
             return
         }
 
-        this.roiAreaOffsetBitmap?.let {
-            if (
-                CaptureOptions.roi.layoutWidth == width &&
-                CaptureOptions.roi.layoutHeight == height
-            ) {
-                canvas.drawBitmap(it, 0f, 0f, null)
-                return
-            }
-        }
-
-        CaptureOptions.roi.layoutWidth = width
-        CaptureOptions.roi.layoutHeight = height
-
         val roi = Rect(
             (width * CaptureOptions.roi.leftOffset).toInt(),
             (height * CaptureOptions.roi.topOffset).toInt(),
@@ -178,13 +161,13 @@ class CameraGraphicView constructor(
             (height - (height * CaptureOptions.roi.bottomOffset)).toInt()
         )
 
-        val faceROIAreaOffsetBitmap: Bitmap = Bitmap.createBitmap(
+        val roiAreaOffsetBitmap: Bitmap = Bitmap.createBitmap(
             width,
             height,
             Bitmap.Config.ARGB_8888
         )
 
-        val areaCanvas = Canvas(faceROIAreaOffsetBitmap)
+        val areaCanvas = Canvas(roiAreaOffsetBitmap)
 
         val offsetAreaPaint = Paint()
         offsetAreaPaint.color = CaptureOptions.roi.areaOffsetColor
@@ -201,10 +184,7 @@ class CameraGraphicView constructor(
         offsetAreaPaint.color = Color.TRANSPARENT
         offsetAreaPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
         areaCanvas.drawRect(roi, offsetAreaPaint)
-
-        this.roiAreaOffsetBitmap = faceROIAreaOffsetBitmap
-
-        canvas.drawBitmap(faceROIAreaOffsetBitmap, 0f, 0f, null)
+        canvas.drawBitmap(roiAreaOffsetBitmap, 0f, 0f, null)
     }
 
     /**

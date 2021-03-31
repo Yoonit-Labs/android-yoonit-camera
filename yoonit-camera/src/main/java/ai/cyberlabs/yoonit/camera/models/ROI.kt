@@ -18,9 +18,6 @@ import android.graphics.Color
  */
 class ROI {
 
-    var layoutWidth: Int = 0
-    var layoutHeight: Int = 0
-
     // Enable or disable ROI.
     var enable: Boolean = false
 
