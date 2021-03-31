@@ -26,4 +26,6 @@
     <string name="roi_color">ROI Color</string>
     <string name="detection_min">Min Size 70%</string>
     <string name="detection_max">Max Size 90%</string>
+    <string name="face_analysis">Analysis</string>
+    <string name="hide">Hide</string>
 </resources>
