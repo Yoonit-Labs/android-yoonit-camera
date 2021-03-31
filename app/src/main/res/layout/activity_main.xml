@@ -72,9 +72,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:onClick="onPanelSwitchClick"
+            android:onClick="onConfigurationSwitchClick"
             android:padding="16dp"
-            android:text="@string/panel" />
+            android:text="@string/configuration" />
 
         <LinearLayout
             android:id="@+id/features_panel"
@@ -98,6 +98,14 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/turn_camera_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:checked="true"
+                        android:onClick="onCameraSwitchClick"
+                        android:text="@string/camera_state" />
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/image_capture_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -111,24 +119,32 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:checked="false"
-                        android:onClick="onFaceBoxSwitchClick"
+                        android:onClick="onDetectionBoxSwitchClick"
                         android:text="@string/detection_box" />
                     <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/face_min_switch"
+                        android:id="@+id/face_point_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:checked="false"
-                        android:onClick="onFaceMinSwitchClick"
-                        android:text="@string/detection_min" />
+                        android:onClick="onFaceContoursSwitchClick"
+                        android:text="@string/face_contours" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/face_roi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:checked="false"
-                        android:onClick="onFaceROISwitchClick"
+                        android:onClick="onROISwitchClick"
                         android:text="@string/roi" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/face_min_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:checked="false"
+                        android:onClick="onMinSwitchClick"
+                        android:text="@string/detection_min" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/computer_vision_switch"
                         android:layout_width="wrap_content"
@@ -145,13 +161,14 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/face_point_switch"
+                        android:id="@+id/turn_torch_state"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
+                        android:visibility="invisible"
                         android:checked="false"
-                        android:onClick="onFaceContoursSwitchClick"
-                        android:text="@string/face_contours" />
+                        android:onClick="onTorchSwitchClick"
+                        android:text="@string/torch_state" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/face_blur"
                         android:layout_width="wrap_content"
@@ -161,40 +178,43 @@
                         android:onClick="onFaceBlurSwitchClick"
                         android:text="@string/face_blur" />
                     <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/detection_box_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:checked="false"
+                        android:onClick="onDetectionBoxColorSwitchClick"
+                        android:text="@string/detection_box_color" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/face_contours_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:checked="false"
+                        android:onClick="onFaceContoursColorSwitchClick"
+                        android:text="@string/face_contours_color" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/roi_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:checked="false"
+                        android:onClick="onROIColorSwitchClick"
+                        android:text="@string/roi_color" />
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/face_max_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:checked="false"
-                        android:onClick="onFaceMaxSwitchClick"
+                        android:onClick="onMaxSwitchClick"
                         android:text="@string/detection_max" />
                 </LinearLayout>
             </LinearLayout>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/turn_camera_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:checked="true"
-                android:onClick="cameraStateSwitchClick"
-                android:text="@string/camera_state" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/turn_torch_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                android:checked="false"
-                android:onClick="torchStateSwitchClick"
-                android:text="@string/torch_state" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/camera_lens" />
-
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

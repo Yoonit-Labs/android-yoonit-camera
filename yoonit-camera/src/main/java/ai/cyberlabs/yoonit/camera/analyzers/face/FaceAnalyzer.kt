@@ -59,7 +59,7 @@ class FaceAnalyzer(
             .toRGBBitmap(context)
             .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
 
-        facefy.detect(
+        this.facefy.detect(
             bitmap,
             { faceDetected ->
 
