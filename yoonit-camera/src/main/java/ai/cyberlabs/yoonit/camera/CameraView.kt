@@ -295,7 +295,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is false.
      */
     fun setTorch(enable: Boolean) {
-        cameraController.setTorch(enable)
+        this.cameraController.setTorch(enable)
     }
 
     /**
