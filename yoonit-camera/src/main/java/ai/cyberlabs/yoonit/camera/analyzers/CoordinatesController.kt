@@ -34,15 +34,13 @@ class CoordinatesController(
      * @param faceDetected the face detected object.
      * @param imageWidth the camera image input width.
      * @param imageHeight the camera image input height.
-     * @param rotationDegrees the camera rotation in degrees.
      * @return the detection box rect of the face detected. Return empty rect if null or detection box is
      * out of the screen.
      */
     fun getDetectionBox(
         faceDetected: FaceDetected?,
         imageWidth: Float,
-        imageHeight: Float,
-        rotationDegrees: Float
+        imageHeight: Float
     ): RectF {
         faceDetected?.let { faceDetected ->
             var detectionBox = faceDetected.boundingBox
@@ -78,14 +76,8 @@ class CoordinatesController(
                     ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
             }
 
-            val x = if (rotationDegrees == 90f) {
-                this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
-            } else {
-                this.graphicView.width - (this.scale(detectionBox.centerX().toFloat(),
-                    scaleFactor) - postScaleWidthOffset)
-            }
-            val y =
-                this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
+            val x = this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
+            val y = this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
 
             val left = x - this.scale(detectionBox.width() / 2.0f, scaleFactor)
             val top = y - this.scale(detectionBox.height() / 2.0f, scaleFactor)
@@ -165,8 +157,7 @@ class CoordinatesController(
     fun getFaceContours(
         contours: MutableList<PointF>,
         imageWidth: Float,
-        imageHeight: Float,
-        rotationDegrees: Float
+        imageHeight: Float
     ): MutableList<PointF> {
         if (imageHeight <= 0 || imageWidth <= 0) {
             return mutableListOf()
@@ -195,14 +186,8 @@ class CoordinatesController(
         val faceContours = mutableListOf<PointF>()
 
         contours.forEach { point ->
-            val x = if (rotationDegrees == 90f) {
-                this.scale(point.x, scaleFactor) - postScaleWidthOffset
-            } else {
-                this.graphicView.width - (this.scale(point.x, scaleFactor) - postScaleWidthOffset)
-            }
-
+            val x = this.scale(point.x, scaleFactor) - postScaleWidthOffset
             val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
-
             faceContours.add(PointF(x, y))
         }
 
