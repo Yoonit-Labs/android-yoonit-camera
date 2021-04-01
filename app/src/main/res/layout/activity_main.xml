@@ -349,7 +349,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10px"
-                    android:text="Left Eye Open:" />
+                    android:text="Left Eye:" />
                 <TextView
                     android:id="@+id/leftEyeTextView"
                     android:layout_width="wrap_content"
@@ -371,7 +371,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10px"
-                    android:text="Right Eye Open:" />
+                    android:text="Right Eye:" />
                 <TextView
                     android:id="@+id/rightEyeTextView"
                     android:layout_width="wrap_content"
