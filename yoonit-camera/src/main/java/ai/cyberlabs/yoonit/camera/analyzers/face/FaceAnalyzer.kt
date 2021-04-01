@@ -14,6 +14,7 @@ package ai.cyberlabs.yoonit.camera.analyzers.face
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.analyzers.CoordinatesController
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
+import ai.cyberlabs.yoonit.camera.controllers.ImageQualityController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
@@ -94,6 +95,8 @@ class FaceAnalyzer(
                         imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
 
+                    val quality: Triple<Double, Double, Double> = ImageQualityController.faceQuality(faceBitmap)
+
                     // Draw or clean the face detection box, face blur and face contours.
                     this.graphicView.handleDraw(
                         detectionBox,
@@ -108,16 +111,17 @@ class FaceAnalyzer(
 
                     // Emit face analysis.
                     this.cameraEventListener.onFaceDetected(
-                        detectionBox.left.pxToDPI(this.context),
-                        detectionBox.top.pxToDPI(this.context),
-                        detectionBox.width().pxToDPI(this.context),
-                        detectionBox.height().pxToDPI(this.context),
-                        faceDetected.leftEyeOpenProbability,
-                        faceDetected.rightEyeOpenProbability,
-                        faceDetected.smilingProbability,
-                        faceDetected.headEulerAngleX,
-                        faceDetected.headEulerAngleY,
-                        faceDetected.headEulerAngleZ
+                            detectionBox.left.pxToDPI(this.context),
+                            detectionBox.top.pxToDPI(this.context),
+                            detectionBox.width().pxToDPI(this.context),
+                            detectionBox.height().pxToDPI(this.context),
+                            faceDetected.leftEyeOpenProbability,
+                            faceDetected.rightEyeOpenProbability,
+                            faceDetected.smilingProbability,
+                            faceDetected.headEulerAngleX,
+                            faceDetected.headEulerAngleY,
+                            faceDetected.headEulerAngleZ,
+                            quality
                     )
 
                     // Continue only if current time stamp is within the interval.

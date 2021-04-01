@@ -31,7 +31,8 @@ interface CameraEventListener {
         smilingProbability: Float?,
         headEulerAngleX: Float,
         headEulerAngleY: Float,
-        headEulerAngleZ: Float
+        headEulerAngleZ: Float,
+        quality: Triple<Double, Double, Double>
     )
 
     fun onFaceUndetected()

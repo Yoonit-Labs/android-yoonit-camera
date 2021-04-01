@@ -130,3 +130,11 @@ fun Rect.scaledBy(percent: Float): Rect {
         (bottom - deltaY).toInt()
     )
 }
+
+fun Rect.coerce(width: Int, height: Int) {
+    // confines Rect to the bitmap's dimensions
+    this.left = this.left.coerceIn(0, width)
+    this.top = this.top.coerceIn(0, height)
+    this.right = this.right.coerceIn(0, width)
+    this.bottom = this.bottom.coerceIn(0, height)
+}
