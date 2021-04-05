@@ -424,6 +424,7 @@ open class CameraView @JvmOverloads constructor(
      */
     fun setROIAreaOffset(enable: Boolean) {
         CaptureOptions.roi.areaOffsetEnable = enable
+        this.graphicView.postInvalidate()
     }
 
     /**
@@ -451,6 +452,7 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.roi.areaOffsetColor = Color.argb(alpha, red, green, blue)
+        this.graphicView.postInvalidate()
     }
 
     /**

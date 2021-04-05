@@ -219,8 +219,8 @@ Here we explaining the above gif and how reached the "results". Each "movement" 
 | Head Direction | Attribute         |  _v_ < -36° | -36° < _v_ < -12° | -12° < _v_ < 12° | 12° < _v_ < 36° |  36° < _v_  |
 | -              | -                 | -           | -                 | -                | -               | -           |
 | Vertical       | `headEulerAngleX` | Super Down  | Down              | Frontal          | Up              | Super Up    |
-| Horizontal     | `headEulerAngleY` | Super Right | Right             | Frontal          | Left            | Super Left  |
-| Tilt           | `headEulerAngleZ` | Super Left  | Left              | Frontal          | Right           | Super Right |
+| Horizontal     | `headEulerAngleY` | Super Left  | Left              | Frontal          | Right           | Super Right |
+| Tilt           | `headEulerAngleZ` | Super Right | Right             | Frontal          | Left            | Super Left  |
 
 ### KeyError
 

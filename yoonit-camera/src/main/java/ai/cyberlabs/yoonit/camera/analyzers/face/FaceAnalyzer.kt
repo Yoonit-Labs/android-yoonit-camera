@@ -59,6 +59,7 @@ class FaceAnalyzer(
         val bitmap = mediaImage
             .toRGBBitmap(context)
             .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
+            .mirror(imageProxy.imageInfo.rotationDegrees.toFloat())
 
         this.facefy.detect(
             bitmap,
@@ -68,8 +69,7 @@ class FaceAnalyzer(
                 val detectionBox = this.coordinatesController.getDetectionBox(
                     faceDetected,
                     imageProxy.width.toFloat(),
-                    imageProxy.height.toFloat(),
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
+                    imageProxy.height.toFloat()
                 )
 
                 // Verify if has error on detection box.
@@ -84,8 +84,7 @@ class FaceAnalyzer(
                     val faceContours = this.coordinatesController.getFaceContours(
                         faceDetected.contours,
                         imageProxy.width.toFloat(),
-                        imageProxy.height.toFloat(),
-                        imageProxy.imageInfo.rotationDegrees.toFloat()
+                        imageProxy.height.toFloat()
                     )
 
                     // Get face bitmap.
@@ -192,8 +191,8 @@ class FaceAnalyzer(
      *
      * 1. Color encoding if necessary;
      * 2. Rotate image if necessary;
-     * 3. Crop image if necessary;
-     * 4. Mirror image if necessary;
+     * 3. Mirror image if necessary;
+     * 4. Crop image if necessary;
      * 5. Scale image if necessary;
      *
      * @param mediaImage The camera frame image;
@@ -215,8 +214,8 @@ class FaceAnalyzer(
 
         val faceBitmap: Bitmap = colorEncodedBitmap
             .rotate(cameraRotation)
-            .crop(boundingBox)
             .mirror(cameraRotation)
+            .crop(boundingBox)
 
         return Bitmap.createScaledBitmap(
             faceBitmap,

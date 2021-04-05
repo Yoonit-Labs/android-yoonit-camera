@@ -76,6 +76,9 @@ class MainActivity : AppCompatActivity() {
             this.cameraView.setROIRightOffset(0.1f)
             this.cameraView.setROITopOffset(0.1f)
             this.cameraView.setROIBottomOffset(0.1f)
+            this.captureType = "face"
+            this.cameraView.setSaveImageCaptured(true)
+            this.cameraView.setComputerVision(true)
             this.cameraView.startPreview()
 
             this.cameraView.setComputerVisionLoadModels(arrayListOf(
@@ -114,11 +117,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onConfigurationSwitchClick(view: View) {
-        if (view is SwitchCompat) {
-            this.features_panel.visibility =
-                if (view.isChecked) View.VISIBLE
-                else View.INVISIBLE
+    fun onConfigurationRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            when (view.getId()) {
+                R.id.configuration_radio_button -> {
+                    this.configurations.visibility = View.VISIBLE
+                    this.analysis.visibility = View.GONE
+                }
+                R.id.analysis_radio_button -> {
+                    this.configurations.visibility = View.GONE
+                    this.analysis.visibility = View.VISIBLE
+                }
+                R.id.hide_radio_button -> {
+                    this.configurations.visibility = View.GONE
+                    this.analysis.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -325,6 +339,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 Log.d(TAG, "${it.first}: $results")
             }
+
+            if (inferences.isNotEmpty() && inferences.first().second.isNotEmpty()) {
+                val probability = inferences.first().second.first()
+                maskTextView.text = if (probability < 0.3) "Masked" else "Not Masked"
+                maskProbabilityTextView.text = probability.toString()
+            }
+
             Log.d(TAG, " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")
 
             info_textview.text = "$count/$total"
@@ -349,12 +370,52 @@ class MainActivity : AppCompatActivity() {
                 "onFaceDetected: \n" +
                 "x: $x, y: $y, w: $width, h: $height. \n" +
                 "leftEye: $leftEyeOpenProbability \n" +
-                "rightEye: $leftEyeOpenProbability \n" +
+                "rightEye: $rightEyeOpenProbability \n" +
                 "smilling: $smilingProbability \n" +
                 "head X angle: $headEulerAngleX \n" +
                 "head Y angle: $headEulerAngleY \n" +
                 "head Z angle: $headEulerAngleZ"
             )
+
+            leftEyeTextView.text = if (leftEyeOpenProbability != null) {
+                leftEyeProbabilityTextView.text = leftEyeOpenProbability.toString()
+                if (leftEyeOpenProbability > 0.8) "Open" else "Close"
+            } else "-"
+            rightEyeTextView.text = if (rightEyeOpenProbability != null) {
+                rightEyeProbabilityTextView.text = rightEyeOpenProbability.toString()
+                if (rightEyeOpenProbability > 0.8) "Open" else "Close"
+            } else "-"
+            smlingTextView.text = if (smilingProbability != null) {
+                smilingProbabilityTextView.text = smilingProbability.toString()
+                if (smilingProbability > 0.8) "Smiling" else "Not Smiling"
+            } else "-"
+
+            headVerticalAngleTextView.text =  headEulerAngleX.toString()
+            headVerticalTextView.text =
+                if (headEulerAngleX < -36) "Super Down"
+                else if (-36 < headEulerAngleX && headEulerAngleX < -12) "Down"
+                else if (-12 < headEulerAngleX && headEulerAngleX < 12) "Frontal"
+                else if (12 < headEulerAngleX && headEulerAngleX < 36) "Up"
+                else if (36 < headEulerAngleX) "Super Up"
+                else "-"
+
+            headHorizontalAngleTextView.text =  headEulerAngleY.toString()
+            headHorizontalTextView.text =
+                if (headEulerAngleY < -36) "Super Left"
+                else if (-36 < headEulerAngleY && headEulerAngleY < -12) "Left"
+                else if (-12 < headEulerAngleY && headEulerAngleY < 12) "Frontal"
+                else if (12 < headEulerAngleY && headEulerAngleY < 36) "Right"
+                else if (36 < headEulerAngleY) "Super Right"
+                else "-"
+
+            headTiltAngleTextView.text =  headEulerAngleZ.toString()
+            headTiltTextView.text =
+                if (headEulerAngleZ < -36) "Super Right"
+                else if (-36 < headEulerAngleZ && headEulerAngleZ < -12) "Right"
+                else if (-12 < headEulerAngleZ && headEulerAngleZ < 12) "Frontal"
+                else if (12 < headEulerAngleZ && headEulerAngleZ < 36) "Left"
+                else if (36 < headEulerAngleZ) "Super Left"
+                else "-"
         }
 
         override fun onFaceUndetected() {
