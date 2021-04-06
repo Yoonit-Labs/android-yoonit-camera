@@ -14,6 +14,7 @@ package ai.cyberlabs.yoonit.camera.analyzers.face
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.analyzers.CoordinatesController
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
+import ai.cyberlabs.yoonit.camera.controllers.ImageQualityController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
@@ -25,6 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.RectF
 import android.media.Image
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.io.File
@@ -55,10 +57,10 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
-        val bitmap = mediaImage
+        var bitmap = mediaImage
             .toRGBBitmap(context)
             .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
-            .mirror(imageProxy.imageInfo.rotationDegrees.toFloat())
+            .mirror()
 
         this.facefy.detect(
             bitmap,
@@ -107,16 +109,16 @@ class FaceAnalyzer(
 
                     // Emit face analysis.
                     this.cameraEventListener.onFaceDetected(
-                        detectionBox.left.pxToDPI(this.context),
-                        detectionBox.top.pxToDPI(this.context),
-                        detectionBox.width().pxToDPI(this.context),
-                        detectionBox.height().pxToDPI(this.context),
-                        faceDetected.leftEyeOpenProbability,
-                        faceDetected.rightEyeOpenProbability,
-                        faceDetected.smilingProbability,
-                        faceDetected.headEulerAngleX,
-                        faceDetected.headEulerAngleY,
-                        faceDetected.headEulerAngleZ
+                            detectionBox.left.pxToDPI(this.context),
+                            detectionBox.top.pxToDPI(this.context),
+                            detectionBox.width().pxToDPI(this.context),
+                            detectionBox.height().pxToDPI(this.context),
+                            faceDetected.leftEyeOpenProbability,
+                            faceDetected.rightEyeOpenProbability,
+                            faceDetected.smilingProbability,
+                            faceDetected.headEulerAngleX,
+                            faceDetected.headEulerAngleY,
+                            faceDetected.headEulerAngleZ
                     )
 
                     // Continue only if current time stamp is within the interval.
@@ -140,8 +142,11 @@ class FaceAnalyzer(
                         if (CaptureOptions.saveImageCaptured) this.handleSaveImage(faceBitmap)
                         else ""
 
+                    val imageQuality: Triple<Double, Double, Double> =
+                            ImageQualityController.processImage(faceBitmap, true)
+
                     // Handle to emit image path and the inferences.
-                    this.handleEmitImageCaptured(imagePath, inferences)
+                    this.handleEmitImageCaptured(imagePath, inferences, imageQuality)
                 }
             },
             { errorMessage ->
@@ -210,7 +215,7 @@ class FaceAnalyzer(
 
         val faceBitmap: Bitmap = colorEncodedBitmap
             .rotate(cameraRotation)
-            .mirror(cameraRotation)
+            .mirror()
             .crop(boundingBox)
 
         return Bitmap.createScaledBitmap(
@@ -229,7 +234,8 @@ class FaceAnalyzer(
      */
     private fun handleEmitImageCaptured(
         imagePath: String,
-        inferences: ArrayList<android.util.Pair<String, FloatArray>>
+        inferences: ArrayList<android.util.Pair<String, FloatArray>>,
+        imageQuality: Triple<Double, Double, Double>
     ) {
         if (imagePath == "") return
 
@@ -242,7 +248,10 @@ class FaceAnalyzer(
                     this.numberOfImages,
                     CaptureOptions.numberOfImages,
                     imagePath,
-                    inferences
+                    inferences,
+                        imageQuality.first,
+                        imageQuality.second,
+                        imageQuality.third
                 )
                 return
             }
@@ -259,7 +268,10 @@ class FaceAnalyzer(
             this.numberOfImages,
             CaptureOptions.numberOfImages,
             imagePath,
-            inferences
+            inferences,
+            imageQuality.first,
+            imageQuality.second,
+            imageQuality.third
         )
     }
 

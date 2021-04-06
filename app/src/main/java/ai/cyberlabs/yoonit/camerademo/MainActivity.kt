@@ -321,7 +321,10 @@ class MainActivity : AppCompatActivity() {
             count: Int,
             total: Int,
             imagePath: String,
-            inferences: ArrayList<android.util.Pair<String, FloatArray>>
+            inferences: ArrayList<android.util.Pair<String, FloatArray>>,
+            darkness: Double,
+            lightness: Double,
+            sharpness: Double
         ) {
             Log.d(TAG, "onImageCaptured . . . . . . . . . . . . . . . . . . . . . . . . .")
 
@@ -345,6 +348,13 @@ class MainActivity : AppCompatActivity() {
                 maskTextView.text = if (probability < 0.3) "Masked" else "Not Masked"
                 maskProbabilityTextView.text = probability.toString()
             }
+
+            darknessTextView.text = if (darkness > 0.7) "Too Dark" else "Normal"
+            darknessProbabilityTextView.text = darkness.toString()
+            lightnessTextView.text = if (lightness > 0.65) "Too Light" else "Normal"
+            lightnessProbabilityTextView.text = lightness.toString()
+            sharpnessTextView.text = if (sharpness < 0.1591) "Blurred" else "Normal"
+            sharpnessProbabilityTextView.text = sharpness.toString()
 
             Log.d(TAG, " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")
 

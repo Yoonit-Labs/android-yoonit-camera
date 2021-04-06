@@ -19,6 +19,7 @@ import ai.cyberlabs.yoonit.facefy.model.FaceDetected
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
+import androidx.camera.core.CameraSelector
 import com.google.mlkit.vision.common.InputImage
 
 /**
@@ -76,7 +77,11 @@ class CoordinatesController(
                     ((this.graphicView.height.toFloat() * imageAspectRatio) - this.graphicView.width.toFloat()) / 2
             }
 
-            val x = this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
+            var x = this.scale(detectionBox.centerX().toFloat(), scaleFactor) - postScaleWidthOffset
+            if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_BACK) {
+                x = this.graphicView.width - x
+            }
+
             val y = this.scale(detectionBox.centerY().toFloat(), scaleFactor) - postScaleHeightOffset
 
             val left = x - this.scale(detectionBox.width() / 2.0f, scaleFactor)
@@ -186,7 +191,10 @@ class CoordinatesController(
         val faceContours = mutableListOf<PointF>()
 
         contours.forEach { point ->
-            val x = this.scale(point.x, scaleFactor) - postScaleWidthOffset
+            var x = this.scale(point.x, scaleFactor) - postScaleWidthOffset
+            if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_BACK) {
+                x = this.graphicView.width - x
+            }
             val y = this.scale(point.y, scaleFactor) - postScaleHeightOffset
             faceContours.add(PointF(x, y))
         }

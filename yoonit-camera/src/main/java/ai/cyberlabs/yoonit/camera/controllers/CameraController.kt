@@ -140,6 +140,7 @@ class CameraController(
 
                 CaptureType.QRCODE -> this.imageAnalyzerController.start(
                     QRCodeAnalyzer(
+                        context,
                         this.cameraEventListener,
                         this.graphicView
                     )
@@ -181,9 +182,7 @@ class CameraController(
      * Set to enable/disable the device torch. Available only to camera lens "back".
      */
     fun setTorch(enable: Boolean) {
-        this.camera?.let {
-            it.cameraControl.enableTorch(enable)
-        }
+        this.camera?.cameraControl?.enableTorch(enable)
     }
 
     private fun buildCameraPreview() {

@@ -14,7 +14,9 @@ package ai.cyberlabs.yoonit.camera.analyzers.qrcode
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.analyzers.CoordinatesController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.toRGBBitmap
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Rect
 import android.graphics.RectF
 import androidx.camera.core.ImageAnalysis
@@ -29,6 +31,7 @@ import com.google.mlkit.vision.common.InputImage
  * Custom camera image analyzer based on barcode detection bounded on [CameraController].
  */
 class QRCodeAnalyzer(
+    private val context: Context,
     private val cameraEventListener: CameraEventListener?,
     private val graphicView: CameraGraphicView
 ) : ImageAnalysis.Analyzer {
@@ -78,9 +81,10 @@ class QRCodeAnalyzer(
             onComplete()
             return
         }
+        val imageBitmap = imageProxy.image?.toRGBBitmap(context)
 
-        val image: InputImage = InputImage.fromMediaImage(
-            imageProxy.image,
+        val image: InputImage = InputImage.fromBitmap(
+            imageBitmap,
             imageProxy.imageInfo.rotationDegrees
         )
 
