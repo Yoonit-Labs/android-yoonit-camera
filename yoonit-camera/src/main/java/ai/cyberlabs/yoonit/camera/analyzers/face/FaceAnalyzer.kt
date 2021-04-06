@@ -62,10 +62,6 @@ class FaceAnalyzer(
             .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
             .mirror()
 
-        if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT) {
-            bitmap = bitmap
-        }
-
         this.facefy.detect(
             bitmap,
             { faceDetected ->
