@@ -349,13 +349,17 @@ class MainActivity : AppCompatActivity() {
                 maskProbabilityTextView.text = probability.toString()
             }
 
+            darknessTextView.text = if (darkness > 0.7) "Too Dark" else "Normal"
+            darknessProbabilityTextView.text = darkness.toString()
+            lightnessTextView.text = if (lightness > 0.65) "Too Light" else "Normal"
+            lightnessProbabilityTextView.text = lightness.toString()
+            sharpnessTextView.text = if (sharpness < 0.1591) "Blurred" else "Normal"
+            sharpnessProbabilityTextView.text = sharpness.toString()
+
             Log.d(TAG, " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")
 
             info_textview.text = "$count/$total"
             image_preview.visibility = View.VISIBLE
-            darknessProbabilityTextView.text = darkness.toString()
-            lightnessProbabilityTextView.text = lightness.toString()
-            sharpnessProbabilityTextView.text = sharpness.toString()
         }
 
         override fun onFaceDetected(
