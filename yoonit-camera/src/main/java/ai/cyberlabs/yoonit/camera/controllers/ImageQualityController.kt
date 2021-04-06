@@ -11,127 +11,125 @@ import kotlin.math.sqrt
 
 class ImageQualityController {
     companion object {
-        fun faceQuality(bitmap: Bitmap, boundingBox: Rect = Rect()) : Triple<Double, Double, Double> {
+        // ellipsoidal mask parameters
+        private const val fracEllipseCenterX: Double = 0.50
+        private const val fracEllipseCenterY: Double = 0.50
+        private const val fracEllipseRadiusX: Double = 0.35
+        private const val fracEllipseRadiusY: Double = 0.50
 
-            // upper limit for dimensions
-            val maxWidth = 200
-            val maxHeight = 200
+        // kernel for the convolution (3x3 laplacian of gaussian)
+        private val kernel: IntArray = intArrayOf(
+            1,  1,  1,
+            1, -8,  1,
+            1,  1,  1
+        )
 
-            // crop the face
-            val faceBitmap: Bitmap = if (boundingBox.isEmpty) {
-                Bitmap.createBitmap(bitmap)
-            } else {
-                boundingBox.coerce(bitmap.width, bitmap.height)
-                Bitmap.createBitmap(bitmap, boundingBox.left, boundingBox.right,
-                        boundingBox.width(), boundingBox.height())
+        fun processImage(scaledFaceBitmap: Bitmap, withMask: Boolean) : Triple<Double, Double, Double> {
+
+            val pixels = convertToGrayscale(scaledFaceBitmap)
+
+            var mask: Ellipse? = null
+
+            if (withMask) {
+                mask = Ellipse(
+                    (scaledFaceBitmap.width * fracEllipseCenterX).toInt(),
+                    (scaledFaceBitmap.height * fracEllipseCenterY).toInt(),
+                    (scaledFaceBitmap.width * fracEllipseRadiusX).toInt(),
+                    (scaledFaceBitmap.height * fracEllipseRadiusY).toInt()
+                )
             }
 
-            // scale the dimensions to at most maxWidth x maxHeight
-            val scaledFaceBitmap = Bitmap.createScaledBitmap(
-                    faceBitmap,
-                    faceBitmap.width.coerceIn(0, maxWidth),
-                    faceBitmap.height.coerceIn(0, maxHeight),
-                    true
-            )
+            val histPair = calcHistogramMetrics(scaledFaceBitmap, pixels, mask)
+            val dark = histPair.first
+            val light = histPair.second
 
-            // define parameters and ellipsoidal mask
-            val width = scaledFaceBitmap.width
-            val height = scaledFaceBitmap.height
-            val ellipseCenterX = width / 2
-            val ellipseCenterY = height / 2
-            val ellipseRadiusX = width * 35 / 100
-            val ellipseRadiusY = height * 50 / 100
-            val mask = Ellipse(ellipseCenterX, ellipseCenterY, ellipseRadiusX, ellipseRadiusY)
+            val sharpness = calcConvolutionMetrics(scaledFaceBitmap, pixels)
 
-            // laplacian of gaussian (LoG) kernel
-            val kernel = arrayOf(
-                    arrayOf(1,  1,  1),
-                    arrayOf(1, -8,  1),
-                    arrayOf(1,  1,  1)
-            )
+            return Triple(dark, light, sharpness)
+        }
+
+        private fun convertToGrayscale(bitmap: Bitmap) : IntArray {
 
             // create flat array with grayscale image
-            val pixels = IntArray(width * height)
-            scaledFaceBitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-            for (i in pixels.indices)
-                pixels[i] = min(max((0.299 * Color.red(pixels[i])
-                        + 0.587 * Color.green(pixels[i])
-                        + 0.114 * Color.blue(pixels[i])).toInt(), 0), 255)
+            val pixelsRGB = IntArray(bitmap.width * bitmap.height)
+            bitmap.getPixels(pixelsRGB, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+            return pixelsRGB.map { pixel ->
+                (0.299 * Color.red(pixel) + 0.587 * Color.green(pixel) + 0.114 * Color.blue(pixel))
+                    .toInt().coerceIn(0, 255)
+            }.toIntArray()
+        }
 
-            // reflect inner pixels on border for convolution -> gfedcb|abcdefgh|gfedcba
-            // val reflectedBitmap = Bitmap.createBitmap(width, height, scaledFaceBitmap.config)
-            // reflectedBitmap.setPixels(pixels, 0, width, 1, 1, width+2, height+2)
+        private fun calcHistogramMetrics(bitmap: Bitmap, pixels: IntArray, mask: Ellipse?) : Pair<Double, Double> {
 
-            // calculate histogram of pixel values inside ellipsoidal mask
+            // calculate histogram of pixels inside bit mask
             val hist = IntArray(256) {0}
-            for (y in 0 until height) {
-                for (x in 0 until width) {
-                    if (mask.contains(x, y)) {
-                        val pixel = pixels[y * width + x]
+            for (y in 0 until bitmap.height) {
+                for (x in 0 until bitmap.width) {
+                    if ((mask != null && mask.contains(x, y))
+                        || mask == null) {
+                        val pixel = pixels[y * bitmap.width + x]
                         hist[pixel] += 1
                     }
                 }
             }
 
             // calculate percentage of bright and dark pixels based on histogram "tails"
-            // one measure of image quality is if the image has more pixels in the intermediate
-            // regions instead of the tails of the histogram
+            // one measure of image quality (or image balance) is to quantify how many pixels
+            // lie in the tails of the histogram, indicating the image is unbalanced
             val darkTail = hist.slice(IntRange(0, 63)).sum().toDouble()
             val dark = darkTail / hist.sum().toDouble()
             val lightTail = hist.slice(IntRange(192, 255)).sum().toDouble()
             val light = lightTail / hist.sum().toDouble()
 
+            return Pair(dark, light)
+        }
+
+        private fun calcConvolutionMetrics(bitmap: Bitmap, pixels: IntArray) : Double {
+
             // determine edges (high frequency signals) via convolution with 3x3 LoG kernel
             // conv is the resulting flattened image, the same size as the original
-            val conv = IntArray(width * height) {0}
+            val conv = IntArray(bitmap.width * bitmap.height) {0}
 
             // we iterate on every pixel of the image...
-            for (y in 0 until height) {
-                for (x in 0 until width) {
+            for (y in 0 until bitmap.height) {
+                for (x in 0 until bitmap.width) {
 
                     // ...and on every coefficient of the 3x3 kernel...
+                    var convPixel = 0
                     for (j in -1 until 2) {
                         for (i in -1 until 2) {
 
-                            // ...and we compute an element-wise multiplication
-                            // of the kernel with the current region of the image
-                            // it is passing through, and store the result on the
-                            // corresponding pixel of the convoluted image
+                            // ...and we compute the dot product (the sum of an element-wise multiplication)
+                            // of the kernel (sliding window) with the current region of the image it is
+                            // passing through, and store the result on the corresponding pixel of the convoluted image
 
-                            // if the needed pixel index is pointing to a pixel
-                            // that is outside the image, inner pixels will be mirrored
-                            // otherwise, the pair (x+i, y+j) is computed
-                            val xi = when (x + i) {
-                                -1 -> 1
-                                width -> width - 2
-                                else -> x + i
-                            }
-                            val yj = when (y + j) {
-                                -1 -> 1
-                                height -> height - 2
-                                else -> y + j
-                            }
+                            // if the image pixel required is "outside" the image, the border pixels will be
+                            // replicated. otherwise, the sum of indices will point to a valid pixel
+                            val pixelY = (y + j).coerceIn(0, bitmap.height - 1)
+                            val pixelX = (x + i).coerceIn(0, bitmap.width - 1)
+                            val pixelIndex = pixelY * bitmap.width + pixelX
+                            val kernelIndex = (j + 1) * 3 + (i + 1)
 
-                            // finally, the needed pixel is fetched and one of the
-                            // element-wise products is computed and the result accumulated
-                            conv[y * width + x] += kernel[i+1][j+1] * pixels[xi * width + yj]
+                            // then, one of the products is computed and accumulated
+                            convPixel += (pixels[pixelIndex] * kernel[kernelIndex])
                         }
                     }
+
+                    // finally, the sum of the products is stored as a pixel
+                    conv[y * bitmap.width + x] = convPixel.coerceIn(0, 255)
                 }
             }
 
-            // compute the variance of the pixels. it results in
-            // a measure of the high frequency signals on the image
+            // compute the standard deviation of the pixels. it results in a measure of the amount
+            // of high frequency signals on the image
             val mean = conv.average()
-            val accVar = conv.fold(0.0, { accVariance, pixel ->
-                accVariance + (pixel - mean).pow(2) })
+            val accVar = conv.fold(0.0, { acc, pixel -> acc + (pixel - mean).pow(2) })
 
-            // get the standard deviation and normalize it
-            val sharp = sqrt(accVar / (width * height)) / 128
-
-            return Triple(dark, light, sharp)
+            return sqrt(accVar / conv.size) / 128
         }
     }
+
+
 
     private class Ellipse(val centerX: Int, val centerY: Int, val radiusX: Int, val radiusY: Int) {
         fun contains(x0: Int, y0: Int) : Boolean {

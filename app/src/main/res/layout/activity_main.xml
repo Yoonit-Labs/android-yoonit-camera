@@ -348,7 +348,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Left Eye:" />
                 <TextView
                     android:id="@+id/leftEyeTextView"
@@ -370,7 +370,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Right Eye:" />
                 <TextView
                     android:id="@+id/rightEyeTextView"
@@ -392,7 +392,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Smiling:" />
                 <TextView
                     android:id="@+id/smlingTextView"
@@ -414,7 +414,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Vertical:" />
                 <TextView
                     android:id="@+id/headVerticalTextView"
@@ -436,7 +436,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Horizontal:" />
                 <TextView
                     android:id="@+id/headHorizontalTextView"
@@ -458,7 +458,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Tilt:" />
                 <TextView
                     android:id="@+id/headTiltTextView"
@@ -475,11 +475,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="10dp"
                     android:text="Using Mask:" />
                 <TextView
                     android:id="@+id/maskTextView"
@@ -489,6 +490,71 @@
                     android:text="-" />
                 <TextView
                     android:id="@+id/maskProbabilityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Darkness:" />
+                <TextView
+                    android:id="@+id/darknessTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-" />
+                <TextView
+                    android:id="@+id/darknessProbabilityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Lighness:" />
+                <TextView
+                    android:id="@+id/lightnessTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-" />
+                <TextView
+                    android:id="@+id/lightnessProbabilityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Sharpness:" />
+                <TextView
+                    android:id="@+id/sharpnessTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-" />
+                <TextView
+                    android:id="@+id/sharpnessProbabilityTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-" />

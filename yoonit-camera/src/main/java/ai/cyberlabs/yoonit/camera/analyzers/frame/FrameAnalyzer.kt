@@ -13,6 +13,7 @@ package ai.cyberlabs.yoonit.camera.analyzers.frame
 
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.controllers.ComputerVisionController
+import ai.cyberlabs.yoonit.camera.controllers.ImageQualityController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraCallback
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
@@ -80,9 +81,12 @@ class FrameAnalyzer(
                     )
                 }
 
+                val imageQuality: Triple<Double, Double, Double> =
+                        ImageQualityController.processImage(frameBitmap, false)
+
                 // Handle to emit image path and the inference.
                 Handler(Looper.getMainLooper()).post {
-                    this.handleEmitImageCaptured(imagePath, inferences)
+                    this.handleEmitImageCaptured(imagePath, inferences, imageQuality)
                 }
             }
         }
@@ -131,7 +135,8 @@ class FrameAnalyzer(
      */
     private fun handleEmitImageCaptured(
         imagePath: String,
-        inferences: ArrayList<android.util.Pair<String, FloatArray>>
+        inferences: ArrayList<android.util.Pair<String, FloatArray>>,
+        imageQuality: Triple<Double, Double, Double>
     ) {
 
         // process face number of images.
@@ -143,7 +148,10 @@ class FrameAnalyzer(
                     this.numberOfImages,
                     CaptureOptions.numberOfImages,
                     imagePath,
-                    inferences
+                    inferences,
+                    imageQuality.first,
+                    imageQuality.second,
+                    imageQuality.third
                 )
                 return
             }
@@ -160,7 +168,10 @@ class FrameAnalyzer(
             this.numberOfImages,
             CaptureOptions.numberOfImages,
             imagePath,
-            inferences
+            inferences,
+            imageQuality.first,
+            imageQuality.second,
+            imageQuality.third
         )
     }
 

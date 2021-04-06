@@ -94,8 +94,6 @@ class FaceAnalyzer(
                         imageProxy.imageInfo.rotationDegrees.toFloat()
                     )
 
-                    val quality: Triple<Double, Double, Double> = ImageQualityController.faceQuality(faceBitmap)
-
                     // Draw or clean the face detection box, face blur and face contours.
                     this.graphicView.handleDraw(
                         detectionBox,
@@ -119,8 +117,7 @@ class FaceAnalyzer(
                             faceDetected.smilingProbability,
                             faceDetected.headEulerAngleX,
                             faceDetected.headEulerAngleY,
-                            faceDetected.headEulerAngleZ,
-                            quality
+                            faceDetected.headEulerAngleZ
                     )
 
                     // Continue only if current time stamp is within the interval.
@@ -144,8 +141,11 @@ class FaceAnalyzer(
                         if (CaptureOptions.saveImageCaptured) this.handleSaveImage(faceBitmap)
                         else ""
 
+                    val imageQuality: Triple<Double, Double, Double> =
+                            ImageQualityController.processImage(faceBitmap, true)
+
                     // Handle to emit image path and the inferences.
-                    this.handleEmitImageCaptured(imagePath, inferences)
+                    this.handleEmitImageCaptured(imagePath, inferences, imageQuality)
                 }
             },
             { errorMessage ->
@@ -233,7 +233,8 @@ class FaceAnalyzer(
      */
     private fun handleEmitImageCaptured(
         imagePath: String,
-        inferences: ArrayList<android.util.Pair<String, FloatArray>>
+        inferences: ArrayList<android.util.Pair<String, FloatArray>>,
+        imageQuality: Triple<Double, Double, Double>
     ) {
         if (imagePath == "") return
 
@@ -246,7 +247,10 @@ class FaceAnalyzer(
                     this.numberOfImages,
                     CaptureOptions.numberOfImages,
                     imagePath,
-                    inferences
+                    inferences,
+                        imageQuality.first,
+                        imageQuality.second,
+                        imageQuality.third
                 )
                 return
             }
@@ -263,7 +267,10 @@ class FaceAnalyzer(
             this.numberOfImages,
             CaptureOptions.numberOfImages,
             imagePath,
-            inferences
+            inferences,
+            imageQuality.first,
+            imageQuality.second,
+            imageQuality.third
         )
     }
 

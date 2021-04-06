@@ -321,7 +321,10 @@ class MainActivity : AppCompatActivity() {
             count: Int,
             total: Int,
             imagePath: String,
-            inferences: ArrayList<android.util.Pair<String, FloatArray>>
+            inferences: ArrayList<android.util.Pair<String, FloatArray>>,
+            darkness: Double,
+            lightness: Double,
+            sharpness: Double
         ) {
             Log.d(TAG, "onImageCaptured . . . . . . . . . . . . . . . . . . . . . . . . .")
 
@@ -350,6 +353,9 @@ class MainActivity : AppCompatActivity() {
 
             info_textview.text = "$count/$total"
             image_preview.visibility = View.VISIBLE
+            darknessProbabilityTextView.text = darkness.toString()
+            lightnessProbabilityTextView.text = lightness.toString()
+            sharpnessProbabilityTextView.text = sharpness.toString()
         }
 
         override fun onFaceDetected(
@@ -362,8 +368,7 @@ class MainActivity : AppCompatActivity() {
             smilingProbability: Float?,
             headEulerAngleX: Float,
             headEulerAngleY: Float,
-            headEulerAngleZ: Float,
-            quality: Triple<Double, Double, Double>
+            headEulerAngleZ: Float
         ) {
             Log.d(
                 TAG,
