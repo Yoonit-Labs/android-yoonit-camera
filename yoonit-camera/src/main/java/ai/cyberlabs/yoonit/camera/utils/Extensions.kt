@@ -43,11 +43,9 @@ fun Bitmap.rotate(rotationDegrees: Float): Bitmap {
     )
 }
 
-fun Bitmap.mirror(rotationDegrees: Float): Bitmap {
+fun Bitmap.mirror(): Bitmap {
     val matrix = Matrix()
-    if (rotationDegrees == 270f) {
-        matrix.preScale(-1.0f, 1.0f)
-    }
+    matrix.preScale(-1.0f, 1.0f)
 
     return Bitmap.createBitmap(
         this,

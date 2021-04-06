@@ -26,6 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.RectF
 import android.media.Image
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.io.File
@@ -56,10 +57,14 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
-        val bitmap = mediaImage
+        var bitmap = mediaImage
             .toRGBBitmap(context)
             .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
-            .mirror(imageProxy.imageInfo.rotationDegrees.toFloat())
+            .mirror()
+
+        if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT) {
+            bitmap = bitmap
+        }
 
         this.facefy.detect(
             bitmap,
@@ -214,7 +219,7 @@ class FaceAnalyzer(
 
         val faceBitmap: Bitmap = colorEncodedBitmap
             .rotate(cameraRotation)
-            .mirror(cameraRotation)
+            .mirror()
             .crop(boundingBox)
 
         return Bitmap.createScaledBitmap(

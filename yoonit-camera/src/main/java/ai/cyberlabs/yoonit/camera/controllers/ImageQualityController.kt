@@ -1,11 +1,7 @@
 package ai.cyberlabs.yoonit.camera.controllers
 
-import ai.cyberlabs.yoonit.camera.utils.coerce
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Rect
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 

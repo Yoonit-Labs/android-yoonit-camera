@@ -193,7 +193,7 @@ class FrameAnalyzer(
 
         mediaBitmap
             .rotate(rotationDegrees)
-            .mirror(rotationDegrees)
+            .mirror()
             .compress(
                 Bitmap.CompressFormat.JPEG,
                 100,
