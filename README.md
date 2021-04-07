@@ -7,7 +7,7 @@
 A Android plugin to provide:
 * Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
 * Camera preview (Front & Back)
-* [Google MLKit](https://developers.google.com/ml-kit)
+* [Yoonit Facefy](https://github.com/Yoonit-Labs/android-yoonit-facefy) integration
 * [PyTorch](https://pytorch.org/mobile/home/) integration
 * Computer vision pipeline
 * Face detection, capture and image crop
@@ -98,7 +98,10 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
         count: Int,
         total: Int,
         imagePath: String,
-        inferences: ArrayList<Pair<String, FloatArray>>
+        inferences: ArrayList<Pair<String, FloatArray>>,
+        darkness: Double,
+        lightness: Double,
+        sharpness: Double
     ) {
         // YOU CODE
     }
@@ -186,7 +189,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 | Event              | Parameters                                                                                                                                                                                                     | Description
 | -                  | -                                                                                                                                                                                                              | -
-| onImageCaptured    | `type: String, count: Int, total: Int, imagePath: String, inferences: ArrayList<Pair<String, FloatArray>>`                                                                                                     | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the image file is created: <ul><li>type: '"face"' or '"frame"'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><li>inferences: each array element is the image inference result.</li><ul>
+| onImageCaptured    | `type: String, count: Int, total: Int, imagePath: String, inferences: ArrayList<Pair<String, FloatArray>>, darkness: Double, lightness: Double, sharpness: Double`                                             | Must have started capture type of face/frame (see `startCaptureType`). Emitted when the image file is created: <ul><li>type: '"face"' or '"frame"'</li><li>count: current index</li><li>total: total to create</li><li>imagePath: the image path</li><li>inferences: each array element is the image inference result.</li><li>darkness: image darkness classification.</li><li>lightness: image lightness classification.</li><li>sharpness: image sharpness classification.</li><ul>
 | onFaceDetected     | `x: Int, y: Int, width: Int, height: Int, leftEyeOpenProbability: Float?, rightEyeOpenProbability: Float?, smilingProbability: Float?, headEulerAngleX: Float, headEulerAngleY: Float, headEulerAngleZ: Float` | Must have started capture type of face. Emit the [face analysis](#face-analysis).
 | onFaceUndetected   | -                                                                                                                                                                                                              | Must have started capture type of face. Emitted after `onFaceDetected`, when there is no more face detecting.
 | onEndCapture       | -                                                                                                                                                                                                              | Must have started capture type of face/frame. Emitted when the number of image files created is equal of the number of images set (see the method `setNumberOfImages`).
