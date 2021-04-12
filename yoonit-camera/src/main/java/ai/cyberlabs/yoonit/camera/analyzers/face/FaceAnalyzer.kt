@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.RectF
 import android.media.Image
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.io.File
@@ -216,7 +215,9 @@ class FaceAnalyzer(
         val faceBitmap: Bitmap = colorEncodedBitmap
             .rotate(cameraRotation)
             .mirror()
-            .crop(boundingBox)
+            .crop(boundingBox.scale(
+                CaptureOptions.facePaddingPercent
+            ))
 
         return Bitmap.createScaledBitmap(
             faceBitmap,

@@ -114,7 +114,7 @@ fun Image.toYUVBitmap(): Bitmap {
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }
 
-fun Rect.scaledBy(percent: Float): Rect {
+fun Rect.scale(percent: Float): Rect {
     val factor = 1 + percent
     val newWidth = width() * factor
     val newHeight = height() * factor

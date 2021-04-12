@@ -14,7 +14,7 @@ package ai.cyberlabs.yoonit.camera.analyzers
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.Message
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
-import ai.cyberlabs.yoonit.camera.utils.scaledBy
+import ai.cyberlabs.yoonit.camera.utils.scale
 import ai.cyberlabs.yoonit.facefy.model.FaceDetected
 import android.graphics.PointF
 import android.graphics.Rect
@@ -50,7 +50,7 @@ class CoordinatesController(
             if (CaptureOptions.facePaddingPercent != 0f) {
                 detectionBox = faceDetected
                     .boundingBox
-                    .scaledBy(CaptureOptions.facePaddingPercent)
+                    .scale(CaptureOptions.facePaddingPercent)
             }
 
             if (imageHeight <= 0 || imageWidth <= 0) {
@@ -115,7 +115,7 @@ class CoordinatesController(
 
         if (CaptureOptions.facePaddingPercent != 0f) {
             detectionBox = boundingBox
-                .scaledBy(CaptureOptions.facePaddingPercent)
+                .scale(CaptureOptions.facePaddingPercent)
         }
 
         if (imageHeight <= 0 || imageWidth <= 0) {
