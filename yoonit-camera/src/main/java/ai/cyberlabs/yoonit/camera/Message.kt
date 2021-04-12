@@ -21,4 +21,7 @@ object Message {
 
     // Face bounding box is out of the setted region of interest.
     const val INVALID_OUT_OF_ROI = "INVALID_OUT_OF_ROI"
+
+    // Not available with camera lens "front".
+    const val INVALID_TORCH_LENS_USAGE = "INVALID_TORCH_LENS_USAGE"
 }

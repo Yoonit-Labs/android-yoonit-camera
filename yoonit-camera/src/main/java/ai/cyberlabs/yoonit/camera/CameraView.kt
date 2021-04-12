@@ -257,62 +257,6 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Set to enable/disable face contours when face detected.
-     *
-     * @param enable The indicator to show or hide the face contours.
-     * Default value is true.
-     */
-    fun setFaceContours(enable: Boolean) {
-        CaptureOptions.faceContours = enable
-    }
-
-    /**
-     * Set face contours ARGB color.
-     *
-     * @param alpha The alpha value.
-     * @param red The red value.
-     * @param green The green value.
-     * @param blue The blue value.
-     * Default value is `(100, 255, 255, 255)`.
-     */
-    fun setFaceContoursColor(alpha: Int, red: Int, green: Int, blue: Int) {
-        if (
-            alpha < 0 || alpha > 255 ||
-            red < 0 || red > 255 ||
-            green < 0 || green > 255 ||
-            blue < 0 || blue > 255
-        ) {
-            throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_CONTOURS_COLOR)
-        }
-
-        CaptureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
-    }
-
-    /**
-     * Set to enable/disable the device torch. Available only to camera lens "back".
-     *
-     * @param enable The indicator to set enable/disable the device torch.
-     * Default value is false.
-     */
-    fun setTorch(enable: Boolean) {
-        this.cameraController.setTorch(enable)
-    }
-
-    /**
-     * Set saving face images time interval in milli seconds.
-     *
-     * @param facePaddingPercent The percent to enlarge the bounding box.
-     * Default value is 0.0.
-     */
-    fun setFacePaddingPercent(facePaddingPercent: Float) {
-        if (facePaddingPercent < 0.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_PADDING_PERCENT)
-        }
-
-        CaptureOptions.facePaddingPercent = facePaddingPercent
-    }
-
-    /**
      * Limit the minimum face capture size.
      * This variable is the face detection box percentage in relation with the UI graphic view.
      * The value must be between 0 and 1.
@@ -348,6 +292,72 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.maximumSize = maximumSize
+    }
+
+    /**
+     * Set to enable/disable face contours when face detected.
+     *
+     * @param enable The indicator to show or hide the face contours.
+     * Default value is true.
+     */
+    fun setFaceContours(enable: Boolean) {
+        CaptureOptions.faceContours = enable
+    }
+
+    /**
+     * Set face contours ARGB color.
+     *
+     * @param alpha The alpha value.
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
+     * Default value is `(100, 255, 255, 255)`.
+     */
+    fun setFaceContoursColor(
+        alpha: Int,
+        red: Int,
+        green: Int,
+        blue: Int
+    ) {
+        if (
+            alpha < 0 || alpha > 255 ||
+            red < 0 || red > 255 ||
+            green < 0 || green > 255 ||
+            blue < 0 || blue > 255
+        ) {
+            throw java.lang.IllegalArgumentException(KeyError.INVALID_FACE_CONTOURS_COLOR)
+        }
+
+        CaptureOptions.faceContoursColor = Color.argb(alpha, red, green, blue)
+    }
+
+    /**
+     * Set to enable/disable the device torch. Available only to camera lens "back".
+     *
+     * @param enable The indicator to set enable/disable the device torch.
+     * Default value is false.
+     */
+    fun setTorch(enable: Boolean) {
+        if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_FRONT) {
+            this.cameraEventListener?.onMessage(Message.INVALID_TORCH_LENS_USAGE)
+            return
+        }
+
+        this.cameraController.setTorch(enable)
+    }
+
+    /**
+     * Set saving face images time interval in milli seconds.
+     *
+     * @param facePaddingPercent The percent to enlarge the bounding box.
+     * Default value is 0.0.
+     */
+    fun setFacePaddingPercent(facePaddingPercent: Float) {
+        if (facePaddingPercent < 0.0f) {
+            throw IllegalArgumentException(KeyError.INVALID_FACE_PADDING_PERCENT)
+        }
+
+        CaptureOptions.facePaddingPercent = facePaddingPercent
     }
 
     /**
