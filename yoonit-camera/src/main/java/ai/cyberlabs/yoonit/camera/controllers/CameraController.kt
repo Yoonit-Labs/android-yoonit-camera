@@ -68,9 +68,7 @@ class CameraController(
 
         // Emit permission denied if do not has permission.
         if (!this.isAllPermissionsGranted()) {
-            this.cameraEventListener?.let {
-                this.cameraEventListener!!.onPermissionDenied()
-            }
+            this.cameraEventListener?.onPermissionDenied()
             return
         }
 
@@ -86,9 +84,7 @@ class CameraController(
 
                     this.buildCameraPreview()
                 } catch (e: Exception) {
-                    this.cameraEventListener?.let {
-                        this.cameraEventListener!!.onError(e.toString())
-                    }
+                    this.cameraEventListener?.onError(e.toString())
                 }
             },
             ContextCompat.getMainExecutor(this.context)

@@ -147,7 +147,13 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 ```
 
 ## API
-  
+
+### Variables
+
+| Variable           | Type  | Valid values | Description
+| -                  | -     | -            | -
+| detectionExtraSize | RectF | -            | Detection extra size in percentage for top, right, left and bottom.
+
 ### Methods   
 
 | Function                     | Parameters                                      | Valid values                                                                     | Return Type | Description
@@ -170,7 +176,6 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setDetectionMaxSize          | `maximumSize: Float`                            | Value between `0` and `1`. Represents the percentage.                            | void        | Set face/qrcode maximum size to detect in percentage related with the camera preview.
 | setFaceContours              | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Set to enable/disable face contours when face detected.
 | setFaceContoursColor         | `alpha: Int, red: Int, green: Int, blue: Int`   | Positive value between 0 and 255.                                                | void        | Set face contours ARGB color. Default value is `(100, 255, 255, 255)`.
-| setFacePaddingPercent        | `facePaddingPercent: Float`                     | Any positive `Float` value.                                                      | void        | Set face image and bounding box padding in percent.
 | setROI                       | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Enable/disable the region of interest capture.
 | setROITopOffset              | `topOffset: Float`                              | Value between `0` and `1`. Represents the percentage.                            | void        | Camera preview top distance in percentage.
 | setROIRightOffset            | `rightOffset: Float`                            | Value between `0` and `1`. Represents the percentage.                            | void        | Camera preview right distance in percentage.
@@ -240,7 +245,6 @@ Pre-define key error constants used by the `onError` event.
 | INVALID_DETECTION_BOX_COLOR          | Tried to input invalid detection box ARGB value color.
 | INVALID_MINIMUM_SIZE                 | Tried to input invalid minimum size.
 | INVALID_MAXIMUM_SIZE                 | Tried to input invalid maximum size.
-| INVALID_FACE_PADDING_PERCENT         | Tried to input invalid face padding percent.
 | INVALID_FACE_CONTOURS_COLOR          | Tried to input invalid face contour ARGB value color.
 | INVALID_ROI_TOP_OFFSET               | Tried to input invalid region of interest top offset.
 | INVALID_ROI_RIGHT_OFFSET             | Tried to input invalid region of interest right offset.

@@ -16,6 +16,7 @@ import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.graphics.Color
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -295,6 +296,15 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
+     * Detection extra size in percentage for top, right, left and bottom.
+     */
+    var detectionExtraSize: RectF = CaptureOptions.detectionExtraSize
+        set(value) {
+            CaptureOptions.detectionExtraSize = value
+            field = value
+        }
+
+    /**
      * Set to enable/disable face contours when face detected.
      *
      * @param enable The indicator to show or hide the face contours.
@@ -344,20 +354,6 @@ open class CameraView @JvmOverloads constructor(
         }
 
         this.cameraController.setTorch(enable)
-    }
-
-    /**
-     * Set saving face images time interval in milli seconds.
-     *
-     * @param facePaddingPercent The percent to enlarge the bounding box.
-     * Default value is 0.0.
-     */
-    fun setFacePaddingPercent(facePaddingPercent: Float) {
-        if (facePaddingPercent < 0.0f) {
-            throw IllegalArgumentException(KeyError.INVALID_FACE_PADDING_PERCENT)
-        }
-
-        CaptureOptions.facePaddingPercent = facePaddingPercent
     }
 
     /**

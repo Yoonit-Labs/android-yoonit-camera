@@ -13,6 +13,8 @@ package ai.cyberlabs.yoonit.camera.models
 
 import ai.cyberlabs.yoonit.camera.CaptureType
 import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.RectF
 import androidx.camera.core.CameraSelector
 
 /**
@@ -50,6 +52,30 @@ object CaptureOptions {
     // Draw or not the face/qrcode detection box.
     var detectionBox: Boolean = false
 
+    /**
+     * Face/qrcode minimum size to detect in percentage related with the camera preview.
+     * This variable is the detection box percentage in relation with the UI graphic view.
+     * The value must be between `0` and `1`.
+     */
+    var minimumSize: Float = 0.0f
+
+    /**
+     * Face/qrcode maximum size to detect in percentage related with the camera preview.
+     * This variable is the detection box percentage in relation with the UI graphic view.
+     * The value must be between `0` and `1`.
+     */
+    var maximumSize: Float = 1.0f
+
+    /**
+     * Detection extra size in percentage for top, right, left and bottom.
+     */
+    var detectionExtraSize = RectF(
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f
+    )
+
     // Detection box color.
     var detectionBoxColor: Int = Color.WHITE
 
@@ -67,18 +93,4 @@ object CaptureOptions {
 
     // Color encoding of the saved image.
     var colorEncoding: String = "RGB"
-
-    /**
-     * Face/qrcode minimum size to detect in percentage related with the camera preview.
-     * This variable is the detection box percentage in relation with the UI graphic view.
-     * The value must be between `0` and `1`.
-     */
-    var minimumSize: Float = 0.0f
-
-    /**
-     * Face/qrcode maximum size to detect in percentage related with the camera preview.
-     * This variable is the detection box percentage in relation with the UI graphic view.
-     * The value must be between `0` and `1`.
-     */
-    var maximumSize: Float = 1.0f
 }
