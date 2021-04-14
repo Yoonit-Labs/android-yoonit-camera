@@ -24,6 +24,7 @@ A Android plugin to provide:
   * [Start capturing face images](#start-capturing-face-images)
   * [Start scanning QR Codes](#start-capturing-face-images)
 * [API](#api)
+  * [Variables](#variables)
   * [Methods](#methods)
   * [Events](#events)
     * [Face Analysis](#face-analysis)
