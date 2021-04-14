@@ -28,6 +28,7 @@ A Android plugin to provide:
   * [Events](#events)
     * [Face Analysis](#face-analysis)
     * [Head Movements](#head-movements)
+    * [Image Quality](#image-quality)
   * [KeyError](#keyerror)
   * [Message](#message)
 * [To contribute and make it better](#to-contribute-and-make-it-better)
@@ -232,6 +233,22 @@ Here we explaining the above gif and how reached the "results". Each "movement" 
 | Vertical       | `headEulerAngleX` | Super Down  | Down              | Frontal          | Up              | Super Up    |
 | Horizontal     | `headEulerAngleY` | Super Left  | Left              | Frontal          | Right           | Super Right |
 | Tilt           | `headEulerAngleZ` | Super Right | Right             | Frontal          | Left            | Super Left  |
+
+### Image Quality
+
+The image quality is the classification of the three attributes: darkness, lightness and sharpness. Result available in the `onImageCaptured` event. Let's see each parameters specifications:
+
+| Threshold           | Classification
+| -                   | -
+| **Darkness**        |
+| darkness > 0.7  	  | Too dark
+| darkness <= 0.7     | Acceptable
+| **Lightness**       |
+| lightness > 0.65    | Too light
+| lightness <= 0.65   | Acceptable
+| **Sharpness**       |
+| sharpness >= 0.1591 | Blurred
+| sharpness < 0.1591  | Acceptable
 
 ### KeyError
 
