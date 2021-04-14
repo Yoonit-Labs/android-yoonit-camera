@@ -150,9 +150,12 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 ### Variables
 
-| Variable           | Type  | Valid values | Description
-| -                  | -     | -            | -
-| detectionExtraSize | RectF | -            | Detection extra size in percentage for top, right, left and bottom.
+| Variable            | Type  | Default Value | Description
+| -                   | -     |  -            | -
+| detectionTopSize    | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the top side of the detection. Use the `setDetectionBox` to have a visual result.
+| detectionRightSize  | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the right side of the detection. Use the `setDetectionBox` to have a visual result.
+| detectionBottomSize | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the bottom side of the detection. Use the `setDetectionBox` to have a visual result.
+| detectionLeftSize   | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the left side of the detection. Use the `setDetectionBox` to have a visual result.
 
 ### Methods   
 

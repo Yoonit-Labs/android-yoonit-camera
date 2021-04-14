@@ -296,11 +296,54 @@ open class CameraView @JvmOverloads constructor(
     }
 
     /**
-     * Detection extra size in percentage for top, right, left and bottom.
+     * Represents the percentage.
+     * Positive value enlarges and negative value reduce the top side of the detection.
+     * Use the `setDetectionBox` to have a visual result.
+     *
+     * Default value: `0.0f`
      */
-    var detectionExtraSize: RectF = CaptureOptions.detectionExtraSize
+    var detectionTopSize: Float = CaptureOptions.detectionTopSize
         set(value) {
-            CaptureOptions.detectionExtraSize = value
+            CaptureOptions.detectionTopSize = value
+            field = value
+        }
+
+    /**
+     * Represents the percentage.
+     * Positive value enlarges and negative value reduce the right side of the detection.
+     * Use the `setDetectionBox` to have a visual result.
+     *
+     * Default value: `0.0f`
+     */
+    var detectionRightSize: Float = CaptureOptions.detectionRightSize
+        set(value) {
+            CaptureOptions.detectionRightSize = value
+            field = value
+        }
+
+    /**
+     * Represents the percentage.
+     * Positive value enlarges and negative value reduce the bottom side of the detection.
+     * Use the `setDetectionBox` to have a visual result.
+     *
+     * Default value: `0.0f`
+     */
+    var detectionBottomSize: Float = CaptureOptions.detectionBottomSize
+        set(value) {
+            CaptureOptions.detectionBottomSize = value
+            field = value
+        }
+
+    /**
+     * Represents the percentage.
+     * Positive value enlarges and negative value reduce the left side of the detection.
+     * Use the `setDetectionBox` to have a visual result.
+     *
+     * Default value: `0.0f`
+     */
+    var detectionLeftSize: Float = CaptureOptions.detectionLeftSize
+        set(value) {
+            CaptureOptions.detectionLeftSize = value
             field = value
         }
 

@@ -66,15 +66,10 @@ object CaptureOptions {
      */
     var maximumSize: Float = 1.0f
 
-    /**
-     * Detection extra size in percentage for top, right, left and bottom.
-     */
-    var detectionExtraSize = RectF(
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f
-    )
+    var detectionTopSize: Float = 0.0f
+    var detectionRightSize: Float = 0.0f
+    var detectionBottomSize: Float = 0.0f
+    var detectionLeftSize: Float = 0.0f
 
     // Detection box color.
     var detectionBoxColor: Int = Color.WHITE
@@ -84,9 +79,6 @@ object CaptureOptions {
 
     // Face contours color.
     var faceContoursColor: Int = Color.WHITE
-
-    // Face capture padding percent.
-    var facePaddingPercent: Float = 0f
 
     // Blur face detection box
     var blurFaceDetectionBox: Boolean = false

@@ -381,7 +381,7 @@ class MainActivity : AppCompatActivity() {
                 "x: $x, y: $y, w: $width, h: $height. \n" +
                 "leftEye: $leftEyeOpenProbability \n" +
                 "rightEye: $rightEyeOpenProbability \n" +
-                "smilling: $smilingProbability \n" +
+                "smiling: $smilingProbability \n" +
                 "head X angle: $headEulerAngleX \n" +
                 "head Y angle: $headEulerAngleY \n" +
                 "head Z angle: $headEulerAngleZ"
