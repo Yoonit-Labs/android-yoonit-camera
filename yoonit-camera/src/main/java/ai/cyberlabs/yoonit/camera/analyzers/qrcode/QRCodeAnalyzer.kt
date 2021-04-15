@@ -14,6 +14,8 @@ package ai.cyberlabs.yoonit.camera.analyzers.qrcode
 import ai.cyberlabs.yoonit.camera.CameraGraphicView
 import ai.cyberlabs.yoonit.camera.analyzers.CoordinatesController
 import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
+import ai.cyberlabs.yoonit.camera.utils.mirror
+import ai.cyberlabs.yoonit.camera.utils.rotate
 import ai.cyberlabs.yoonit.camera.utils.toRGBBitmap
 import android.annotation.SuppressLint
 import android.content.Context
@@ -76,78 +78,83 @@ class QRCodeAnalyzer(
         onError: (String) -> Unit,
         onComplete: () -> Unit
     ) {
-        if (imageProxy.image == null) {
-            this.graphicView.clear()
-            onComplete()
+        imageProxy.image?.let { image ->
+            val imageBitmap = image
+                .toRGBBitmap(this.context)
+                .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
+                .mirror()
+
+            val image: InputImage = InputImage.fromBitmap(
+                imageBitmap,
+                0
+            )
+
+            this.scanner
+                .process(image)
+                .addOnSuccessListener { barcodes ->
+
+                    if (barcodes.isEmpty()) {
+                        this.graphicView.clear()
+                        onComplete()
+                        return@addOnSuccessListener
+                    }
+
+                    // Get closest detection box.
+                    var boundingBox = Rect()
+                    var value = ""
+                    for (barcode in barcodes) {
+                        val bounds = barcode.boundingBox
+                        bounds?.let {
+                            if (it.width() > boundingBox.width()) {
+                                boundingBox = it
+                                value = barcode.rawValue!!
+                            }
+                        }
+                    }
+
+                    // Get from barcode the UI detection box.
+                    val detectionBox: RectF = this.coordinatesController.getDetectionBox(
+                        boundingBox,
+                        imageProxy.width.toFloat(),
+                        imageProxy.height.toFloat()
+                    )
+
+                    // Get error if exist in the detectionBox.
+                    val error: String? = this.coordinatesController.getError(
+                        detectionBox
+                    )
+
+                    // Handle error.
+                    error?.let {
+                        if (this.isValid) {
+                            this.isValid = false
+                            if (error != "") {
+                                onMessage(error)
+                            }
+                        }
+                        this.graphicView.clear()
+                        onComplete()
+                        return@addOnSuccessListener
+                    }
+                    this.isValid = true
+
+                    onDetected(detectionBox, value)
+                    onComplete()
+                }
+                .addOnFailureListener { e ->
+                    this.graphicView.clear()
+                    onError(e.toString())
+                    onComplete()
+                }
+                .addOnCompleteListener {
+                    onComplete()
+                }
+
             return
         }
-        val imageBitmap = imageProxy.image?.toRGBBitmap(context)
 
-        val image: InputImage = InputImage.fromBitmap(
-            imageBitmap,
-            imageProxy.imageInfo.rotationDegrees
-        )
-
-        this.scanner
-            .process(image)
-            .addOnSuccessListener { barcodes ->
-
-                if (barcodes.isEmpty()) {
-                    this.graphicView.clear()
-                    onComplete()
-                    return@addOnSuccessListener
-                }
-
-                // Get closest detection box.
-                var boundingBox = Rect()
-                var value = ""
-                for (barcode in barcodes) {
-                    val bounds = barcode.boundingBox
-                    bounds?.let {
-                        if (it.width() > boundingBox.width()) {
-                            boundingBox = it
-                            value = barcode.rawValue!!
-                        }
-                    }
-                }
-
-                // Get from barcode the UI detection box.
-                val detectionBox: RectF = this.coordinatesController.getDetectionBox(
-                    boundingBox,
-                    imageProxy.width.toFloat(),
-                    imageProxy.height.toFloat(),
-                    imageProxy.imageInfo.rotationDegrees.toFloat()
-                )
-
-                // Get error if exist in the detectionBox.
-                val error: String? = this.coordinatesController.getError(
-                    detectionBox
-                )
-
-                // Handle error.
-                error?.let {
-                    if (this.isValid) {
-                        this.isValid = false
-                        if (error != "") {
-                            onMessage(error)
-                        }
-                    }
-                    this.graphicView.clear()
-                    onComplete()
-                    return@addOnSuccessListener
-                }
-                this.isValid = true
-
-                onDetected(detectionBox, value)
-                onComplete()
-            }
-            .addOnFailureListener { e ->
-                this.graphicView.clear()
-                onError(e.toString())
-                onComplete()
-            }
-            .addOnCompleteListener {
-                onComplete()
-            }
+        this.graphicView.clear()
+        onComplete()
+        return
     }
 }

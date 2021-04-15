@@ -57,7 +57,7 @@ class FaceAnalyzer(
 
         val mediaImage = imageProxy.image ?: return
 
-        var bitmap = mediaImage
+        val bitmap = mediaImage
             .toRGBBitmap(context)
             .rotate(imageProxy.imageInfo.rotationDegrees.toFloat())
             .mirror()
@@ -67,11 +67,13 @@ class FaceAnalyzer(
             { faceDetected ->
 
                 // Get from faceDetected the graphic face bounding box.
-                val detectionBox = this.coordinatesController.getDetectionBox(
-                    faceDetected,
-                    imageProxy.width.toFloat(),
-                    imageProxy.height.toFloat()
-                )
+                val detectionBox = if (faceDetected != null) {
+                    this.coordinatesController.getDetectionBox(
+                        faceDetected.boundingBox,
+                        imageProxy.width.toFloat(),
+                        imageProxy.height.toFloat()
+                    )
+                } else RectF()
 
                 // Verify if has error on detection box.
                 if (this.hasError(detectionBox)) {
@@ -109,16 +111,16 @@ class FaceAnalyzer(
 
                     // Emit face analysis.
                     this.cameraEventListener.onFaceDetected(
-                            detectionBox.left.pxToDPI(this.context),
-                            detectionBox.top.pxToDPI(this.context),
-                            detectionBox.width().pxToDPI(this.context),
-                            detectionBox.height().pxToDPI(this.context),
-                            faceDetected.leftEyeOpenProbability,
-                            faceDetected.rightEyeOpenProbability,
-                            faceDetected.smilingProbability,
-                            faceDetected.headEulerAngleX,
-                            faceDetected.headEulerAngleY,
-                            faceDetected.headEulerAngleZ
+                        detectionBox.left.pxToDPI(this.context),
+                        detectionBox.top.pxToDPI(this.context),
+                        detectionBox.width().pxToDPI(this.context),
+                        detectionBox.height().pxToDPI(this.context),
+                        faceDetected.leftEyeOpenProbability,
+                        faceDetected.rightEyeOpenProbability,
+                        faceDetected.smilingProbability,
+                        faceDetected.headEulerAngleX,
+                        faceDetected.headEulerAngleY,
+                        faceDetected.headEulerAngleZ
                     )
 
                     // Continue only if current time stamp is within the interval.
@@ -213,10 +215,20 @@ class FaceAnalyzer(
             else -> mediaImage.toRGBBitmap(context)
         }
 
-        val faceBitmap: Bitmap = colorEncodedBitmap
+        var faceBitmap: Bitmap = colorEncodedBitmap
             .rotate(cameraRotation)
             .mirror()
-            .crop(boundingBox)
+        
+        faceBitmap = faceBitmap.crop(boundingBox.scale(
+            CaptureOptions.detectionTopSize,
+            CaptureOptions.detectionRightSize,
+            CaptureOptions.detectionBottomSize,
+            CaptureOptions.detectionLeftSize
+        ))
+
+        if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_BACK) {
+            faceBitmap = faceBitmap.mirror()
+        }
 
         return Bitmap.createScaledBitmap(
             faceBitmap,

@@ -40,9 +40,6 @@ object KeyError {
     // Tried to input invalid maximum size.
     const val INVALID_MAXIMUM_SIZE = "INVALID_MAXIMUM_SIZE"
 
-    // Tried to input invalid face padding percent.
-    const val INVALID_FACE_PADDING_PERCENT = "INVALID_FACE_PADDING_PERCENT"
-
     // Tried to input invalid face contour ARGB value color.
     const val INVALID_FACE_CONTOURS_COLOR = "INVALID_FACE_CONTOURS_COLOR"
 

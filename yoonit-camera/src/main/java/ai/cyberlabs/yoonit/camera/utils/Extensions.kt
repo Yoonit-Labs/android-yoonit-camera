@@ -114,25 +114,40 @@ fun Image.toYUVBitmap(): Bitmap {
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }
 
-fun Rect.scaledBy(percent: Float): Rect {
-    val factor = 1 + percent
-    val newWidth = width() * factor
-    val newHeight = height() * factor
-    val deltaX = (width() - newWidth) / 2
-    val deltaY = (height() - newHeight) / 2
+fun Rect.scale(
+    top: Float,
+    right: Float,
+    bottom: Float,
+    left: Float
+): Rect {
+    val newLeft = this.exactCenterX() - ((left + 1) * this.width() / 2)
+    val newTop = this.exactCenterY() - ((top + 1) * this.height() / 2)
+    val newRight = this.exactCenterX() + ((right + 1) * this.width() / 2)
+    val newBottom = this.exactCenterY() + ((bottom + 1) * this.height() / 2)
 
     return Rect(
-        (left + deltaX).toInt(),
-        (top + deltaY).toInt(),
-        (right - deltaX).toInt(),
-        (bottom - deltaY).toInt()
+        newLeft.toInt(),
+        newTop.toInt(),
+        newRight.toInt(),
+        newBottom.toInt()
     )
 }
 
-fun Rect.coerce(width: Int, height: Int) {
-    // confines Rect to the bitmap's dimensions
-    this.left = this.left.coerceIn(0, width)
-    this.top = this.top.coerceIn(0, height)
-    this.right = this.right.coerceIn(0, width)
-    this.bottom = this.bottom.coerceIn(0, height)
+fun RectF.scale(
+    top: Float,
+    right: Float,
+    bottom: Float,
+    left: Float
+): RectF {
+    val newLeft = this.centerX() - ((left + 1) * this.width() / 2)
+    val newTop = this.centerY() - ((top + 1) * this.height() / 2)
+    val newRight = this.centerX() + ((right + 1) * this.width() / 2)
+    val newBottom = this.centerY() + ((bottom + 1) * this.height() / 2)
+
+    return RectF(
+        newLeft,
+        newTop,
+        newRight,
+        newBottom
+    )
 }

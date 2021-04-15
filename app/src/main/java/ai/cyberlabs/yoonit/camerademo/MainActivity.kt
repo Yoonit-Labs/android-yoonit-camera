@@ -76,10 +76,11 @@ class MainActivity : AppCompatActivity() {
             this.cameraView.setROIRightOffset(0.1f)
             this.cameraView.setROITopOffset(0.1f)
             this.cameraView.setROIBottomOffset(0.1f)
-            this.captureType = "face"
             this.cameraView.setSaveImageCaptured(true)
             this.cameraView.setComputerVision(true)
+            this.cameraView.setDetectionBox(true)
             this.cameraView.startPreview()
+            this.captureType = "face"
 
             this.cameraView.setComputerVisionLoadModels(arrayListOf(
                 this.getModelPath("mask_custom_model.pt")
@@ -380,7 +381,7 @@ class MainActivity : AppCompatActivity() {
                 "x: $x, y: $y, w: $width, h: $height. \n" +
                 "leftEye: $leftEyeOpenProbability \n" +
                 "rightEye: $rightEyeOpenProbability \n" +
-                "smilling: $smilingProbability \n" +
+                "smiling: $smilingProbability \n" +
                 "head X angle: $headEulerAngleX \n" +
                 "head Y angle: $headEulerAngleY \n" +
                 "head Z angle: $headEulerAngleZ"

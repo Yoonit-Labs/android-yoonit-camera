@@ -13,6 +13,8 @@ package ai.cyberlabs.yoonit.camera.models
 
 import ai.cyberlabs.yoonit.camera.CaptureType
 import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.RectF
 import androidx.camera.core.CameraSelector
 
 /**
@@ -50,24 +52,6 @@ object CaptureOptions {
     // Draw or not the face/qrcode detection box.
     var detectionBox: Boolean = false
 
-    // Detection box color.
-    var detectionBoxColor: Int = Color.WHITE
-
-    // Face contours.
-    var faceContours: Boolean = false
-
-    // Face contours color.
-    var faceContoursColor: Int = Color.WHITE
-
-    // Face capture padding percent.
-    var facePaddingPercent: Float = 0f
-
-    // Blur face detection box
-    var blurFaceDetectionBox: Boolean = false
-
-    // Color encoding of the saved image.
-    var colorEncoding: String = "RGB"
-
     /**
      * Face/qrcode minimum size to detect in percentage related with the camera preview.
      * This variable is the detection box percentage in relation with the UI graphic view.
@@ -81,4 +65,24 @@ object CaptureOptions {
      * The value must be between `0` and `1`.
      */
     var maximumSize: Float = 1.0f
+
+    var detectionTopSize: Float = 0.0f
+    var detectionRightSize: Float = 0.0f
+    var detectionBottomSize: Float = 0.0f
+    var detectionLeftSize: Float = 0.0f
+
+    // Detection box color.
+    var detectionBoxColor: Int = Color.WHITE
+
+    // Face contours.
+    var faceContours: Boolean = false
+
+    // Face contours color.
+    var faceContoursColor: Int = Color.WHITE
+
+    // Blur face detection box
+    var blurFaceDetectionBox: Boolean = false
+
+    // Color encoding of the saved image.
+    var colorEncoding: String = "RGB"
 }

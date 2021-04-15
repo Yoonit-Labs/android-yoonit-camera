@@ -26,6 +26,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.io.File
@@ -58,9 +59,15 @@ class FrameAnalyzer(
 
             mediaImage?.let {
 
-                val frameBitmap: Bitmap = when (CaptureOptions.colorEncoding) {
+                var frameBitmap: Bitmap = when (CaptureOptions.colorEncoding) {
                     "YUV" -> mediaImage.toYUVBitmap()
                     else -> mediaImage.toRGBBitmap(context)
+                }
+
+                if (CaptureOptions.cameraLens == CameraSelector.LENS_FACING_BACK) {
+                    frameBitmap = frameBitmap
+                        .rotate(180f)
+                        .mirror()
                 }
 
                 // Computer Vision Inference.
