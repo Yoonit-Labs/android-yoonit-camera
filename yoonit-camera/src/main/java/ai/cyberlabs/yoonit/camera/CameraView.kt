@@ -16,13 +16,11 @@ import ai.cyberlabs.yoonit.camera.interfaces.CameraEventListener
 import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.content.Context
 import android.graphics.Color
-import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
 import kotlinx.android.synthetic.main.cameraview_layout.view.*
-import java.io.File
 
 /**
  * This class represents the camera layout.
@@ -39,6 +37,8 @@ open class CameraView @JvmOverloads constructor(
 
     // Camera interface event listeners object.
     private var cameraEventListener: CameraEventListener? = null
+
+    public var computerVision = ComputerVision()
 
     /**
      * Inflate CameraView layout and instantiate [CameraController].
@@ -526,40 +526,6 @@ open class CameraView @JvmOverloads constructor(
         }
 
         CaptureOptions.colorEncoding = colorEncoding
-    }
-
-    /**
-     * Enable/disable computer vision usage.
-     *
-     * @param enable The indicator to enable/disable computer vision usage.
-     * Default value is `false`.
-     */
-    fun setComputerVision(enable: Boolean) {
-        CaptureOptions.computerVision.enable = enable
-    }
-
-    /**
-     * Set the computer vision model paths to load.
-     *
-     * @param modelPaths The computer vision absolute model file path array list.
-     * Default value is an empty array.
-     */
-    fun setComputerVisionLoadModels(modelPaths: ArrayList<String>) {
-        modelPaths.forEach {
-            modelPath ->
-            if (!File(modelPath).exists()) {
-                throw IllegalArgumentException("${KeyError.INVALID_COMPUTER_VISION_MODEL_PATHS}: $modelPath")
-            }
-        }
-
-        CaptureOptions.computerVision.paths = modelPaths
-    }
-
-    /**
-     * Clear loaded computer vision models.
-     */
-    fun computerVisionClearModels() {
-        CaptureOptions.computerVision.clear()
     }
 
     companion object {
