@@ -38,7 +38,7 @@ open class CameraView @JvmOverloads constructor(
     // Camera interface event listeners object.
     private var cameraEventListener: CameraEventListener? = null
 
-    public var computerVision = ComputerVision()
+    var ComputerVision = ComputerVision()
 
     /**
      * Inflate CameraView layout and instantiate [CameraController].
