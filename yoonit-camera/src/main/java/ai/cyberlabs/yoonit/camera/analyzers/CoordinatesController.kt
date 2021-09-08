@@ -163,7 +163,7 @@ class CoordinatesController(
             return ""
         }
 
-        if (CaptureOptions.roi.enable) {
+        if (CaptureOptions.ROI.enable) {
 
             // Detection box offsets.
             val topOffset: Float = detectionBox.top / screenHeight
@@ -171,7 +171,7 @@ class CoordinatesController(
             val bottomOffset: Float = (screenHeight - detectionBox.bottom) / screenHeight
             val leftOffset: Float = detectionBox.left / screenWidth
 
-            if (CaptureOptions.roi.isOutOf(
+            if (CaptureOptions.ROI.isOutOf(
                     topOffset,
                     rightOffset,
                     bottomOffset,
@@ -181,13 +181,13 @@ class CoordinatesController(
                 return Message.INVALID_OUT_OF_ROI
             }
 
-            if (CaptureOptions.roi.hasChanges) {
+            if (CaptureOptions.ROI.hasChanges) {
 
                 // Face is inside the region of interest and faceROI is setted.
                 // Face is smaller than the defined "minimumSize".
                 val roiWidth: Float =
                     screenWidth -
-                        ((CaptureOptions.roi.rightOffset + CaptureOptions.roi.leftOffset) * screenWidth)
+                        ((CaptureOptions.ROI.rightOffset + CaptureOptions.ROI.leftOffset) * screenWidth)
                 val faceRelatedWithROI: Float = detectionBox.width() / roiWidth
 
                 if (CaptureOptions.minimumSize > faceRelatedWithROI) {

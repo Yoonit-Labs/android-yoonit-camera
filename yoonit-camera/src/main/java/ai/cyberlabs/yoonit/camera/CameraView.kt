@@ -406,7 +406,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is `false`.
      */
     fun setROI(enable: Boolean) {
-        CaptureOptions.roi.enable = enable
+        CaptureOptions.ROI.enable = enable
     }
 
     /**
@@ -420,7 +420,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_ROI_TOP_OFFSET)
         }
 
-        CaptureOptions.roi.topOffset = topOffset
+        CaptureOptions.ROI.topOffset = topOffset
     }
 
     /**
@@ -434,7 +434,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_ROI_RIGHT_OFFSET)
         }
 
-        CaptureOptions.roi.rightOffset = rightOffset
+        CaptureOptions.ROI.rightOffset = rightOffset
     }
 
     /**
@@ -448,7 +448,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_ROI_BOTTOM_OFFSET)
         }
 
-        CaptureOptions.roi.bottomOffset = bottomOffset
+        CaptureOptions.ROI.bottomOffset = bottomOffset
     }
 
     /**
@@ -462,7 +462,7 @@ open class CameraView @JvmOverloads constructor(
             throw IllegalArgumentException(KeyError.INVALID_ROI_LEFT_OFFSET)
         }
 
-        CaptureOptions.roi.leftOffset = leftOffset
+        CaptureOptions.ROI.leftOffset = leftOffset
     }
 
     /**
@@ -472,7 +472,7 @@ open class CameraView @JvmOverloads constructor(
      * Default value is `false`.
      */
     fun setROIAreaOffset(enable: Boolean) {
-        CaptureOptions.roi.areaOffsetEnable = enable
+        CaptureOptions.ROI.areaOffsetEnable = enable
         this.graphicView.postInvalidate()
     }
 
@@ -500,7 +500,7 @@ open class CameraView @JvmOverloads constructor(
             throw java.lang.IllegalArgumentException(KeyError.INVALID_ROI_COLOR)
         }
 
-        CaptureOptions.roi.areaOffsetColor = Color.argb(alpha, red, green, blue)
+        CaptureOptions.ROI.areaOffsetColor = Color.argb(alpha, red, green, blue)
         this.graphicView.postInvalidate()
     }
 

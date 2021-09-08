@@ -18,6 +18,7 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
@@ -77,14 +78,15 @@ class MainActivity : AppCompatActivity() {
             this.cameraView.setROITopOffset(0.1f)
             this.cameraView.setROIBottomOffset(0.1f)
             this.cameraView.setSaveImageCaptured(true)
-            this.cameraView.setComputerVision(true)
+            this.cameraView.ComputerVision.enable = true
+            this.cameraView.ComputerVision.inputSize = Size(28, 28)
             this.cameraView.setDetectionBox(true)
             this.cameraView.startPreview()
             this.captureType = "face"
 
-            this.cameraView.setComputerVisionLoadModels(arrayListOf(
+            this.cameraView.ComputerVision.modelPaths = arrayListOf(
                 this.getModelPath("mask_custom_model.pt")
-            ))
+            )
 
             return
         }
@@ -99,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        this.cameraView.computerVisionClearModels()
+        this.cameraView.ComputerVision.clear()
     }
 
     private fun getModelPath(assetName: String): String {
@@ -287,7 +289,7 @@ class MainActivity : AppCompatActivity() {
     fun onComputerSwitchSwitchClick(view: View) {
         if (view is SwitchCompat) {
             val checked = view.isChecked
-            this.cameraView.setComputerVision(checked)
+            this.cameraView.ComputerVision.enable = checked
         }
     }
 

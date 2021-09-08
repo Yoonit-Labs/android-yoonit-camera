@@ -10,17 +10,17 @@ class ComputerVision {
      * Enable/disable computer vision usage.
      * Default value is `false`.
      */
-    var enable: Boolean = CaptureOptions.computerVision.enable
+    var enable: Boolean = CaptureOptions.ComputerVision.enable
         set(value) {
-            CaptureOptions.computerVision.enable = value
+            CaptureOptions.ComputerVision.enable = value
             field = value
         }
 
     /**
-     * Set the computer vision model paths to load.
+     * Set the computer vision model paths.
      * Default value is an empty array.
      */
-    var modelPaths: ArrayList<String> = CaptureOptions.computerVision.paths
+    var modelPaths: ArrayList<String> = CaptureOptions.ComputerVision.paths
         set(value) {
             value.forEach {
                 modelPath ->
@@ -29,20 +29,24 @@ class ComputerVision {
                 }
             }
 
-            CaptureOptions.computerVision.paths = value
-            field = value
-        }
-
-    var inputSize: Size = CaptureOptions.computerVision.inputSize
-        set(value) {
-            CaptureOptions.computerVision.inputSize = value
+            CaptureOptions.ComputerVision.paths = value
             field = value
         }
 
     /**
-     * Clear loaded computer vision models.
+     * Set the image input size to use the loaded model paths.
+     * Default value is (0, 0).
+     */
+    var inputSize: Size = CaptureOptions.ComputerVision.inputSize
+        set(value) {
+            CaptureOptions.ComputerVision.inputSize = value
+            field = value
+        }
+
+    /**
+     * Clear computer vision path models.
      */
     fun clear() {
-        CaptureOptions.computerVision.clear()
+        CaptureOptions.ComputerVision.clear()
     }
 }

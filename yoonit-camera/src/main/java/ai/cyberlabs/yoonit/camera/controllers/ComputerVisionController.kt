@@ -11,6 +11,7 @@
 
 package ai.cyberlabs.yoonit.camera.controllers
 
+import ai.cyberlabs.yoonit.camera.models.CaptureOptions
 import android.graphics.Bitmap
 import org.pytorch.IValue
 import org.pytorch.Module
@@ -48,8 +49,8 @@ class ComputerVisionController {
 
             val scaledBitmap: Bitmap = Bitmap.createScaledBitmap(
                 bitmap,
-                28,
-                28,
+                CaptureOptions.ComputerVision.inputSize.width,
+                CaptureOptions.ComputerVision.inputSize.height,
                 false
             )
 
