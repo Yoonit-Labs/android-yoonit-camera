@@ -132,9 +132,9 @@ class FaceAnalyzer(
 
                     // Computer Vision Inference.
                     val inferences: ArrayList<android.util.Pair<String, FloatArray>> =
-                        if (CaptureOptions.computerVision.enable)
+                        if (CaptureOptions.ComputerVision.enable)
                             ComputerVisionController.getInferences(
-                                CaptureOptions.computerVision.modelMap,
+                                CaptureOptions.ComputerVision.modelMap,
                                 faceBitmap
                             )
                         else arrayListOf()

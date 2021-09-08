@@ -45,8 +45,8 @@ class CameraGraphicView constructor(
             !CaptureOptions.detectionBox &&
             !CaptureOptions.blurFaceDetectionBox &&
             !CaptureOptions.faceContours &&
-            !CaptureOptions.roi.enable &&
-            !CaptureOptions.roi.areaOffsetEnable
+            !CaptureOptions.ROI.enable &&
+            !CaptureOptions.ROI.areaOffsetEnable
         ) {
             return
         }
@@ -63,8 +63,8 @@ class CameraGraphicView constructor(
 
         // Draw face/qrcode region of interest area offset bitmap.
         if (
-            CaptureOptions.roi.enable &&
-            CaptureOptions.roi.areaOffsetEnable
+            CaptureOptions.ROI.enable &&
+            CaptureOptions.ROI.areaOffsetEnable
         ) {
             this.drawROIAreaOffset(canvas)
         }
@@ -155,10 +155,10 @@ class CameraGraphicView constructor(
         }
 
         val roi = Rect(
-            (width * CaptureOptions.roi.leftOffset).toInt(),
-            (height * CaptureOptions.roi.topOffset).toInt(),
-            (width - (width * CaptureOptions.roi.rightOffset)).toInt(),
-            (height - (height * CaptureOptions.roi.bottomOffset)).toInt()
+            (width * CaptureOptions.ROI.leftOffset).toInt(),
+            (height * CaptureOptions.ROI.topOffset).toInt(),
+            (width - (width * CaptureOptions.ROI.rightOffset)).toInt(),
+            (height - (height * CaptureOptions.ROI.bottomOffset)).toInt()
         )
 
         val roiAreaOffsetBitmap: Bitmap = Bitmap.createBitmap(
@@ -170,7 +170,7 @@ class CameraGraphicView constructor(
         val areaCanvas = Canvas(roiAreaOffsetBitmap)
 
         val offsetAreaPaint = Paint()
-        offsetAreaPaint.color = CaptureOptions.roi.areaOffsetColor
+        offsetAreaPaint.color = CaptureOptions.ROI.areaOffsetColor
         areaCanvas.drawRect(
             Rect(
                 0,
