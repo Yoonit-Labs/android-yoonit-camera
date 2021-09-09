@@ -17,7 +17,7 @@ class ComputerVision {
         }
 
     /**
-     * Set the computer vision model paths.
+     * The computer vision model paths.
      * Default value is an empty array.
      */
     var modelPaths: ArrayList<String> = CaptureOptions.ComputerVision.paths
@@ -34,7 +34,7 @@ class ComputerVision {
         }
 
     /**
-     * Set the image input size to use the loaded model paths.
+     * Image input size to use the loaded model paths.
      * Default value is (0, 0).
      */
     var inputSize: Size = CaptureOptions.ComputerVision.inputSize
