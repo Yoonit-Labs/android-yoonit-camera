@@ -292,7 +292,6 @@ Pre-define message constants used by the `onMessage` event.
 ## To contribute and make it better
 
 Clone the repo, change what you want and send PR.
-
 For commit messages we use <a href="https://www.conventionalcommits.org/">Conventional Commits</a>.
 
 Contributions are always welcome!
