@@ -72,9 +72,9 @@ class FrameAnalyzer(
 
                 // Computer Vision Inference.
                 var inferences: ArrayList<android.util.Pair<String, FloatArray>> = arrayListOf()
-                if (CaptureOptions.computerVision.enable) {
+                if (CaptureOptions.ComputerVision.enable) {
                     inferences = ComputerVisionController.getInferences(
-                        CaptureOptions.computerVision.modelMap,
+                        CaptureOptions.ComputerVision.modelMap,
                         frameBitmap
                     )
                 }
@@ -111,7 +111,7 @@ class FrameAnalyzer(
 
         if (
             !CaptureOptions.saveImageCaptured &&
-            !CaptureOptions.computerVision.enable
+            !CaptureOptions.ComputerVision.enable
         ) {
             return false
         }

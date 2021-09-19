@@ -2,7 +2,7 @@
 
 # android-yoonit-camera  
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Yoonit-Labs/android-yoonit-facefy?color=lightgrey&label=Facefy&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Yoonit-Labs/android-yoonit-facefy?color=lightgrey&label=Facefy&style=for-the-badge)
 
 A Android plugin to provide:
 * Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
@@ -15,6 +15,8 @@ A Android plugin to provide:
 * Frame capture
 * Capture timed images
 * QR Code scanning
+
+<img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/development/facefy.gif" width="300" />
 
 ## Table of Contents
 
@@ -152,12 +154,15 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 
 ### Variables
 
-| Variable            | Type  | Default Value | Description
-| -                   | -     |  -            | -
-| detectionTopSize    | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the top side of the detection. Use the `setDetectionBox` to have a visual result.
-| detectionRightSize  | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the right side of the detection. Use the `setDetectionBox` to have a visual result.
-| detectionBottomSize | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the bottom side of the detection. Use the `setDetectionBox` to have a visual result.
-| detectionLeftSize   | Float | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the left side of the detection. Use the `setDetectionBox` to have a visual result.
+| Variable                  | Type              | Default Value | Description
+| -                         | -                 |  -            | -
+| detectionTopSize          | Float             | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the top side of the detection. Use the `setDetectionBox` to have a visual result.
+| detectionRightSize        | Float             | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the right side of the detection. Use the `setDetectionBox` to have a visual result.
+| detectionBottomSize       | Float             | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the bottom side of the detection. Use the `setDetectionBox` to have a visual result.
+| detectionLeftSize         | Float             | '0.0f'        | Represents the percentage. Positive value enlarges and negative value reduce the left side of the detection. Use the `setDetectionBox` to have a visual result.
+| ComputerVision.enable     | Boolean           | `false        | Enable/disable computer vision usage.
+| ComputerVision.modelPaths | ArrayList<String> | `[]`          | The computer vision model paths.
+| ComputerVision.inputSize  | Size              | `(0, 0)`      | Image input size to use the loaded model paths.
 
 ### Methods   
 
@@ -190,10 +195,8 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | setROIAreaOffsetColor        | `alpha: Int, red: Int, green: Int, blue: Int`   | Any positive integer between 0 and 255.                                          | void        | Set face region of interest area offset color. Default value is `(100, 255, 255, 255)`.
 | setBlurFaceDetectionBox      | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Enable/disable blur in face detection box.
 | setColorEncodingCapture      | `colorEncoding: String`                         | <ul><li>`"RGB"`</li><li>`"YUV"`</li>                                             | void        | Set the color encoding for the saved images.
-| setComputerVision            | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Enable/disable computer vision usage.
-| setComputerVisionLoadModels  | `modelPaths: ArrayList<String>`                 | Must exist all model files paths.                                                | void        | Set the computer vision model files paths to load.
-| computerVisionClearModels    | -                                               | -                                                                                | void        | Clear loaded computer vision models.
 | setTorch                     | `enable: Boolean`                               | `true` or `false`.                                                               | void        | Set to enable/disable the device torch. Available only to camera lens `"back"`.
+| ComputerVision.clear         | -                                               | -                                                                                | void        | Clear computer vision model paths.
 
 ### Events
 
@@ -289,7 +292,6 @@ Pre-define message constants used by the `onMessage` event.
 ## To contribute and make it better
 
 Clone the repo, change what you want and send PR.
-
 For commit messages we use <a href="https://www.conventionalcommits.org/">Conventional Commits</a>.
 
 Contributions are always welcome!

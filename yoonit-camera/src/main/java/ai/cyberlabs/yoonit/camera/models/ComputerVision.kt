@@ -11,6 +11,7 @@
 
 package ai.cyberlabs.yoonit.camera.models
 
+import android.util.Size
 import org.pytorch.Module
 
 /**
@@ -20,6 +21,8 @@ class ComputerVision {
 
     //  Enable or disable computer vision models usage when capture images.
     var enable: Boolean = false
+
+    var inputSize: Size = Size(0, 0)
 
     // Computer vision models map.
     // Key is the name of the file and the value is the model loaded.

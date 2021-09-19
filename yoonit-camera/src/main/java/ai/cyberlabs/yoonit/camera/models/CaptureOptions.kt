@@ -13,8 +13,6 @@ package ai.cyberlabs.yoonit.camera.models
 
 import ai.cyberlabs.yoonit.camera.CaptureType
 import android.graphics.Color
-import android.graphics.Rect
-import android.graphics.RectF
 import androidx.camera.core.CameraSelector
 
 /**
@@ -23,10 +21,10 @@ import androidx.camera.core.CameraSelector
 object CaptureOptions {
 
     // Region of interesting.
-    var roi: ROI = ROI()
+    var ROI: ROI = ROI()
 
     // Computer vision models.
-    var computerVision: ComputerVision = ComputerVision()
+    var ComputerVision: ComputerVision = ComputerVision()
 
     // Camera image capture type: NONE, FACE, QRCODE and FRAME.
     var type: CaptureType = CaptureType.NONE
