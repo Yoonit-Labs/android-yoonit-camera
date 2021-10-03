@@ -47,7 +47,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<h5><a href="mailto:about@yoonit.dev">Become a sponsor!</a>
+	<h5><a href="mailto:about@yoonit.dev">Become a sponsor!</a></h5>
 </div>
 
 ## Table of Contents
