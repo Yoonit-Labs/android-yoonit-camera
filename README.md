@@ -1,22 +1,54 @@
-<img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/development/logo_cyberlabs.png" width="300">
+<h1 align="center">Android Yoonit Camera</h1>
 
-# android-yoonit-camera  
+<p align="center">
+	<img src="https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge"/>
+	<img src="https://img.shields.io/github/v/release/Yoonit-Labs/android-yoonit-facefy?color=lightgrey&label=Facefy&style=for-the-badge"/>
+	<img src="https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge"/>
+	<img src="https://img.shields.io/github/v/release/Yoonit-Labs/android-yoonit-facefy?color=lightgrey&label=Facefy&style=for-the-badge"/>
+</p>
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Yoonit-Labs/android-yoonit-camera?color=lightgrey&label=version&style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Yoonit-Labs/android-yoonit-facefy?color=lightgrey&label=Facefy&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/Yoonit-Labs/android-yoonit-camera?color=lightgrey&style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Yoonit-Labs/android-yoonit-facefy?color=lightgrey&label=Facefy&style=for-the-badge)
+<div align="center">
+	<table>
+		<tbody>
+			<tr>
+				<td align="left" valign="middle">
+					<p>◻ Modern Android Camera API <a href="https://developer.android.com/training/camerax">Camera X</a></p>
+					<p>◻ Camera preview (Front & Back)</p>
+					<p>◻ <a href="https://github.com/Yoonit-Labs/android-yoonit-facefy">Yoonit Facefy</a> integration</p>
+					<p>◻ <a href="https://pytorch.org/mobile/home">PyTorch</a> integration</p>
+					<p>◻ Computer vision pipeline</p>
+					<p>◻ Face detection, capture and image crop</p>
+					<p>◻ Understanding of the human face</p>
+					<p>◻ Frame capture</p>
+					<p>◻ Capture timed images</p>
+					<p>◻ QR Code scanning</p>
+				</td>
+				<td align="center" valign="middle">
+					<img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/main/facefy.gif" width="300" />
+				</td>
+			</tr>
+		<tbody>
+	</table>
+</div>
 
-A Android plugin to provide:
-* Modern Android Camera API [Camera X](https://developer.android.com/training/camerax)
-* Camera preview (Front & Back)
-* [Yoonit Facefy](https://github.com/Yoonit-Labs/android-yoonit-facefy) integration
-* [PyTorch](https://pytorch.org/mobile/home/) integration
-* Computer vision pipeline
-* Face detection, capture and image crop
-* Understanding of the human face
-* Frame capture
-* Capture timed images
-* QR Code scanning
-
-<img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/development/facefy.gif" width="300" />
+<div align="center">
+	<h3>Sponsors</h3>
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					<b>Platinum</b>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" valign="middle">
+					<a href="https://cyberlabs.ai"><img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/main/sponsor_cyberlabs.png" width="300" /></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<h5><a href="mailto:about@yoonit.dev">Become a sponsor!</a></h5>
+</div>
 
 ## Table of Contents
 
@@ -164,7 +196,7 @@ fun buildCameraEventListener(): CameraEventListener = object : CameraEventListen
 | ComputerVision.modelPaths | ArrayList<String> | `[]`          | The computer vision model paths.
 | ComputerVision.inputSize  | Size              | `(0, 0)`      | Image input size to use the loaded model paths.
 
-### Methods   
+### Methods
 
 | Function                     | Parameters                                      | Valid values                                                                     | Return Type | Description
 | -                            | -                                               | -                                                                                | -           | -
@@ -302,4 +334,4 @@ Contributions are always welcome!
 
 ---
 
-Code with ❤ by the [**Cyberlabs AI**](https://cyberlabs.ai/) Front-End Team
+Code with ❤ by the [**Yoonit**](https://yoonit.dev/) Team
